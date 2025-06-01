@@ -29,32 +29,37 @@ const MovementTaskEdge = memo(({
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
   // Calculate orthogonal routing with 90-degree turns
-  const defaultTurnX = sourceX + (targetX - sourceX) * 0.6; // Default turn point at 60% horizontal distance
+  const defaultTurnX = sourceX + (targetX - sourceX) * 0.6;
+  const defaultTurnY = sourceY + (targetY - sourceY) * 0.3;
   const turnX = data?.controlPointX ?? defaultTurnX;
-  const turnY = sourceY; // Keep horizontal line at source level, then vertical to target
+  const turnY = data?.controlPointY ?? defaultTurnY;
   
-  const cornerRadius = 8; // Rounded corner radius
+  const cornerRadius = 8;
   
   // Create orthogonal path with rounded corners
   const createOrthogonalPath = () => {
     const horizontal = Math.abs(turnX - sourceX);
-    const vertical = Math.abs(targetY - turnY);
+    const vertical = Math.abs(turnY - sourceY);
+    const vertical2 = Math.abs(targetY - turnY);
     
-    if (horizontal < cornerRadius || vertical < cornerRadius) {
+    if (horizontal < cornerRadius || vertical < cornerRadius || vertical2 < cornerRadius) {
       // If distances are too small for rounded corners, use straight lines
       return `M ${sourceX},${sourceY} L ${turnX},${turnY} L ${targetX},${targetY}`;
     }
     
     // Direction vectors
     const hDir = turnX > sourceX ? 1 : -1;
-    const vDir = targetY > turnY ? 1 : -1;
+    const vDir1 = turnY > sourceY ? 1 : -1;
+    const vDir2 = targetY > turnY ? 1 : -1;
     
-    // Calculate path with rounded corner
+    // Calculate path with rounded corners
     const path = [
       `M ${sourceX},${sourceY}`, // Start at source
-      `L ${turnX - cornerRadius * hDir},${turnY}`, // Horizontal line to corner start
-      `Q ${turnX},${turnY} ${turnX},${turnY + cornerRadius * vDir}`, // Rounded corner
-      `L ${targetX},${targetY}` // Vertical line to target
+      `L ${turnX - cornerRadius * hDir},${sourceY}`, // Horizontal line to first corner
+      `Q ${turnX},${sourceY} ${turnX},${sourceY + cornerRadius * vDir1}`, // First rounded corner
+      `L ${turnX},${turnY - cornerRadius * vDir2}`, // Vertical line to second corner
+      `Q ${turnX},${turnY} ${turnX + cornerRadius * hDir},${turnY}`, // Second rounded corner
+      `L ${targetX},${targetY}` // Final line to target
     ].join(' ');
     
     return path;
@@ -62,9 +67,9 @@ const MovementTaskEdge = memo(({
   
   const edgePath = createOrthogonalPath();
   
-  // Position label at the midpoint of the horizontal segment
-  const labelX = (sourceX + turnX) / 2;
-  const labelY = sourceY - 20; // Offset above the line
+  // Position label at the turn point
+  const labelX = turnX;
+  const labelY = turnY;
 
   const handleEdgeClick = () => {
     if (!isDragging) {
@@ -86,25 +91,35 @@ const MovementTaskEdge = memo(({
   const handleMouseMove = useCallback((e: MouseEvent) => {
     if (!isDragging) return;
     
-    // Calculate the horizontal movement delta
+    // Calculate movement deltas
     const deltaX = e.clientX - dragStart.x;
+    const deltaY = e.clientY - dragStart.y;
     
-    // Update only the X position for horizontal control of the turn point
+    // Update both X and Y positions with reasonable bounds
     const newTurnX = Math.max(
-      Math.min(sourceX, targetX) + 20, // Minimum distance from left edge
+      Math.min(sourceX, targetX) + 30, // Minimum distance from left edge
       Math.min(
-        Math.max(sourceX, targetX) - 20, // Maximum distance from right edge
-        turnX + deltaX // Current position plus delta
+        Math.max(sourceX, targetX) - 30, // Maximum distance from right edge
+        turnX + deltaX
+      )
+    );
+    
+    const newTurnY = Math.max(
+      Math.min(sourceY, targetY) + 30, // Minimum distance from top edge
+      Math.min(
+        Math.max(sourceY, targetY) - 30, // Maximum distance from bottom edge
+        turnY + deltaY
       )
     );
     
     updateMovementEdge(id, {
       ...data,
       controlPointX: newTurnX,
+      controlPointY: newTurnY,
     });
     
     setDragStart({ x: e.clientX, y: e.clientY });
-  }, [isDragging, id, data, updateMovementEdge, dragStart, turnX, sourceX, targetX]);
+  }, [isDragging, id, data, updateMovementEdge, dragStart, turnX, turnY, sourceX, targetX, sourceY, targetY]);
 
   const handleMouseUp = useCallback(() => {
     setIsDragging(false);
