@@ -1,4 +1,4 @@
-import { Settings, Trash2 } from 'lucide-react';
+import { Settings, Trash2, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useWarehouseStore } from '@/stores/warehouseStore';
@@ -7,25 +7,27 @@ export default function WarehousePropertiesPanel() {
   const {
     selectedElementId,
     selectedElementType,
+    isPropertiesPanelOpen,
     locationNodes,
     movementEdges,
     deleteLocationNode,
     deleteMovementEdge,
     setConfigModalOpen,
+    setPropertiesPanelOpen,
+    setSelectedElement,
     getLocationNodeType,
     getMovementTaskType,
     getLocationTaskType,
   } = useWarehouseStore();
 
-  if (!selectedElementId || !selectedElementType) {
-    return (
-      <aside className="w-80 bg-white border-l border-gray-200 p-4">
-        <div className="text-center text-gray-500 mt-8">
-          <Settings className="w-12 h-12 mx-auto mb-3 text-gray-300" />
-          <p className="text-sm">Select an element to view its properties</p>
-        </div>
-      </aside>
-    );
+  const handleClose = () => {
+    setPropertiesPanelOpen(false);
+    setSelectedElement(null, null);
+  };
+
+  // Show collapsed state or hidden when no element selected
+  if (!isPropertiesPanelOpen || !selectedElementId || !selectedElementType) {
+    return null; // Hide panel completely when closed
   }
 
   const handleDelete = () => {
@@ -56,9 +58,19 @@ export default function WarehousePropertiesPanel() {
     <aside className="w-80 bg-white border-l border-gray-200 p-4 overflow-y-auto">
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg flex items-center space-x-2">
-            <span>{selectedElementType === 'location' ? '📍' : '→'}</span>
-            <span className="capitalize">{selectedElementType} Properties</span>
+          <CardTitle className="text-lg flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <span>{selectedElementType === 'location' ? '📍' : '→'}</span>
+              <span className="capitalize">{selectedElementType} Properties</span>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleClose}
+              className="h-8 w-8 p-0 hover:bg-gray-100"
+            >
+              <X className="h-4 w-4" />
+            </Button>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">

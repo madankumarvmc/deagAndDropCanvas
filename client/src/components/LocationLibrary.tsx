@@ -213,7 +213,7 @@ export default function LocationLibrary() {
                         onClick={() => handleMovementTaskClick(type.id)}
                         className={`
                           rounded-lg border-2 p-3 cursor-pointer hover:shadow-md transition-all duration-200
-                          ${isCreatingMovementTask ? 'ring-2 ring-blue-500' : ''}
+                          ${isCreatingMovementTask && pendingMovementTask?.taskTypeId === type.id ? 'ring-2 ring-blue-500 bg-blue-50' : ''}
                         `}
                         style={{
                           backgroundColor: `${type.color}10`,

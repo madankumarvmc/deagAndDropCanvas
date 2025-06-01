@@ -88,8 +88,13 @@ export const useWarehouseStore = create<WarehouseState>((set, get) => ({
   setLocationNodes: (nodes) => set({ locationNodes: nodes }),
   setMovementEdges: (edges) => set({ movementEdges: edges }),
   setViewport: (viewport) => set({ viewport }),
-  setSelectedElement: (id, type) => set({ selectedElementId: id, selectedElementType: type }),
+  setSelectedElement: (id, type) => set({ 
+    selectedElementId: id, 
+    selectedElementType: type,
+    isPropertiesPanelOpen: id !== null // Auto-open panel when element is selected
+  }),
   setConfigModalOpen: (open) => set({ isConfigModalOpen: open }),
+  setPropertiesPanelOpen: (open) => set({ isPropertiesPanelOpen: open }),
   setDraggedLocationTypeId: (typeId) => set({ draggedLocationTypeId: typeId }),
   setCreatingMovementTask: (creating) => set({ isCreatingMovementTask: creating }),
   setPendingMovementTask: (task) => set({ pendingMovementTask: task }),
