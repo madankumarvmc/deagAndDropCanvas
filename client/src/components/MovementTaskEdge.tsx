@@ -28,48 +28,18 @@ const MovementTaskEdge = memo(({
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
-  // Calculate orthogonal routing with 90-degree turns
-  const defaultTurnX = sourceX + (targetX - sourceX) * 0.6;
-  const defaultTurnY = sourceY + (targetY - sourceY) * 0.3;
-  const turnX = data?.controlPointX ?? defaultTurnX;
-  const turnY = data?.controlPointY ?? defaultTurnY;
+  // Simple curved connection with control point
+  const defaultControlX = (sourceX + targetX) / 2;
+  const defaultControlY = (sourceY + targetY) / 2 - 50; // Slight curve offset
+  const controlX = data?.controlPointX ?? defaultControlX;
+  const controlY = data?.controlPointY ?? defaultControlY;
   
-  const cornerRadius = 8;
+  // Create smooth quadratic bezier curve
+  const edgePath = `M ${sourceX},${sourceY} Q ${controlX},${controlY} ${targetX},${targetY}`;
   
-  // Create orthogonal path with rounded corners
-  const createOrthogonalPath = () => {
-    const horizontal = Math.abs(turnX - sourceX);
-    const vertical = Math.abs(turnY - sourceY);
-    const vertical2 = Math.abs(targetY - turnY);
-    
-    if (horizontal < cornerRadius || vertical < cornerRadius || vertical2 < cornerRadius) {
-      // If distances are too small for rounded corners, use straight lines
-      return `M ${sourceX},${sourceY} L ${turnX},${turnY} L ${targetX},${targetY}`;
-    }
-    
-    // Direction vectors
-    const hDir = turnX > sourceX ? 1 : -1;
-    const vDir1 = turnY > sourceY ? 1 : -1;
-    const vDir2 = targetY > turnY ? 1 : -1;
-    
-    // Calculate path with rounded corners
-    const path = [
-      `M ${sourceX},${sourceY}`, // Start at source
-      `L ${turnX - cornerRadius * hDir},${sourceY}`, // Horizontal line to first corner
-      `Q ${turnX},${sourceY} ${turnX},${sourceY + cornerRadius * vDir1}`, // First rounded corner
-      `L ${turnX},${turnY - cornerRadius * vDir2}`, // Vertical line to second corner
-      `Q ${turnX},${turnY} ${turnX + cornerRadius * hDir},${turnY}`, // Second rounded corner
-      `L ${targetX},${targetY}` // Final line to target
-    ].join(' ');
-    
-    return path;
-  };
-  
-  const edgePath = createOrthogonalPath();
-  
-  // Position label at the turn point
-  const labelX = turnX;
-  const labelY = turnY;
+  // Position label at the control point (curve peak)
+  const labelX = controlX;
+  const labelY = controlY;
 
   const handleEdgeClick = () => {
     if (!isDragging) {
@@ -95,31 +65,18 @@ const MovementTaskEdge = memo(({
     const deltaX = e.clientX - dragStart.x;
     const deltaY = e.clientY - dragStart.y;
     
-    // Update both X and Y positions with reasonable bounds
-    const newTurnX = Math.max(
-      Math.min(sourceX, targetX) + 30, // Minimum distance from left edge
-      Math.min(
-        Math.max(sourceX, targetX) - 30, // Maximum distance from right edge
-        turnX + deltaX
-      )
-    );
-    
-    const newTurnY = Math.max(
-      Math.min(sourceY, targetY) + 30, // Minimum distance from top edge
-      Math.min(
-        Math.max(sourceY, targetY) - 30, // Maximum distance from bottom edge
-        turnY + deltaY
-      )
-    );
+    // Update control point position
+    const newControlX = controlX + deltaX;
+    const newControlY = controlY + deltaY;
     
     updateMovementEdge(id, {
       ...data,
-      controlPointX: newTurnX,
-      controlPointY: newTurnY,
+      controlPointX: newControlX,
+      controlPointY: newControlY,
     });
     
     setDragStart({ x: e.clientX, y: e.clientY });
-  }, [isDragging, id, data, updateMovementEdge, dragStart, turnX, turnY, sourceX, targetX, sourceY, targetY]);
+  }, [isDragging, id, data, updateMovementEdge, dragStart, controlX, controlY]);
 
   const handleMouseUp = useCallback(() => {
     setIsDragging(false);
@@ -162,7 +119,7 @@ const MovementTaskEdge = memo(({
           <div
             style={{
               position: 'absolute',
-              transform: `translate(-50%, -50%) translate(${turnX}px,${turnY}px)`,
+              transform: `translate(-50%, -50%) translate(${controlX}px,${controlY}px)`,
               pointerEvents: 'none',
             }}
             className="w-3 h-3 bg-blue-500 rounded-full border-2 border-white shadow-lg"
