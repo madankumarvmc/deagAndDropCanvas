@@ -1,0 +1,22 @@
+"I am planning to develop a web-based framework, hosted on Replit, designed to visually define and configure Warehouse Management System (WMS) operational processes. This framework will function as a drag-and-drop canvas where users can construct process flows by creating and connecting nodes.
+
+The core functionalities of this framework must include:
+
+Interactive Canvas:
+
+A central canvas area where users can visually construct WMS process flows.
+Ability to draw and place individual 'Process Nodes' representing distinct WMS tasks (e.g., Receiving, Palletization, Putaway, Replenishment, Picking, Loading).
+Ability to connect these Process Nodes with 'Edges' (lines/arrows) to define the sequential flow of operations, allowing for linear process paths.
+Hierarchical Process Definition (Implicit/Explicit):
+
+While the immediate focus is on linear task sequences (e.g., Receiving -> Palletization -> Putaway), the design should implicitly support the concept of higher-level processes (e.g., Inbound, Outbound) that contain these task sequences. The visual representation should clearly delineate these sub-processes within the overall flow.
+Node-Specific Configuration (Forms):
+
+Each Process Node must be interactive. Upon clicking a node, a dedicated configuration form/modal should appear.
+This form will allow users to define and modify the specific logic, settings, and parameters pertinent to that particular WMS process (e.g., for 'Receiving', settings might include 'Expected GRN', 'Quality Check Required'; for 'Picking', 'Picking Strategy', 'Batch Allocation').
+All changes made within these forms must be saved and associated directly with the respective node.
+Conditional Logic / Parallel Paths ('Loops'):
+
+The framework must support the definition of conditional logic or parallel operational paths for a single WMS process type.
+For instance, if a 'Replenishment' process has different settings or sub-flows for 'Full Case Items' versus 'Loose Items', the user should be able to visually represent these distinct paths originating from the 'Replenishment' node. This could be achieved by allowing multiple outbound edges from a node, each leading to a specialized sub-process, or by visually indicating conditional branches.
+The framework should prioritize intuitive drag-and-drop interaction, clear visual representation of process flows, and robust, node-specific configuration capabilities. The ultimate goal is to provide a user-friendly tool for WMS process definition and configuration."
