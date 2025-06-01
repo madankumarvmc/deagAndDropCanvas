@@ -9,8 +9,8 @@ interface MovementTaskEdgeData {
   color: string;
   category: string;
   configuration?: any;
-  labelOffsetX?: number;
-  labelOffsetY?: number;
+  controlPointX?: number;
+  controlPointY?: number;
 }
 
 const MovementTaskEdge = memo(({
@@ -28,14 +28,18 @@ const MovementTaskEdge = memo(({
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
-  const [edgePath, labelX, labelY] = getBezierPath({
-    sourceX,
-    sourceY,
-    sourcePosition,
-    targetX,
-    targetY,
-    targetPosition,
-  });
+  // Calculate control point for custom curve
+  const defaultControlX = (sourceX + targetX) / 2;
+  const defaultControlY = (sourceY + targetY) / 2;
+  const controlX = data?.controlPointX ?? defaultControlX;
+  const controlY = data?.controlPointY ?? defaultControlY;
+
+  // Create custom bezier path using control point
+  const edgePath = `M ${sourceX},${sourceY} Q ${controlX},${controlY} ${targetX},${targetY}`;
+  
+  // Position label at the control point
+  const adjustedLabelX = controlX;
+  const adjustedLabelY = controlY;
 
   const handleEdgeClick = () => {
     if (!isDragging) {
@@ -51,23 +55,33 @@ const MovementTaskEdge = memo(({
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
     setIsDragging(true);
-    setDragStart({ x: e.clientX, y: e.clientY });
+    
+    // Get the React Flow viewport element to calculate relative coordinates
+    const reactFlowBounds = (e.target as Element).closest('.react-flow')?.getBoundingClientRect();
+    if (reactFlowBounds) {
+      const x = e.clientX - reactFlowBounds.left;
+      const y = e.clientY - reactFlowBounds.top;
+      setDragStart({ x, y });
+    }
   }, []);
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
     if (!isDragging) return;
     
-    const deltaX = e.clientX - dragStart.x;
-    const deltaY = e.clientY - dragStart.y;
+    // Get the React Flow viewport element to calculate relative coordinates
+    const reactFlowElement = document.querySelector('.react-flow');
+    if (!reactFlowElement) return;
+    
+    const reactFlowBounds = reactFlowElement.getBoundingClientRect();
+    const x = e.clientX - reactFlowBounds.left;
+    const y = e.clientY - reactFlowBounds.top;
     
     updateMovementEdge(id, {
       ...data,
-      labelOffsetX: (data?.labelOffsetX || 0) + deltaX,
-      labelOffsetY: (data?.labelOffsetY || 0) + deltaY,
+      controlPointX: x,
+      controlPointY: y,
     });
-    
-    setDragStart({ x: e.clientX, y: e.clientY });
-  }, [isDragging, dragStart, id, data, updateMovementEdge]);
+  }, [isDragging, id, data, updateMovementEdge]);
 
   const handleMouseUp = useCallback(() => {
     setIsDragging(false);
@@ -108,7 +122,7 @@ const MovementTaskEdge = memo(({
         <div
           style={{
             position: 'absolute',
-            transform: `translate(-50%, -50%) translate(${labelX + (data?.labelOffsetX || 0)}px,${labelY + (data?.labelOffsetY || 0)}px)`,
+            transform: `translate(-50%, -50%) translate(${adjustedLabelX}px,${adjustedLabelY}px)`,
             pointerEvents: 'all',
             cursor: isDragging ? 'grabbing' : 'grab',
           }}
