@@ -94,129 +94,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Node Configuration routes
-  app.get("/api/nodes/:nodeId/config", async (req, res) => {
+  // Location Configuration routes
+  app.post("/api/locations/config", async (req, res) => {
     try {
-      const { nodeId } = req.params;
-      const config = await storage.getNodeConfiguration(nodeId);
-      
-      if (!config) {
-        return res.status(404).json({ message: "Node configuration not found" });
-      }
-
-      res.json(config);
-    } catch (error) {
-      res.status(500).json({ message: "Failed to fetch node configuration" });
-    }
-  });
-
-  app.get("/api/flows/:flowId/nodes", async (req, res) => {
-    try {
-      const flowId = parseInt(req.params.flowId);
-      if (isNaN(flowId)) {
-        return res.status(400).json({ message: "Invalid flow ID" });
-      }
-
-      const configs = await storage.getNodeConfigurationsByFlow(flowId);
-      res.json(configs);
-    } catch (error) {
-      res.status(500).json({ message: "Failed to fetch node configurations" });
-    }
-  });
-
-  app.post("/api/nodes/config", async (req, res) => {
-    try {
-      // Validate basic structure
-      const validatedData = insertNodeConfigurationSchema.parse(req.body);
-      
-      // Validate configuration based on node type
-      const { nodeType, configuration } = validatedData;
-      let validatedConfig;
-
-      switch (nodeType) {
-        case NODE_TYPES.RECEIVING:
-          validatedConfig = receivingConfigSchema.parse(configuration);
-          break;
-        case NODE_TYPES.PALLETIZATION:
-          validatedConfig = palletizationConfigSchema.parse(configuration);
-          break;
-        case NODE_TYPES.PUTAWAY:
-          validatedConfig = putawayConfigSchema.parse(configuration);
-          break;
-        case NODE_TYPES.REPLENISHMENT:
-          validatedConfig = replenishmentConfigSchema.parse(configuration);
-          break;
-        case NODE_TYPES.PICKING:
-          validatedConfig = pickingConfigSchema.parse(configuration);
-          break;
-        case NODE_TYPES.LOADING:
-          validatedConfig = loadingConfigSchema.parse(configuration);
-          break;
-        default:
-          return res.status(400).json({ message: "Invalid node type" });
-      }
-
-      const configData = {
-        ...validatedData,
-        configuration: validatedConfig,
-      };
-
-      const config = await storage.createNodeConfiguration(configData);
+      const validatedData = insertLocationConfigurationSchema.parse(req.body);
+      const config = await storage.createLocationConfiguration(validatedData);
       res.status(201).json(config);
     } catch (error) {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: "Invalid configuration", errors: error.errors });
       }
-      res.status(500).json({ message: "Failed to create node configuration" });
+      res.status(500).json({ message: "Failed to create location configuration" });
     }
   });
 
-  app.put("/api/nodes/:nodeId/config", async (req, res) => {
+  app.put("/api/locations/:locationId/config", async (req, res) => {
     try {
-      const { nodeId } = req.params;
+      const { locationId } = req.params;
+      const validatedData = insertLocationConfigurationSchema.partial().parse(req.body);
+      const config = await storage.updateLocationConfiguration(locationId, validatedData);
       
-      // Get existing config to determine node type
-      const existing = await storage.getNodeConfiguration(nodeId);
-      if (!existing) {
-        return res.status(404).json({ message: "Node configuration not found" });
-      }
-
-      const validatedData = insertNodeConfigurationSchema.partial().parse(req.body);
-      
-      // If configuration is being updated, validate it
-      if (validatedData.configuration) {
-        const nodeType = validatedData.nodeType || existing.nodeType;
-        let validatedConfig;
-
-        switch (nodeType) {
-          case NODE_TYPES.RECEIVING:
-            validatedConfig = receivingConfigSchema.parse(validatedData.configuration);
-            break;
-          case NODE_TYPES.PALLETIZATION:
-            validatedConfig = palletizationConfigSchema.parse(validatedData.configuration);
-            break;
-          case NODE_TYPES.PUTAWAY:
-            validatedConfig = putawayConfigSchema.parse(validatedData.configuration);
-            break;
-          case NODE_TYPES.REPLENISHMENT:
-            validatedConfig = replenishmentConfigSchema.parse(validatedData.configuration);
-            break;
-          case NODE_TYPES.PICKING:
-            validatedConfig = pickingConfigSchema.parse(validatedData.configuration);
-            break;
-          case NODE_TYPES.LOADING:
-            validatedConfig = loadingConfigSchema.parse(validatedData.configuration);
-            break;
-          default:
-            return res.status(400).json({ message: "Invalid node type" });
-        }
-
-        validatedData.configuration = validatedConfig;
-      }
-
-      const config = await storage.updateNodeConfiguration(nodeId, validatedData);
       if (!config) {
-        return res.status(404).json({ message: "Node configuration not found" });
+        return res.status(404).json({ message: "Location configuration not found" });
       }
 
       res.json(config);
@@ -224,22 +123,82 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: "Invalid configuration", errors: error.errors });
       }
-      res.status(500).json({ message: "Failed to update node configuration" });
+      res.status(500).json({ message: "Failed to update location configuration" });
     }
   });
 
-  app.delete("/api/nodes/:nodeId/config", async (req, res) => {
+  // Movement Task Configuration routes
+  app.post("/api/movement-tasks/config", async (req, res) => {
     try {
-      const { nodeId } = req.params;
-      const deleted = await storage.deleteNodeConfiguration(nodeId);
+      const validatedData = insertMovementTaskConfigurationSchema.parse(req.body);
+      const config = await storage.createMovementTaskConfiguration(validatedData);
+      res.status(201).json(config);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid configuration", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to create movement task configuration" });
+    }
+  });
+
+  app.put("/api/movement-tasks/:edgeId/config", async (req, res) => {
+    try {
+      const { edgeId } = req.params;
+      const validatedData = insertMovementTaskConfigurationSchema.partial().parse(req.body);
+      const config = await storage.updateMovementTaskConfiguration(edgeId, validatedData);
       
-      if (!deleted) {
-        return res.status(404).json({ message: "Node configuration not found" });
+      if (!config) {
+        return res.status(404).json({ message: "Movement task configuration not found" });
       }
 
-      res.status(204).send();
+      res.json(config);
     } catch (error) {
-      res.status(500).json({ message: "Failed to delete node configuration" });
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid configuration", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to update movement task configuration" });
+    }
+  });
+
+  // Location Task Configuration routes
+  app.post("/api/location-tasks/config", async (req, res) => {
+    try {
+      const validatedData = insertLocationTaskConfigurationSchema.parse(req.body);
+      const config = await storage.createLocationTaskConfiguration(validatedData);
+      res.status(201).json(config);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid configuration", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to create location task configuration" });
+    }
+  });
+
+  app.put("/api/location-tasks/:taskId/config", async (req, res) => {
+    try {
+      const { taskId } = req.params;
+      const validatedData = insertLocationTaskConfigurationSchema.partial().parse(req.body);
+      const config = await storage.updateLocationTaskConfiguration(taskId, validatedData);
+      
+      if (!config) {
+        return res.status(404).json({ message: "Location task configuration not found" });
+      }
+
+      res.json(config);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid configuration", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to update location task configuration" });
+    }
+  });
+
+  // Framework Configuration route
+  app.get("/api/framework-config", async (req, res) => {
+    try {
+      res.json(defaultFrameworkConfig);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch framework configuration" });
     }
   });
 
