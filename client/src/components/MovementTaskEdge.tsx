@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useState, useCallback, useEffect } from 'react';
 import { EdgeProps, getBezierPath, EdgeLabelRenderer } from 'reactflow';
 import { useWarehouseStore } from '@/stores/warehouseStore';
 
@@ -9,6 +9,8 @@ interface MovementTaskEdgeData {
   color: string;
   category: string;
   configuration?: any;
+  labelOffsetX?: number;
+  labelOffsetY?: number;
 }
 
 const MovementTaskEdge = memo(({
@@ -22,7 +24,9 @@ const MovementTaskEdge = memo(({
   data,
   selected,
 }: EdgeProps<MovementTaskEdgeData>) => {
-  const { setSelectedElement, setConfigModalOpen } = useWarehouseStore();
+  const { setSelectedElement, setConfigModalOpen, updateMovementEdge } = useWarehouseStore();
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
   const [edgePath, labelX, labelY] = getBezierPath({
     sourceX,
@@ -34,13 +38,52 @@ const MovementTaskEdge = memo(({
   });
 
   const handleEdgeClick = () => {
-    setSelectedElement(id, 'movement');
+    if (!isDragging) {
+      setSelectedElement(id, 'movement');
+    }
   };
 
   const handleEdgeDoubleClick = () => {
     setSelectedElement(id, 'movement');
     setConfigModalOpen(true);
   };
+
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsDragging(true);
+    setDragStart({ x: e.clientX, y: e.clientY });
+  }, []);
+
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (!isDragging) return;
+    
+    const deltaX = e.clientX - dragStart.x;
+    const deltaY = e.clientY - dragStart.y;
+    
+    updateMovementEdge(id, {
+      ...data,
+      labelOffsetX: (data?.labelOffsetX || 0) + deltaX,
+      labelOffsetY: (data?.labelOffsetY || 0) + deltaY,
+    });
+    
+    setDragStart({ x: e.clientX, y: e.clientY });
+  }, [isDragging, dragStart, id, data, updateMovementEdge]);
+
+  const handleMouseUp = useCallback(() => {
+    setIsDragging(false);
+  }, []);
+
+  // Add global mouse event listeners for dragging
+  useEffect(() => {
+    if (isDragging) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+      };
+    }
+  }, [isDragging, handleMouseMove, handleMouseUp]);
 
   const getStatusColor = () => {
     if (!data?.configuration) return '#f59e0b'; // Warning yellow for unconfigured
@@ -65,10 +108,12 @@ const MovementTaskEdge = memo(({
         <div
           style={{
             position: 'absolute',
-            transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
+            transform: `translate(-50%, -50%) translate(${labelX + (data?.labelOffsetX || 0)}px,${labelY + (data?.labelOffsetY || 0)}px)`,
             pointerEvents: 'all',
+            cursor: isDragging ? 'grabbing' : 'grab',
           }}
           className="nodrag nopan"
+          onMouseDown={handleMouseDown}
         >
           <div
             className={`
