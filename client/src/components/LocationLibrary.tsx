@@ -13,7 +13,8 @@ export default function LocationLibrary() {
     setDraggedLocationTypeId, 
     frameworkConfig,
     isCreatingMovementTask,
-    setCreatingMovementTask
+    setCreatingMovementTask,
+    setPendingMovementTask
   } = useWarehouseStore();
 
   const filteredLocationTypes = frameworkConfig.locationNodeTypes.filter(
@@ -80,7 +81,11 @@ export default function LocationLibrary() {
   const handleMovementTaskClick = (taskTypeId: string) => {
     // Store the selected movement task type for creating edges
     setCreatingMovementTask(true);
-    // You would store the taskTypeId in a state for later use when connecting nodes
+    setPendingMovementTask({
+      sourceLocationId: '',
+      targetLocationId: '',
+      taskTypeId: taskTypeId
+    });
   };
 
   const groupedLocations = groupLocationsByCategory(filteredLocationTypes);

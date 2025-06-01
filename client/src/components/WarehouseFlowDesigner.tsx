@@ -204,9 +204,11 @@ export default function WarehouseFlowDesigner() {
         </header>
 
         {/* Main Content */}
-        <div className="flex flex-1 overflow-hidden">
+        <div className="flex flex-1 overflow-hidden h-full">
           <LocationLibrary />
-          <WarehouseCanvas />
+          <div className="flex-1 h-full">
+            <WarehouseCanvas />
+          </div>
           <WarehousePropertiesPanel />
         </div>
 
