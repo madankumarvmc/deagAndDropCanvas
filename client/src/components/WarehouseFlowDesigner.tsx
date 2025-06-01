@@ -11,7 +11,7 @@ import WarehousePropertiesPanel from './WarehousePropertiesPanel';
 import DynamicConfigModal from './DynamicConfigModal';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
-import { defaultFrameworkConfig } from '@shared/framework-config';
+import { defaultFrameworkConfig, type FrameworkConfig } from '@shared/framework-config';
 
 export default function WarehouseFlowDesigner() {
   const { toast } = useToast();
@@ -27,24 +27,31 @@ export default function WarehouseFlowDesigner() {
   const [isSaving, setIsSaving] = useState(false);
 
   // Load framework configuration
-  const { data: frameworkConfig } = useQuery({
+  const { data: frameworkConfig, isLoading: isConfigLoading } = useQuery<FrameworkConfig>({
     queryKey: ['/api/framework-config'],
   });
-
-  // Update framework config when loaded
-  React.useEffect(() => {
-    if (frameworkConfig) {
-      setFrameworkConfig(frameworkConfig);
-    } else {
-      setFrameworkConfig(defaultFrameworkConfig);
-    }
-  }, [frameworkConfig, setFrameworkConfig]);
 
   // Load current flow if one is selected
   const { data: currentFlow } = useQuery({
     queryKey: ['/api/warehouse-flows', currentFlowId],
     enabled: !!currentFlowId,
   });
+
+  // Update framework config when loaded
+  React.useEffect(() => {
+    if (frameworkConfig) {
+      setFrameworkConfig(frameworkConfig);
+    }
+  }, [frameworkConfig, setFrameworkConfig]);
+
+  // Show loading state if config is not loaded
+  if (isConfigLoading || !frameworkConfig) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-lg">Loading configuration...</div>
+      </div>
+    );
+  }
 
   const handleSave = async () => {
     try {

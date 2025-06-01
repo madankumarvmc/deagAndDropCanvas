@@ -67,7 +67,7 @@ export const useWarehouseStore = create<WarehouseState>((set, get) => ({
   // Initial state
   currentFlowId: null,
   warehouseName: 'Default Warehouse',
-  frameworkConfig: defaultFrameworkConfig,
+  frameworkConfig: defaultFrameworkConfig as FrameworkConfig,
   locationNodes: [],
   movementEdges: [],
   viewport: { x: 0, y: 0, zoom: 1 },

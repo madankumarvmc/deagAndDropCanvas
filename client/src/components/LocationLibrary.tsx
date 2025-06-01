@@ -179,10 +179,7 @@ export default function LocationLibrary() {
           <TabsContent value="movements" className="mt-0">
             <div className="p-4 space-y-6">
               <div className="text-xs text-green-600 font-medium bg-green-50 p-2 rounded">
-                {isCreatingMovementTask 
-                  ? "Click on two locations to create a movement task"
-                  : "Select a movement type, then connect two locations"
-                }
+                {frameworkConfig.ui?.tabs?.movements?.instruction || 'Select a movement type, then connect two locations'}
               </div>
               
               {Object.entries(groupedMovements).map(([category, types]) => (
@@ -232,7 +229,7 @@ export default function LocationLibrary() {
           <TabsContent value="tasks" className="mt-0">
             <div className="p-4 space-y-6">
               <div className="text-xs text-purple-600 font-medium bg-purple-50 p-2 rounded">
-                These tasks can be attached to compatible location types
+                {frameworkConfig.ui?.tabs?.tasks?.instruction || 'These tasks can be attached to compatible location types'}
               </div>
               
               {Object.entries(groupedLocationTasks).map(([category, types]) => (

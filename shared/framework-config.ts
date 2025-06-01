@@ -133,6 +133,7 @@ export type FormField = z.infer<typeof formFieldSchema>;
 export type LocationNodeType = z.infer<typeof locationNodeTypeSchema>;
 export type MovementTaskType = z.infer<typeof movementTaskTypeSchema>;
 export type LocationTaskType = z.infer<typeof locationTaskTypeSchema>;
+export type UIConfig = z.infer<typeof uiConfigSchema>;
 export type FrameworkConfig = z.infer<typeof frameworkConfigSchema>;
 
 // Import the JSON configuration
