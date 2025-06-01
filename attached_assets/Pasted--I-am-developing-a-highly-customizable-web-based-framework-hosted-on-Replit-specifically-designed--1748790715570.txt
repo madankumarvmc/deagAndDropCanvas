@@ -1,0 +1,30 @@
+"I am developing a highly customizable web-based framework, hosted on Replit, specifically designed to visually define and configure Warehouse Management System (WMS) operational processes. This framework will function as a dynamic drag-and-drop canvas where users construct detailed warehouse process flows by representing physical locations and the movements/tasks between them.
+
+The core functionalities and architectural principles of this framework must include:
+
+Dynamic Canvas for Location-Based Flow:
+
+A central interactive canvas enabling users to visually map the full operation of a warehouse.
+Primary Nodes: 'Location Nodes': Users must be able to draw and place individual nodes representing distinct physical or logical warehouse locations (e.g., Staging, Storage, Picking Face, Receiving Dock, Shipping Lane).
+Edges as 'Movement Tasks': The connections between these Location Nodes will be represented by 'Edges' (lines/arrows). Each edge signifies a specific movement task (e.g., Putaway, Picking, Replenishment, Transfer) that occurs between the connected locations.
+Multiple Movement Paths with Distinct Settings: Critically, the framework must allow for multiple distinct 'Movement Task' edges to connect the same two Location Nodes. For example, from 'Staging Location' to 'Storage Location', there could be two separate 'Putaway' edges, each representing a different configuration (e.g., one for 'Full Case Putaway' and another for 'Loose Item Putaway'). Each of these distinct edges must be individually configurable.
+Location-Specific Task Definition (Non-Movement Tasks):
+
+For WMS tasks that occur at a specific location but do not involve movement between locations (e.g., Receiving, Loading, Quality Check, Packing), the framework must provide a mechanism to define these.
+These 'Location-Specific Tasks' should be visually represented as attached branches or distinct sub-nodes (e.g., 'round blocks') originating directly from a single 'Location Node'.
+Each 'Location-Specific Task' must also have its own dedicated configuration settings.
+Comprehensive Configuration Forms:
+
+All interactive elements – 'Location Nodes', 'Movement Task' Edges, and 'Location-Specific Task' sub-nodes – must be configurable.
+Upon selecting (e.g., clicking) any of these elements, a dedicated configuration form/modal must appear.
+These forms will allow users to define and modify the specific logic, settings, and parameters pertinent to that particular location, movement task, or location-specific task.
+All changes made within these forms must be saved and persist, associated directly with the respective element on the canvas.
+Framework-Level JSON-Driven Customization:
+
+The entire framework must be fully customizable and extensible via JSON definitions.
+This includes:
+Defining the types of 'Location Nodes' available (and their default properties).
+Defining the types of 'Movement Tasks' (edges) available (e.g., Putaway, Picking, Replenishment, and their associated default settings structures).
+Defining the types of 'Location-Specific Tasks' (attached sub-nodes) available (e.g., Receiving, Loading, Packing, and their associated default settings structures).
+Crucially, the structure and fields of all configuration forms (for Location Nodes, Movement Task Edges, and Location-Specific Task sub-nodes) must be dynamically generated from JSON schemas. This means the framework should read JSON definitions to determine what input fields (text, number, dropdown, checkbox, etc.) are presented for each configurable element.
+The ultimate goal is to deliver a highly flexible, visually intuitive, and fully JSON-configurable web framework for defining, mapping, and configuring complex WMS operational flows based on warehouse locations and the tasks/movements that occur within and between them."
