@@ -1,0 +1,418 @@
+{
+  "name": "WMS Process Framework",
+  "version": "1.0.0",
+  "description": "Location-centric warehouse management system framework",
+  "locationNodeTypes": [
+    {
+      "id": "receiving_dock",
+      "name": "Receiving Dock",
+      "description": "Dock for incoming shipments",
+      "icon": "🚛",
+      "color": "#16a34a",
+      "bgColor": "#dcfce7",
+      "borderColor": "#16a34a",
+      "category": "Inbound",
+      "configurationFields": [
+        {
+          "id": "dock_number",
+          "label": "Dock Number",
+          "type": "text",
+          "required": true,
+          "placeholder": "e.g., DOCK-01"
+        },
+        {
+          "id": "capacity",
+          "label": "Capacity (pallets)",
+          "type": "number",
+          "required": true,
+          "defaultValue": 10,
+          "validation": { "min": 1, "max": 100 }
+        },
+        {
+          "id": "operating_hours",
+          "label": "Operating Hours",
+          "type": "dropdown",
+          "required": true,
+          "defaultValue": "24x7",
+          "options": [
+            { "value": "24x7", "label": "24/7" },
+            { "value": "business", "label": "Business Hours" },
+            { "value": "extended", "label": "Extended Hours" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "staging_area",
+      "name": "Staging Area",
+      "description": "Temporary holding area for goods",
+      "icon": "📦",
+      "color": "#3b82f6",
+      "bgColor": "#dbeafe",
+      "borderColor": "#2563eb",
+      "category": "Inbound",
+      "configurationFields": [
+        {
+          "id": "area_code",
+          "label": "Area Code",
+          "type": "text",
+          "required": true,
+          "placeholder": "e.g., STAGE-A1"
+        },
+        {
+          "id": "max_dwell_time",
+          "label": "Max Dwell Time (hours)",
+          "type": "number",
+          "required": true,
+          "defaultValue": 24,
+          "validation": { "min": 1, "max": 168 }
+        }
+      ]
+    },
+    {
+      "id": "storage_location",
+      "name": "Storage Location",
+      "description": "Main storage area for inventory",
+      "icon": "🏪",
+      "color": "#8b5cf6",
+      "bgColor": "#ede9fe",
+      "borderColor": "#7c3aed",
+      "category": "Storage",
+      "configurationFields": [
+        {
+          "id": "zone",
+          "label": "Storage Zone",
+          "type": "text",
+          "required": true,
+          "placeholder": "e.g., A1-A5"
+        },
+        {
+          "id": "storage_type",
+          "label": "Storage Type",
+          "type": "dropdown",
+          "required": true,
+          "defaultValue": "rack",
+          "options": [
+            { "value": "rack", "label": "Rack Storage" },
+            { "value": "bulk", "label": "Bulk Storage" },
+            { "value": "floor", "label": "Floor Storage" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "picking_face",
+      "name": "Picking Face",
+      "description": "Active picking location",
+      "icon": "✋",
+      "color": "#ef4444",
+      "bgColor": "#fee2e2",
+      "borderColor": "#dc2626",
+      "category": "Outbound",
+      "configurationFields": [
+        {
+          "id": "pick_face_id",
+          "label": "Pick Face ID",
+          "type": "text",
+          "required": true,
+          "placeholder": "e.g., PF-A1-01"
+        },
+        {
+          "id": "pick_method",
+          "label": "Pick Method",
+          "type": "dropdown",
+          "required": true,
+          "defaultValue": "each",
+          "options": [
+            { "value": "each", "label": "Each" },
+            { "value": "case", "label": "Case" },
+            { "value": "pallet", "label": "Pallet" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shipping_dock",
+      "name": "Shipping Dock",
+      "description": "Dock for outgoing shipments",
+      "icon": "🚚",
+      "color": "#f97316",
+      "bgColor": "#fed7aa",
+      "borderColor": "#ea580c",
+      "category": "Outbound",
+      "configurationFields": [
+        {
+          "id": "dock_number",
+          "label": "Dock Number",
+          "type": "text",
+          "required": true,
+          "placeholder": "e.g., SHIP-01"
+        },
+        {
+          "id": "carrier_restrictions",
+          "label": "Carrier Restrictions",
+          "type": "multiselect",
+          "required": false,
+          "options": [
+            { "value": "fedex", "label": "FedEx" },
+            { "value": "ups", "label": "UPS" },
+            { "value": "dhl", "label": "DHL" },
+            { "value": "ltl", "label": "LTL Carriers" }
+          ]
+        }
+      ]
+    }
+  ],
+  "movementTaskTypes": [
+    {
+      "id": "putaway",
+      "name": "Putaway",
+      "description": "Move goods from receiving to storage",
+      "icon": "📥",
+      "color": "#10b981",
+      "category": "Inbound Movement",
+      "allowMultiple": true,
+      "configurationFields": [
+        {
+          "id": "putaway_strategy",
+          "label": "Putaway Strategy",
+          "type": "dropdown",
+          "required": true,
+          "defaultValue": "directed",
+          "options": [
+            { "value": "directed", "label": "Directed" },
+            { "value": "random", "label": "Random" },
+            { "value": "closest", "label": "Closest Available" }
+          ]
+        },
+        {
+          "id": "unit_type",
+          "label": "Unit Type",
+          "type": "dropdown",
+          "required": true,
+          "defaultValue": "pallet",
+          "options": [
+            { "value": "full_case", "label": "Full Case" },
+            { "value": "loose_item", "label": "Loose Item" },
+            { "value": "pallet", "label": "Pallet" }
+          ]
+        },
+        {
+          "id": "priority",
+          "label": "Priority Level",
+          "type": "dropdown",
+          "required": true,
+          "defaultValue": "medium",
+          "options": [
+            { "value": "low", "label": "Low" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "high", "label": "High" },
+            { "value": "urgent", "label": "Urgent" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "picking",
+      "name": "Picking",
+      "description": "Select items for orders",
+      "icon": "👆",
+      "color": "#ef4444",
+      "category": "Outbound Movement",
+      "allowMultiple": true,
+      "configurationFields": [
+        {
+          "id": "picking_method",
+          "label": "Picking Method",
+          "type": "dropdown",
+          "required": true,
+          "defaultValue": "batch",
+          "options": [
+            { "value": "discrete", "label": "Discrete" },
+            { "value": "batch", "label": "Batch" },
+            { "value": "zone", "label": "Zone" },
+            { "value": "wave", "label": "Wave" }
+          ]
+        },
+        {
+          "id": "picking_technology",
+          "label": "Technology",
+          "type": "dropdown",
+          "required": true,
+          "defaultValue": "rf",
+          "options": [
+            { "value": "paper", "label": "Paper" },
+            { "value": "rf", "label": "RF Scanner" },
+            { "value": "voice", "label": "Voice" },
+            { "value": "light", "label": "Pick to Light" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "replenishment",
+      "name": "Replenishment",
+      "description": "Restock picking locations",
+      "icon": "🔄",
+      "color": "#f59e0b",
+      "category": "Internal Movement",
+      "allowMultiple": true,
+      "configurationFields": [
+        {
+          "id": "replenishment_type",
+          "label": "Replenishment Type",
+          "type": "dropdown",
+          "required": true,
+          "defaultValue": "min_max",
+          "options": [
+            { "value": "min_max", "label": "Min/Max" },
+            { "value": "demand_based", "label": "Demand Based" },
+            { "value": "time_based", "label": "Time Based" }
+          ]
+        },
+        {
+          "id": "trigger_threshold",
+          "label": "Trigger Threshold (%)",
+          "type": "number",
+          "required": true,
+          "defaultValue": 20,
+          "validation": { "min": 1, "max": 100 }
+        }
+      ]
+    },
+    {
+      "id": "loading",
+      "name": "Loading",
+      "description": "Load items onto outbound vehicles",
+      "icon": "📤",
+      "color": "#f97316",
+      "category": "Outbound Movement",
+      "allowMultiple": false,
+      "configurationFields": [
+        {
+          "id": "loading_sequence",
+          "label": "Loading Sequence",
+          "type": "dropdown",
+          "required": true,
+          "defaultValue": "stop_sequence",
+          "options": [
+            { "value": "stop_sequence", "label": "Stop Sequence" },
+            { "value": "weight_distribution", "label": "Weight Distribution" },
+            { "value": "product_type", "label": "Product Type" }
+          ]
+        },
+        {
+          "id": "load_verification",
+          "label": "Load Verification",
+          "type": "checkbox",
+          "defaultValue": true
+        }
+      ]
+    }
+  ],
+  "locationTaskTypes": [
+    {
+      "id": "receiving_inspection",
+      "name": "Receiving Inspection",
+      "description": "Quality check of incoming goods",
+      "icon": "🔍",
+      "color": "#16a34a",
+      "bgColor": "#dcfce7",
+      "category": "Quality Control",
+      "compatibleLocationTypes": ["receiving_dock", "staging_area"],
+      "configurationFields": [
+        {
+          "id": "inspection_type",
+          "label": "Inspection Type",
+          "type": "dropdown",
+          "required": true,
+          "defaultValue": "visual",
+          "options": [
+            { "value": "visual", "label": "Visual Inspection" },
+            { "value": "dimensional", "label": "Dimensional Check" },
+            { "value": "weight", "label": "Weight Verification" },
+            { "value": "full", "label": "Full Quality Check" }
+          ]
+        },
+        {
+          "id": "sampling_rate",
+          "label": "Sampling Rate (%)",
+          "type": "number",
+          "required": true,
+          "defaultValue": 10,
+          "validation": { "min": 1, "max": 100 }
+        }
+      ]
+    },
+    {
+      "id": "cycle_counting",
+      "name": "Cycle Counting",
+      "description": "Regular inventory verification",
+      "icon": "📊",
+      "color": "#8b5cf6",
+      "bgColor": "#ede9fe",
+      "category": "Inventory Management",
+      "compatibleLocationTypes": ["storage_location", "picking_face"],
+      "configurationFields": [
+        {
+          "id": "count_frequency",
+          "label": "Count Frequency",
+          "type": "dropdown",
+          "required": true,
+          "defaultValue": "monthly",
+          "options": [
+            { "value": "daily", "label": "Daily" },
+            { "value": "weekly", "label": "Weekly" },
+            { "value": "monthly", "label": "Monthly" },
+            { "value": "quarterly", "label": "Quarterly" }
+          ]
+        },
+        {
+          "id": "count_method",
+          "label": "Count Method",
+          "type": "dropdown",
+          "required": true,
+          "defaultValue": "abc_analysis",
+          "options": [
+            { "value": "abc_analysis", "label": "ABC Analysis" },
+            { "value": "random", "label": "Random Selection" },
+            { "value": "location_based", "label": "Location Based" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "consolidation",
+      "name": "Order Consolidation",
+      "description": "Combine multiple orders for efficiency",
+      "icon": "📋",
+      "color": "#ef4444",
+      "bgColor": "#fee2e2",
+      "category": "Order Processing",
+      "compatibleLocationTypes": ["staging_area", "shipping_dock"],
+      "configurationFields": [
+        {
+          "id": "consolidation_rule",
+          "label": "Consolidation Rule",
+          "type": "dropdown",
+          "required": true,
+          "defaultValue": "destination",
+          "options": [
+            { "value": "destination", "label": "By Destination" },
+            { "value": "carrier", "label": "By Carrier" },
+            { "value": "route", "label": "By Route" },
+            { "value": "customer", "label": "By Customer" }
+          ]
+        },
+        {
+          "id": "max_orders",
+          "label": "Max Orders per Shipment",
+          "type": "number",
+          "required": true,
+          "defaultValue": 10,
+          "validation": { "min": 1, "max": 50 }
+        }
+      ]
+    }
+  ]
+}
