@@ -95,11 +95,13 @@ export default function LocationLibrary() {
   return (
     <aside className="w-80 bg-white border-r border-gray-200 flex flex-col">
       <div className="p-4 border-b border-gray-200">
-        <h2 className="text-lg font-semibold text-gray-900 mb-3">Warehouse Elements</h2>
+        <h2 className="text-lg font-semibold text-gray-900 mb-3">
+          {frameworkConfig.ui?.libraryTitle || 'Warehouse Elements'}
+        </h2>
         <div className="relative mb-3">
           <Input
             type="text"
-            placeholder="Search elements..."
+            placeholder={frameworkConfig.ui?.searchPlaceholder || 'Search elements...'}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10"
@@ -113,22 +115,22 @@ export default function LocationLibrary() {
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="locations" className="text-xs">
               <MapPin className="w-3 h-3 mr-1" />
-              Locations
+              {frameworkConfig.ui?.tabs?.locations?.label || 'Locations'}
             </TabsTrigger>
             <TabsTrigger value="movements" className="text-xs">
               <ArrowRight className="w-3 h-3 mr-1" />
-              Movements
+              {frameworkConfig.ui?.tabs?.movements?.label || 'Movements'}
             </TabsTrigger>
             <TabsTrigger value="tasks" className="text-xs">
               <Settings className="w-3 h-3 mr-1" />
-              Tasks
+              {frameworkConfig.ui?.tabs?.tasks?.label || 'Tasks'}
             </TabsTrigger>
           </TabsList>
           
           <TabsContent value="locations" className="mt-0">
             <div className="p-4 space-y-6">
               <div className="text-xs text-blue-600 font-medium bg-blue-50 p-2 rounded">
-                Drag locations onto the canvas to create warehouse areas
+                {frameworkConfig.ui?.tabs?.locations?.instruction || 'Drag locations onto the canvas to create warehouse areas'}
               </div>
               
               {Object.entries(groupedLocations).map(([category, types]) => (

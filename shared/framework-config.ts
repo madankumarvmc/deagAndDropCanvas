@@ -67,11 +67,62 @@ export const locationTaskTypeSchema = z.object({
   configurationFields: z.array(formFieldSchema)
 });
 
+// UI Configuration Schema
+export const uiConfigSchema = z.object({
+  appTitle: z.string(),
+  warehouseLabel: z.string(),
+  defaultWarehouseName: z.string(),
+  libraryTitle: z.string(),
+  searchPlaceholder: z.string(),
+  tabs: z.object({
+    locations: z.object({
+      id: z.string(),
+      label: z.string(),
+      icon: z.string(),
+      instruction: z.string()
+    }),
+    movements: z.object({
+      id: z.string(),
+      label: z.string(),
+      icon: z.string(),
+      instruction: z.string()
+    }),
+    tasks: z.object({
+      id: z.string(),
+      label: z.string(),
+      icon: z.string(),
+      instruction: z.string()
+    })
+  }),
+  actions: z.object({
+    newFlow: z.string(),
+    saveFlow: z.string(),
+    export: z.string(),
+    undo: z.string(),
+    redo: z.string(),
+    configure: z.string(),
+    addTask: z.string(),
+    delete: z.string()
+  }),
+  messages: z.object({
+    movementCreation: z.object({
+      selectSource: z.string(),
+      selectTarget: z.string()
+    }),
+    propertiesPanel: z.object({
+      noSelection: z.string(),
+      configured: z.string(),
+      notConfigured: z.string()
+    })
+  })
+});
+
 // Framework Configuration Schema
 export const frameworkConfigSchema = z.object({
   name: z.string(),
   version: z.string(),
   description: z.string(),
+  ui: uiConfigSchema,
   locationNodeTypes: z.array(locationNodeTypeSchema),
   movementTaskTypes: z.array(movementTaskTypeSchema),
   locationTaskTypes: z.array(locationTaskTypeSchema)

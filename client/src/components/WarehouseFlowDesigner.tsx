@@ -136,10 +136,10 @@ export default function WarehouseFlowDesigner() {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <h1 className="text-xl font-semibold text-gray-900">
-                WMS Warehouse Flow Designer
+                {frameworkConfig?.ui?.appTitle || 'Warehouse Flow Designer'}
               </h1>
               <div className="flex items-center space-x-2 text-sm text-gray-500">
-                <span>Warehouse:</span>
+                <span>{frameworkConfig?.ui?.warehouseLabel || 'Warehouse:'}</span>
                 <Input
                   value={warehouseName}
                   onChange={(e) => setWarehouseName(e.target.value)}
@@ -156,7 +156,7 @@ export default function WarehouseFlowDesigner() {
                 className="flex items-center space-x-2"
               >
                 <Undo className="w-4 h-4" />
-                <span>Undo</span>
+                <span>{frameworkConfig?.ui?.actions?.undo || 'Undo'}</span>
               </Button>
               
               <Button
@@ -166,7 +166,7 @@ export default function WarehouseFlowDesigner() {
                 className="flex items-center space-x-2"
               >
                 <Redo className="w-4 h-4" />
-                <span>Redo</span>
+                <span>{frameworkConfig?.ui?.actions?.redo || 'Redo'}</span>
               </Button>
               
               <div className="h-4 w-px bg-gray-300" />
@@ -177,7 +177,7 @@ export default function WarehouseFlowDesigner() {
                 onClick={handleNewFlow}
                 className="flex items-center space-x-2"
               >
-                <span>New Flow</span>
+                <span>{frameworkConfig?.ui?.actions?.newFlow || 'New Flow'}</span>
               </Button>
               
               <Button
@@ -188,7 +188,7 @@ export default function WarehouseFlowDesigner() {
                 className="flex items-center space-x-2"
               >
                 <Save className="w-4 h-4" />
-                <span>{isSaving ? 'Saving...' : 'Save Flow'}</span>
+                <span>{isSaving ? 'Saving...' : (frameworkConfig?.ui?.actions?.saveFlow || 'Save Flow')}</span>
               </Button>
               
               <Button
@@ -197,7 +197,7 @@ export default function WarehouseFlowDesigner() {
                 className="flex items-center space-x-2"
               >
                 <Download className="w-4 h-4" />
-                <span>Export</span>
+                <span>{frameworkConfig?.ui?.actions?.export || 'Export'}</span>
               </Button>
             </div>
           </div>

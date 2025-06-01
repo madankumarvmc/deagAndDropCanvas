@@ -2,6 +2,54 @@
   "name": "WMS Process Framework",
   "version": "1.0.0",
   "description": "Location-centric warehouse management system framework",
+  "ui": {
+    "appTitle": "WMS Warehouse Flow Designer",
+    "warehouseLabel": "Warehouse:",
+    "defaultWarehouseName": "Default Warehouse",
+    "libraryTitle": "Warehouse Elements",
+    "searchPlaceholder": "Search elements...",
+    "tabs": {
+      "locations": {
+        "id": "locations",
+        "label": "Locations",
+        "icon": "📍",
+        "instruction": "Drag locations onto the canvas to create warehouse areas"
+      },
+      "movements": {
+        "id": "movements", 
+        "label": "Movements",
+        "icon": "→",
+        "instruction": "Select a movement type, then connect two locations"
+      },
+      "tasks": {
+        "id": "tasks",
+        "label": "Tasks", 
+        "icon": "⚙️",
+        "instruction": "These tasks can be attached to compatible location types"
+      }
+    },
+    "actions": {
+      "newFlow": "New Flow",
+      "saveFlow": "Save Flow",
+      "export": "Export",
+      "undo": "Undo",
+      "redo": "Redo",
+      "configure": "Configure",
+      "addTask": "Add Task",
+      "delete": "Delete"
+    },
+    "messages": {
+      "movementCreation": {
+        "selectSource": "Click on the source location",
+        "selectTarget": "Click on the target location"
+      },
+      "propertiesPanel": {
+        "noSelection": "Select an element to view its properties",
+        "configured": "Configured",
+        "notConfigured": "Not Configured"
+      }
+    }
+  },
   "locationNodeTypes": [
     {
       "id": "receiving_dock",
