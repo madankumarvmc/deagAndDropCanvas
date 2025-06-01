@@ -62,20 +62,22 @@ const MovementTaskEdge = memo(({
   const handleMouseMove = useCallback((e: MouseEvent) => {
     if (!isDragging) return;
     
-    // Get React Flow container for coordinate conversion
-    const reactFlowElement = document.querySelector('.react-flow__viewport');
-    if (!reactFlowElement) return;
+    // Calculate smooth movement deltas
+    const deltaX = e.clientX - dragStart.x;
+    const deltaY = e.clientY - dragStart.y;
     
-    const reactFlowBounds = reactFlowElement.getBoundingClientRect();
-    const newControlX = e.clientX - reactFlowBounds.left;
-    const newControlY = e.clientY - reactFlowBounds.top;
+    // Apply deltas to current control point
+    const newControlX = controlX + deltaX;
+    const newControlY = controlY + deltaY;
     
     updateMovementEdge(id, {
       ...data,
       controlPointX: newControlX,
       controlPointY: newControlY,
     });
-  }, [isDragging, id, data, updateMovementEdge]);
+    
+    setDragStart({ x: e.clientX, y: e.clientY });
+  }, [isDragging, id, data, updateMovementEdge, dragStart, controlX, controlY]);
 
   const handleMouseUp = useCallback(() => {
     setIsDragging(false);
@@ -147,7 +149,12 @@ const MovementTaskEdge = memo(({
             onDoubleClick={handleEdgeDoubleClick}
           >
             <span className="text-sm">{data?.icon}</span>
-            <span className="text-xs font-medium text-gray-700">{data?.taskName}</span>
+            <div className="flex flex-col">
+              <span className="text-xs font-medium text-gray-700">{data?.taskName}</span>
+              {data?.configuration?.labelName && (
+                <span className="text-xs text-gray-500">{data.configuration.labelName}</span>
+              )}
+            </div>
             <div
               className="w-2 h-2 rounded-full"
               style={{ backgroundColor: getStatusColor() }}

@@ -225,6 +225,14 @@
       "allowMultiple": true,
       "configurationFields": [
         {
+          "id": "labelName",
+          "label": "Label Name",
+          "type": "text",
+          "required": false,
+          "placeholder": "Enter custom label name (optional)",
+          "description": "Custom name to identify this connection"
+        },
+        {
           "id": "putaway_strategy",
           "label": "Putaway Strategy",
           "type": "dropdown",
@@ -272,6 +280,14 @@
       "category": "Outbound Movement",
       "allowMultiple": true,
       "configurationFields": [
+        {
+          "id": "labelName",
+          "label": "Label Name",
+          "type": "text",
+          "required": false,
+          "placeholder": "Enter custom label name (optional)",
+          "description": "Custom name to identify this connection"
+        },
         {
           "id": "picking_method",
           "label": "Picking Method",
