@@ -28,18 +28,43 @@ const MovementTaskEdge = memo(({
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
-  // Calculate control point for custom curve
-  const defaultControlX = (sourceX + targetX) / 2;
-  const defaultControlY = (sourceY + targetY) / 2 - 50; // Offset upward for natural curve
-  const controlX = data?.controlPointX ?? defaultControlX;
-  const controlY = data?.controlPointY ?? defaultControlY;
-
-  // Create smooth quadratic bezier path
-  const edgePath = `M ${sourceX},${sourceY} Q ${controlX},${controlY} ${targetX},${targetY}`;
+  // Calculate orthogonal routing with 90-degree turns
+  const defaultTurnX = sourceX + (targetX - sourceX) * 0.6; // Default turn point at 60% horizontal distance
+  const turnX = data?.controlPointX ?? defaultTurnX;
+  const turnY = sourceY; // Keep horizontal line at source level, then vertical to target
   
-  // Calculate the midpoint of the curve for label positioning (t = 0.5)
-  const labelX = 0.25 * sourceX + 0.5 * controlX + 0.25 * targetX;
-  const labelY = 0.25 * sourceY + 0.5 * controlY + 0.25 * targetY;
+  const cornerRadius = 8; // Rounded corner radius
+  
+  // Create orthogonal path with rounded corners
+  const createOrthogonalPath = () => {
+    const horizontal = Math.abs(turnX - sourceX);
+    const vertical = Math.abs(targetY - turnY);
+    
+    if (horizontal < cornerRadius || vertical < cornerRadius) {
+      // If distances are too small for rounded corners, use straight lines
+      return `M ${sourceX},${sourceY} L ${turnX},${turnY} L ${targetX},${targetY}`;
+    }
+    
+    // Direction vectors
+    const hDir = turnX > sourceX ? 1 : -1;
+    const vDir = targetY > turnY ? 1 : -1;
+    
+    // Calculate path with rounded corner
+    const path = [
+      `M ${sourceX},${sourceY}`, // Start at source
+      `L ${turnX - cornerRadius * hDir},${turnY}`, // Horizontal line to corner start
+      `Q ${turnX},${turnY} ${turnX},${turnY + cornerRadius * vDir}`, // Rounded corner
+      `L ${targetX},${targetY}` // Vertical line to target
+    ].join(' ');
+    
+    return path;
+  };
+  
+  const edgePath = createOrthogonalPath();
+  
+  // Position label at the midpoint of the horizontal segment
+  const labelX = (sourceX + turnX) / 2;
+  const labelY = sourceY - 20; // Offset above the line
 
   const handleEdgeClick = () => {
     if (!isDragging) {
@@ -55,33 +80,31 @@ const MovementTaskEdge = memo(({
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
     setIsDragging(true);
-    
-    // Get the React Flow viewport element to calculate relative coordinates
-    const reactFlowBounds = (e.target as Element).closest('.react-flow')?.getBoundingClientRect();
-    if (reactFlowBounds) {
-      const x = e.clientX - reactFlowBounds.left;
-      const y = e.clientY - reactFlowBounds.top;
-      setDragStart({ x, y });
-    }
+    setDragStart({ x: e.clientX, y: e.clientY });
   }, []);
 
   const handleMouseMove = useCallback((e: MouseEvent) => {
     if (!isDragging) return;
     
-    // Get the React Flow viewport element to calculate relative coordinates
-    const reactFlowElement = document.querySelector('.react-flow__viewport');
-    if (!reactFlowElement) return;
+    // Calculate the horizontal movement delta
+    const deltaX = e.clientX - dragStart.x;
     
-    const reactFlowBounds = reactFlowElement.getBoundingClientRect();
-    const x = e.clientX - reactFlowBounds.left;
-    const y = e.clientY - reactFlowBounds.top;
+    // Update only the X position for horizontal control of the turn point
+    const newTurnX = Math.max(
+      Math.min(sourceX, targetX) + 20, // Minimum distance from left edge
+      Math.min(
+        Math.max(sourceX, targetX) - 20, // Maximum distance from right edge
+        turnX + deltaX // Current position plus delta
+      )
+    );
     
     updateMovementEdge(id, {
       ...data,
-      controlPointX: x,
-      controlPointY: y,
+      controlPointX: newTurnX,
     });
-  }, [isDragging, id, data, updateMovementEdge]);
+    
+    setDragStart({ x: e.clientX, y: e.clientY });
+  }, [isDragging, id, data, updateMovementEdge, dragStart, turnX, sourceX, targetX]);
 
   const handleMouseUp = useCallback(() => {
     setIsDragging(false);
@@ -124,7 +147,7 @@ const MovementTaskEdge = memo(({
           <div
             style={{
               position: 'absolute',
-              transform: `translate(-50%, -50%) translate(${controlX}px,${controlY}px)`,
+              transform: `translate(-50%, -50%) translate(${turnX}px,${turnY}px)`,
               pointerEvents: 'none',
             }}
             className="w-3 h-3 bg-blue-500 rounded-full border-2 border-white shadow-lg"
