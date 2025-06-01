@@ -13,19 +13,22 @@
         "id": "locations",
         "label": "Locations",
         "icon": "📍",
-        "instruction": "Drag locations onto the canvas to create warehouse areas"
+        "instruction": "Drag locations onto the canvas to create warehouse areas",
+        "categories": ["Inbound", "Storage", "Outbound", "Quality Control", "Returns"]
       },
       "movements": {
         "id": "movements", 
         "label": "Movements",
         "icon": "→",
-        "instruction": "Select a movement type, then connect two locations"
+        "instruction": "Select a movement type, then connect two locations",
+        "categories": ["Transport", "Processing", "Handling"]
       },
       "tasks": {
         "id": "tasks",
         "label": "Tasks", 
         "icon": "⚙️",
-        "instruction": "These tasks can be attached to compatible location types"
+        "instruction": "These tasks can be attached to compatible location types",
+        "categories": ["Automation", "Manual", "Quality"]
       }
     },
     "actions": {

@@ -79,19 +79,22 @@ export const uiConfigSchema = z.object({
       id: z.string(),
       label: z.string(),
       icon: z.string(),
-      instruction: z.string()
+      instruction: z.string(),
+      categories: z.array(z.string())
     }),
     movements: z.object({
       id: z.string(),
       label: z.string(),
       icon: z.string(),
-      instruction: z.string()
+      instruction: z.string(),
+      categories: z.array(z.string())
     }),
     tasks: z.object({
       id: z.string(),
       label: z.string(),
       icon: z.string(),
-      instruction: z.string()
+      instruction: z.string(),
+      categories: z.array(z.string())
     })
   }),
   actions: z.object({

@@ -39,31 +39,43 @@ export default function LocationLibrary() {
   );
 
   const groupLocationsByCategory = (types: LocationNodeType[]) => {
+    const allowedCategories = frameworkConfig.ui?.tabs?.locations?.categories || [];
     return types.reduce((acc, type) => {
-      if (!acc[type.category]) {
-        acc[type.category] = [];
+      // Only include types that belong to categories defined in the JSON config
+      if (allowedCategories.includes(type.category)) {
+        if (!acc[type.category]) {
+          acc[type.category] = [];
+        }
+        acc[type.category].push(type);
       }
-      acc[type.category].push(type);
       return acc;
     }, {} as Record<string, LocationNodeType[]>);
   };
 
   const groupMovementsByCategory = (types: MovementTaskType[]) => {
+    const allowedCategories = frameworkConfig.ui?.tabs?.movements?.categories || [];
     return types.reduce((acc, type) => {
-      if (!acc[type.category]) {
-        acc[type.category] = [];
+      // Only include types that belong to categories defined in the JSON config
+      if (allowedCategories.includes(type.category)) {
+        if (!acc[type.category]) {
+          acc[type.category] = [];
+        }
+        acc[type.category].push(type);
       }
-      acc[type.category].push(type);
       return acc;
     }, {} as Record<string, MovementTaskType[]>);
   };
 
   const groupLocationTasksByCategory = (types: LocationTaskType[]) => {
+    const allowedCategories = frameworkConfig.ui?.tabs?.tasks?.categories || [];
     return types.reduce((acc, type) => {
-      if (!acc[type.category]) {
-        acc[type.category] = [];
+      // Only include types that belong to categories defined in the JSON config
+      if (allowedCategories.includes(type.category)) {
+        if (!acc[type.category]) {
+          acc[type.category] = [];
+        }
+        acc[type.category].push(type);
       }
-      acc[type.category].push(type);
       return acc;
     }, {} as Record<string, LocationTaskType[]>);
   };
