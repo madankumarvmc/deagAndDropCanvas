@@ -34,12 +34,13 @@ const MovementTaskEdge = memo(({
   const controlX = data?.controlPointX ?? defaultControlX;
   const controlY = data?.controlPointY ?? defaultControlY;
   
-  // Create smooth quadratic bezier curve
+  // Create smooth quadratic bezier curve - this path should follow the control point
   const edgePath = `M ${sourceX},${sourceY} Q ${controlX},${controlY} ${targetX},${targetY}`;
   
-  // Position label at the control point (curve peak)
-  const labelX = controlX;
-  const labelY = controlY;
+  // Calculate actual label position on the curve (t=0.5 for midpoint)
+  const t = 0.5;
+  const labelX = (1 - t) * (1 - t) * sourceX + 2 * (1 - t) * t * controlX + t * t * targetX;
+  const labelY = (1 - t) * (1 - t) * sourceY + 2 * (1 - t) * t * controlY + t * t * targetY;
 
   const handleEdgeClick = () => {
     if (!isDragging) {
@@ -61,22 +62,20 @@ const MovementTaskEdge = memo(({
   const handleMouseMove = useCallback((e: MouseEvent) => {
     if (!isDragging) return;
     
-    // Calculate movement deltas
-    const deltaX = e.clientX - dragStart.x;
-    const deltaY = e.clientY - dragStart.y;
+    // Get React Flow container for coordinate conversion
+    const reactFlowElement = document.querySelector('.react-flow__viewport');
+    if (!reactFlowElement) return;
     
-    // Update control point position
-    const newControlX = controlX + deltaX;
-    const newControlY = controlY + deltaY;
+    const reactFlowBounds = reactFlowElement.getBoundingClientRect();
+    const newControlX = e.clientX - reactFlowBounds.left;
+    const newControlY = e.clientY - reactFlowBounds.top;
     
     updateMovementEdge(id, {
       ...data,
       controlPointX: newControlX,
       controlPointY: newControlY,
     });
-    
-    setDragStart({ x: e.clientX, y: e.clientY });
-  }, [isDragging, id, data, updateMovementEdge, dragStart, controlX, controlY]);
+  }, [isDragging, id, data, updateMovementEdge]);
 
   const handleMouseUp = useCallback(() => {
     setIsDragging(false);
