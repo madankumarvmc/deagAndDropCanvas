@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, useState, useEffect, useMemo } from 'react';
 import ReactFlow, {
   Background,
   Controls,
@@ -8,8 +8,8 @@ import ReactFlow, {
   addEdge,
   Connection,
   Edge,
-  ReactFlowInstance,
   Node,
+  ReactFlowProvider,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { Button } from '@/components/ui/button';
@@ -18,14 +18,13 @@ import { useFlowStore } from '@/stores/flowStore';
 import ProcessNode from './ProcessNode';
 import { type NodeType } from '@shared/schema';
 
-const nodeTypes = {
-  wmsProcess: ProcessNode,
-};
-
 export default function FlowCanvas() {
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
-  const [reactFlowInstance, setReactFlowInstance] = 
-    ReactFlowInstance<null, null>(null);
+  const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
+
+  const nodeTypes = useMemo(() => ({
+    wmsProcess: ProcessNode,
+  }), []);
 
   const {
     nodes,
@@ -44,19 +43,19 @@ export default function FlowCanvas() {
   const [localEdges, setLocalEdges, onEdgesChange] = useEdgesState(edges);
 
   // Sync local state with store
-  React.useEffect(() => {
+  useEffect(() => {
     setLocalNodes(nodes);
   }, [nodes, setLocalNodes]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setLocalEdges(edges);
   }, [edges, setLocalEdges]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setNodes(localNodes);
   }, [localNodes, setNodes]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setEdges(localEdges);
   }, [localEdges, setEdges]);
 
@@ -202,7 +201,6 @@ export default function FlowCanvas() {
           attributionPosition="bottom-left"
           className="bg-gray-50"
           defaultViewport={viewport}
-          onViewportChange={setViewport}
         >
           <Background
             color="#94a3b8"
