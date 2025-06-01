@@ -13,6 +13,7 @@ export default function LocationLibrary() {
     setDraggedLocationTypeId, 
     frameworkConfig,
     isCreatingMovementTask,
+    pendingMovementTask,
     setCreatingMovementTask,
     setPendingMovementTask
   } = useWarehouseStore();
@@ -191,7 +192,12 @@ export default function LocationLibrary() {
           <TabsContent value="movements" className="mt-0">
             <div className="p-4 space-y-6">
               <div className="text-xs text-green-600 font-medium bg-green-50 p-2 rounded">
-                {frameworkConfig.ui?.tabs?.movements?.instruction || 'Select a movement type, then connect two locations'}
+                {isCreatingMovementTask 
+                  ? (pendingMovementTask?.sourceLocationId 
+                      ? "Now click the target location to complete the connection"
+                      : "Click the source location to start the connection")
+                  : (frameworkConfig.ui?.tabs?.movements?.instruction || 'Select a movement type, then connect two locations')
+                }
               </div>
               
               {Object.entries(groupedMovements).map(([category, types]) => (
