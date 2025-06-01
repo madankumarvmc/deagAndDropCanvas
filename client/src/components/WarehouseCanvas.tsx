@@ -70,15 +70,8 @@ export default function WarehouseCanvas() {
   const handleNodesChange: OnNodesChange = useCallback(
     (changes) => {
       onNodesChange(changes);
-      // Update store with changes
-      const updatedNodes = nodes.map((node) => {
-        const change = changes.find((c) => c.id === node.id);
-        if (change && change.type === 'position' && change.position) {
-          return { ...node, position: change.position };
-        }
-        return node;
-      });
-      setLocationNodes(updatedNodes);
+      // Update store with position changes
+      setLocationNodes(nodes);
     },
     [onNodesChange, nodes, setLocationNodes]
   );
@@ -87,10 +80,7 @@ export default function WarehouseCanvas() {
     (changes) => {
       onEdgesChange(changes);
       // Update store with changes
-      const updatedEdges = edges.filter((edge) => 
-        !changes.find((c) => c.id === edge.id && c.type === 'remove')
-      );
-      setMovementEdges(updatedEdges);
+      setMovementEdges(edges);
     },
     [onEdgesChange, edges, setMovementEdges]
   );
@@ -146,15 +136,8 @@ export default function WarehouseCanvas() {
     ]
   );
 
-  const onViewportChange = useCallback(
-    (newViewport: any) => {
-      setViewport(newViewport);
-    },
-    [setViewport]
-  );
-
   return (
-    <div className="flex-1 relative">
+    <div className="flex-1 relative h-full">
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -164,12 +147,10 @@ export default function WarehouseCanvas() {
         onDrop={onDrop}
         onDragOver={onDragOver}
         onNodeClick={onNodeClick}
-        onViewportChange={onViewportChange}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         fitView
-        defaultViewport={viewport}
-        className="bg-gray-50"
+        className="bg-gray-50 w-full h-full"
       >
         <Controls />
         <MiniMap 
@@ -181,7 +162,7 @@ export default function WarehouseCanvas() {
           }}
           className="bg-white border border-gray-200"
         />
-        <Background variant="dots" gap={20} size={1} color="#d1d5db" />
+        <Background gap={20} size={1} color="#d1d5db" />
       </ReactFlow>
       
       {isCreatingMovementTask && (
