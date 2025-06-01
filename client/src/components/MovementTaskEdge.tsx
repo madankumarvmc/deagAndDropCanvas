@@ -30,16 +30,16 @@ const MovementTaskEdge = memo(({
 
   // Calculate control point for custom curve
   const defaultControlX = (sourceX + targetX) / 2;
-  const defaultControlY = (sourceY + targetY) / 2;
+  const defaultControlY = (sourceY + targetY) / 2 - 50; // Offset upward for natural curve
   const controlX = data?.controlPointX ?? defaultControlX;
   const controlY = data?.controlPointY ?? defaultControlY;
 
-  // Create custom bezier path using control point
+  // Create smooth quadratic bezier path
   const edgePath = `M ${sourceX},${sourceY} Q ${controlX},${controlY} ${targetX},${targetY}`;
   
-  // Position label at the control point
-  const adjustedLabelX = controlX;
-  const adjustedLabelY = controlY;
+  // Calculate the midpoint of the curve for label positioning (t = 0.5)
+  const labelX = 0.25 * sourceX + 0.5 * controlX + 0.25 * targetX;
+  const labelY = 0.25 * sourceY + 0.5 * controlY + 0.25 * targetY;
 
   const handleEdgeClick = () => {
     if (!isDragging) {
@@ -69,7 +69,7 @@ const MovementTaskEdge = memo(({
     if (!isDragging) return;
     
     // Get the React Flow viewport element to calculate relative coordinates
-    const reactFlowElement = document.querySelector('.react-flow');
+    const reactFlowElement = document.querySelector('.react-flow__viewport');
     if (!reactFlowElement) return;
     
     const reactFlowBounds = reactFlowElement.getBoundingClientRect();
@@ -119,10 +119,23 @@ const MovementTaskEdge = memo(({
       />
       
       <EdgeLabelRenderer>
+        {/* Visual control point indicator when dragging or selected */}
+        {(isDragging || selected) && (
+          <div
+            style={{
+              position: 'absolute',
+              transform: `translate(-50%, -50%) translate(${controlX}px,${controlY}px)`,
+              pointerEvents: 'none',
+            }}
+            className="w-3 h-3 bg-blue-500 rounded-full border-2 border-white shadow-lg"
+          />
+        )}
+        
+        {/* Draggable movement label */}
         <div
           style={{
             position: 'absolute',
-            transform: `translate(-50%, -50%) translate(${adjustedLabelX}px,${adjustedLabelY}px)`,
+            transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
             pointerEvents: 'all',
             cursor: isDragging ? 'grabbing' : 'grab',
           }}
