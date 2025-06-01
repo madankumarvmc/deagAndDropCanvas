@@ -21,14 +21,14 @@
         "label": "Movements",
         "icon": "→",
         "instruction": "Select a movement type, then connect two locations",
-        "categories": ["Transport", "Processing", "Handling"]
+        "categories": ["Inbound Movement", "Internal Movement", "Outbound Movement"]
       },
       "tasks": {
         "id": "tasks",
         "label": "Tasks", 
         "icon": "⚙️",
         "instruction": "These tasks can be attached to compatible location types",
-        "categories": ["Automation", "Manual", "Quality"]
+        "categories": ["Quality Control", "Inventory Management", "Order Processing"]
       }
     },
     "actions": {
