@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "Location-centric warehouse management system framework",
   "ui": {
-    "appTitle": "WMS Warehouse Flow Designer",
+    "appTitle": "StackBox WMS Design Portal",
     "warehouseLabel": "Warehouse:",
     "defaultWarehouseName": "Default Warehouse",
-    "libraryTitle": "Warehouse Elements",
+    "libraryTitle": "Warehouse Element",
     "searchPlaceholder": "Search elements...",
     "tabs": {
       "locations": {
@@ -14,21 +14,35 @@
         "label": "Locations",
         "icon": "📍",
         "instruction": "Drag locations onto the canvas to create warehouse areas",
-        "categories": ["Inbound", "Storage", "Outbound", "Quality Control", "Returns"]
+        "categories": [
+          "Inbound",
+          "Storage",
+          "Outbound",
+          "Quality Control",
+          "Returns"
+        ]
       },
       "movements": {
-        "id": "movements", 
+        "id": "movements",
         "label": "Movements",
         "icon": "→",
         "instruction": "Select a movement type, then connect two locations",
-        "categories": ["Inbound Movement", "Internal Movement", "Outbound Movement"]
+        "categories": [
+          "Inbound Movement",
+          "Internal Movement",
+          "Outbound Movement"
+        ]
       },
       "tasks": {
         "id": "tasks",
-        "label": "Tasks", 
+        "label": "Tasks",
         "icon": "⚙️",
         "instruction": "These tasks can be attached to compatible location types",
-        "categories": ["Quality Control", "Inventory Management", "Order Processing"]
+        "categories": [
+          "Quality Control",
+          "Inventory Management",
+          "Order Processing"
+        ]
       }
     },
     "actions": {
