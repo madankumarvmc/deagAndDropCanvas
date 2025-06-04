@@ -137,6 +137,7 @@ export default function DynamicConfigModal() {
             onSubmit={handleSubmit}
             onCancel={handleCancel}
             submitLabel="Save Configuration"
+            frameworkConfig={frameworkConfig}
           />
         ) : (
           <div className="py-8 text-center">

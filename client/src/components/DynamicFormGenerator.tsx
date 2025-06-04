@@ -35,7 +35,8 @@ export default function DynamicFormGenerator({
   onSubmit,
   onCancel,
   isLoading = false,
-  submitLabel = "Save Configuration"
+  submitLabel = "Save Configuration",
+  frameworkConfig
 }: DynamicFormGeneratorProps) {
   const [isAdvancedExpanded, setIsAdvancedExpanded] = useState(false);
   
@@ -307,10 +308,10 @@ export default function DynamicFormGenerator({
         
         <div className="flex items-center justify-end space-x-3 pt-6 border-t border-gray-200">
           <Button type="button" variant="outline" onClick={onCancel}>
-            Cancel
+            {frameworkConfig?.ui?.buttons?.cancel || "Cancel"}
           </Button>
           <Button type="submit" disabled={isLoading}>
-            {isLoading ? 'Saving...' : submitLabel}
+            {isLoading ? (frameworkConfig?.ui?.messages?.saving || 'Saving...') : (submitLabel || frameworkConfig?.ui?.buttons?.save || "Save")}
           </Button>
         </div>
       </form>
