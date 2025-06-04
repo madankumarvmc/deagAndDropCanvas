@@ -108,6 +108,8 @@ export default function DynamicConfigModal() {
       updateLocationNode(selectedElementId, { configuration });
     } else if (selectedElementType === 'movement') {
       updateMovementEdge(selectedElementId, { configuration });
+    } else if (selectedElementType === 'taskSequence' || selectedElementType === 'locationTask') {
+      updateLocationTask('', selectedElementId, { configuration });
     }
     setConfigModalOpen(false);
   };
