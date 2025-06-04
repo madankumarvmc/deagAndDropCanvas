@@ -309,19 +309,8 @@
           "type": "text",
           "required": false,
           "placeholder": "Enter custom label name (optional)",
-          "description": "Custom name to identify this connection"
-        },
-        {
-          "id": "putaway_strategy",
-          "label": "Putaway Strategy",
-          "type": "dropdown",
-          "required": true,
-          "defaultValue": "directed",
-          "options": [
-            { "value": "directed", "label": "Directed" },
-            { "value": "random", "label": "Random" },
-            { "value": "closest", "label": "Closest Available" }
-          ]
+          "description": "Custom name to identify this connection",
+          "group": "primary"
         },
         {
           "id": "unit_type",
@@ -333,7 +322,21 @@
             { "value": "full_case", "label": "Full Case" },
             { "value": "loose_item", "label": "Loose Item" },
             { "value": "pallet", "label": "Pallet" }
-          ]
+          ],
+          "group": "primary"
+        },
+        {
+          "id": "putaway_strategy",
+          "label": "Putaway Strategy",
+          "type": "dropdown",
+          "required": true,
+          "defaultValue": "directed",
+          "options": [
+            { "value": "directed", "label": "Directed" },
+            { "value": "random", "label": "Random" },
+            { "value": "closest", "label": "Closest Available" }
+          ],
+          "group": "advanced"
         },
         {
           "id": "priority",
@@ -346,7 +349,8 @@
             { "value": "medium", "label": "Medium" },
             { "value": "high", "label": "High" },
             { "value": "urgent", "label": "Urgent" }
-          ]
+          ],
+          "group": "advanced"
         }
       ]
     },

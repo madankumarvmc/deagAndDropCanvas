@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -15,6 +16,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
+import { ChevronDown, ChevronRight } from 'lucide-react';
 import type { FormField as FormFieldType } from '@shared/framework-config';
 
 interface DynamicFormGeneratorProps {
@@ -34,6 +36,11 @@ export default function DynamicFormGenerator({
   isLoading = false,
   submitLabel = "Save Configuration"
 }: DynamicFormGeneratorProps) {
+  const [isAdvancedExpanded, setIsAdvancedExpanded] = useState(false);
+  
+  // Group fields by their group property
+  const primaryFields = fields.filter(field => field.group === "primary" || !field.group);
+  const advancedFields = fields.filter(field => field.group === "advanced");
   
   // Create dynamic Zod schema based on field definitions
   const createDynamicSchema = (fields: FormFieldType[]) => {
@@ -255,9 +262,47 @@ export default function DynamicFormGenerator({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {fields.map(renderField)}
-        </div>
+        {/* Primary Section - Always Visible */}
+        {primaryFields.length > 0 && (
+          <div className="space-y-4">
+            <div className="border-b border-gray-200 pb-2">
+              <h3 className="text-lg font-semibold text-gray-900">Define Inventory Group</h3>
+              <p className="text-sm text-gray-600 mt-1">Configure basic inventory handling settings</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {primaryFields.map(renderField)}
+            </div>
+          </div>
+        )}
+
+        {/* Advanced Section - Expandable */}
+        {advancedFields.length > 0 && (
+          <div className="space-y-4">
+            <button
+              type="button"
+              onClick={() => setIsAdvancedExpanded(!isAdvancedExpanded)}
+              className="flex items-center space-x-2 text-gray-700 hover:text-gray-900 transition-colors"
+            >
+              {isAdvancedExpanded ? (
+                <ChevronDown className="h-4 w-4" />
+              ) : (
+                <ChevronRight className="h-4 w-4" />
+              )}
+              <span className="font-medium">Advanced Configuration</span>
+              <span className="text-sm text-gray-500">
+                ({advancedFields.length} additional settings)
+              </span>
+            </button>
+            
+            {isAdvancedExpanded && (
+              <div className="pl-6 border-l-2 border-gray-200 space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {advancedFields.map(renderField)}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
         
         <div className="flex items-center justify-end space-x-3 pt-6 border-t border-gray-200">
           <Button type="button" variant="outline" onClick={onCancel}>
