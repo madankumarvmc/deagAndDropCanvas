@@ -142,6 +142,16 @@ export const uiConfigSchema = z.object({
         locationTask: z.string()
       })
     }),
+    forms: z.object({
+      primarySection: z.object({
+        title: z.string(),
+        description: z.string()
+      }),
+      advancedSection: z.object({
+        title: z.string(),
+        description: z.string()
+      })
+    }),
     loading: z.string(),
     saving: z.string(),
     flowName: z.string(),

@@ -78,6 +78,16 @@
           "locationTask": "⚙️"
         }
       },
+      "forms": {
+        "primarySection": {
+          "title": "Define Inventory Group",
+          "description": "Configure basic inventory handling settings"
+        },
+        "advancedSection": {
+          "title": "Advanced Configuration",
+          "description": "additional settings"
+        }
+      },
       "loading": "Loading configuration...",
       "saving": "Saving...",
       "flowName": "Warehouse Flow - {timestamp}",

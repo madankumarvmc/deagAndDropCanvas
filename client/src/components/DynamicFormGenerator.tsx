@@ -268,8 +268,12 @@ export default function DynamicFormGenerator({
         {primaryFields.length > 0 && (
           <div className="space-y-4">
             <div className="border-b border-gray-200 pb-2">
-              <h3 className="text-lg font-semibold text-gray-900">Define Inventory Group</h3>
-              <p className="text-sm text-gray-600 mt-1">Configure basic inventory handling settings</p>
+              <h3 className="text-lg font-semibold text-gray-900">
+                {frameworkConfig?.ui?.messages?.forms?.primarySection?.title || "Define Inventory Group"}
+              </h3>
+              <p className="text-sm text-gray-600 mt-1">
+                {frameworkConfig?.ui?.messages?.forms?.primarySection?.description || "Configure basic inventory handling settings"}
+              </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {primaryFields.map(renderField)}
@@ -290,9 +294,11 @@ export default function DynamicFormGenerator({
               ) : (
                 <ChevronRight className="h-4 w-4" />
               )}
-              <span className="font-medium">Advanced Configuration</span>
+              <span className="font-medium">
+                {frameworkConfig?.ui?.messages?.forms?.advancedSection?.title || "Advanced Configuration"}
+              </span>
               <span className="text-sm text-gray-500">
-                ({advancedFields.length} additional settings)
+                ({advancedFields.length} {frameworkConfig?.ui?.messages?.forms?.advancedSection?.description || "additional settings"})
               </span>
             </button>
             
