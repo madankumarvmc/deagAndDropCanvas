@@ -25,6 +25,7 @@ export default function WarehouseFlowDesigner() {
     getWarehouseFlowData,
     clearWarehouse,
     setFrameworkConfig,
+    isSidebarCollapsed,
   } = useWarehouseStore();
 
   const [isSaving, setIsSaving] = useState(false);
@@ -244,7 +245,7 @@ export default function WarehouseFlowDesigner() {
         {/* Main Content */}
         <div className="flex flex-1 overflow-hidden h-full">
           <LocationLibrary />
-          <div className="flex-1 h-full">
+          <div className={`flex-1 h-full transition-all duration-300 ease-in-out ${isSidebarCollapsed ? 'ml-0' : 'ml-0'}`}>
             <WarehouseCanvas />
           </div>
           <WarehousePropertiesPanel />

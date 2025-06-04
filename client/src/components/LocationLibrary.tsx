@@ -145,21 +145,54 @@ export default function LocationLibrary() {
       )}
       
       <div className="flex-1 overflow-y-auto">
-        <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="locations" className="text-xs">
-              <MapPin className="w-3 h-3 mr-1" />
-              {frameworkConfig.ui?.tabs?.locations?.label || 'Locations'}
-            </TabsTrigger>
-            <TabsTrigger value="movements" className="text-xs">
-              <ArrowRight className="w-3 h-3 mr-1" />
-              {frameworkConfig.ui?.tabs?.movements?.label || 'Movements'}
-            </TabsTrigger>
-            <TabsTrigger value="tasks" className="text-xs">
-              <Settings className="w-3 h-3 mr-1" />
-              {frameworkConfig.ui?.tabs?.tasks?.label || 'Tasks'}
-            </TabsTrigger>
-          </TabsList>
+        {isSidebarCollapsed ? (
+          // Collapsed view - vertical icon stack
+          <div className="flex flex-col items-center py-4 space-y-4">
+            <Button
+              variant={selectedTab === 'locations' ? 'default' : 'ghost'}
+              size="icon"
+              onClick={() => setSelectedTab('locations')}
+              className="h-10 w-10"
+              title={frameworkConfig.ui?.tabs?.locations?.label || 'Locations'}
+            >
+              <MapPin className="w-4 h-4" />
+            </Button>
+            <Button
+              variant={selectedTab === 'movements' ? 'default' : 'ghost'}
+              size="icon"
+              onClick={() => setSelectedTab('movements')}
+              className="h-10 w-10"
+              title={frameworkConfig.ui?.tabs?.movements?.label || 'Movements'}
+            >
+              <ArrowRight className="w-4 h-4" />
+            </Button>
+            <Button
+              variant={selectedTab === 'tasks' ? 'default' : 'ghost'}
+              size="icon"
+              onClick={() => setSelectedTab('tasks')}
+              className="h-10 w-10"
+              title={frameworkConfig.ui?.tabs?.tasks?.label || 'Tasks'}
+            >
+              <Settings className="w-4 h-4" />
+            </Button>
+          </div>
+        ) : (
+          // Expanded view - normal tabs
+          <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-full">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="locations" className="text-xs">
+                <MapPin className="w-3 h-3 mr-1" />
+                {frameworkConfig.ui?.tabs?.locations?.label || 'Locations'}
+              </TabsTrigger>
+              <TabsTrigger value="movements" className="text-xs">
+                <ArrowRight className="w-3 h-3 mr-1" />
+                {frameworkConfig.ui?.tabs?.movements?.label || 'Movements'}
+              </TabsTrigger>
+              <TabsTrigger value="tasks" className="text-xs">
+                <Settings className="w-3 h-3 mr-1" />
+                {frameworkConfig.ui?.tabs?.tasks?.label || 'Tasks'}
+              </TabsTrigger>
+            </TabsList>
           
           <TabsContent value="locations" className="mt-0">
             <div className="p-4 space-y-6">
@@ -312,8 +345,9 @@ export default function LocationLibrary() {
                 </div>
               ))}
             </div>
-          </TabsContent>
-        </Tabs>
+            </TabsContent>
+          </Tabs>
+        )}
       </div>
     </aside>
   );
