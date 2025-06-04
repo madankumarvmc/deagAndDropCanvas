@@ -1,9 +1,15 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import { Handle, Position, NodeProps } from 'reactflow';
-import { Settings, X, Plus } from 'lucide-react';
+import { Settings, X, Plus, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useWarehouseStore } from '@/stores/warehouseStore';
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 interface TaskNodeData {
   parentLocationId: string;
@@ -24,8 +30,11 @@ const TaskNode = memo(({ data, selected, id }: NodeProps<TaskNodeData>) => {
     setConfigModalOpen, 
     deleteLocationTask,
     addLocationTask,
+    addTaskToSequence,
     frameworkConfig,
-    updateLocationTask
+    updateLocationTask,
+    getLocationNodeType,
+    locationNodes
   } = useWarehouseStore();
 
   const handleNodeClick = () => {
@@ -53,16 +62,24 @@ const TaskNode = memo(({ data, selected, id }: NodeProps<TaskNodeData>) => {
     deleteLocationTask(data.parentLocationId, id);
   };
 
-  const handleAddTaskToGroup = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    // Add another task to this group - for now, add first compatible task
-    const compatibleTasks = frameworkConfig.locationTaskTypes.filter(
-      taskType => !data.tasks.some(existingTask => existingTask.taskTypeId === taskType.id)
-    );
+  // Get compatible tasks for this Task Sequence based on parent location
+  const getCompatibleTasks = () => {
+    // Find the parent location node to get its location type
+    const parentLocationNode = locationNodes.find(node => node.id === data.parentLocationId);
+    if (!parentLocationNode) return [];
     
-    if (compatibleTasks.length > 0) {
-      addLocationTask(data.parentLocationId, compatibleTasks[0].id);
-    }
+    const parentLocationTypeId = parentLocationNode.data?.locationTypeId;
+    if (!parentLocationTypeId) return [];
+    
+    // Filter tasks that are compatible with the parent location type and not already in this sequence
+    return frameworkConfig.locationTaskTypes.filter(taskType => 
+      taskType.compatibleLocationTypes.includes(parentLocationTypeId) &&
+      !data.tasks.some(existingTask => existingTask.taskTypeId === taskType.id)
+    );
+  };
+
+  const handleAddTaskToSequence = (taskTypeId: string) => {
+    addTaskToSequence(id, taskTypeId);
   };
 
   const handleRemoveTask = (taskId: string, e: React.MouseEvent) => {
@@ -144,16 +161,36 @@ const TaskNode = memo(({ data, selected, id }: NodeProps<TaskNodeData>) => {
           </div>
         ))}
         
-        {/* Add Task to Group Button */}
+        {/* Add Task to Sequence Dropdown */}
         <div className="flex justify-between items-center pt-1 border-t">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleAddTaskToGroup}
-            className="h-4 w-4 p-0 text-blue-500 hover:bg-blue-50"
-          >
-            <Plus className="w-2 h-2" />
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-4 w-4 p-0 text-blue-500 hover:bg-blue-50"
+              >
+                <Plus className="w-2 h-2" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-48">
+              {getCompatibleTasks().map((taskType) => (
+                <DropdownMenuItem
+                  key={taskType.id}
+                  onClick={() => handleAddTaskToSequence(taskType.id)}
+                  className="flex items-center space-x-2"
+                >
+                  <span className="text-sm">{taskType.icon}</span>
+                  <span className="text-sm">{taskType.name}</span>
+                </DropdownMenuItem>
+              ))}
+              {getCompatibleTasks().length === 0 && (
+                <DropdownMenuItem disabled className="text-xs text-gray-500">
+                  No more tasks available
+                </DropdownMenuItem>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
           <Button
             variant="ghost"
             size="sm"
