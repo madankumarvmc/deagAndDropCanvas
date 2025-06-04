@@ -18,7 +18,11 @@ export default function WarehousePropertiesPanel() {
     getLocationNodeType,
     getMovementTaskType,
     getLocationTaskType,
+    frameworkConfig,
   } = useWarehouseStore();
+
+  const propertiesConfig = frameworkConfig.ui?.messages?.propertiesPanel;
+  const buttonsConfig = frameworkConfig.ui?.buttons;
 
   const handleClose = () => {
     setPropertiesPanelOpen(false);
@@ -65,10 +69,6 @@ export default function WarehousePropertiesPanel() {
 
   const element = getSelectedElement();
   if (!element) return null;
-
-  const { frameworkConfig } = useWarehouseStore();
-  const propertiesConfig = frameworkConfig.ui?.messages?.propertiesPanel;
-  const buttonsConfig = frameworkConfig.ui?.buttons;
 
   return (
     <aside className="w-80 bg-white border-l border-gray-200 p-4 overflow-y-auto">
