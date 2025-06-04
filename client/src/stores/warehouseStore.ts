@@ -31,7 +31,7 @@ interface WarehouseState {
   setLocationNodes: (nodes: Node[]) => void;
   setMovementEdges: (edges: Edge[]) => void;
   setViewport: (viewport: Viewport) => void;
-  setSelectedElement: (id: string | null, type: 'location' | 'movement' | 'locationTask' | null) => void;
+  setSelectedElement: (id: string | null, type: 'location' | 'movement' | 'locationTask' | 'taskSequence' | null) => void;
   setConfigModalOpen: (open: boolean) => void;
   setPropertiesPanelOpen: (open: boolean) => void;
   toggleSidebar: () => void;
