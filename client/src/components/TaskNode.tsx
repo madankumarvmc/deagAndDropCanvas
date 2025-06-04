@@ -86,40 +86,46 @@ const TaskNode = memo(({ data, selected, id }: NodeProps<TaskNodeData>) => {
         style={{ backgroundColor: '#64748b' }}
       />
 
-      {/* Task Group Content */}
-      <div className="space-y-1">
+      {/* Task Sequence Header */}
+      <div className="text-center border-b pb-2 mb-3">
+        <span className="text-sm font-medium text-gray-700">Task Sequence</span>
+      </div>
+
+      {/* Individual Task Cards */}
+      <div className="space-y-2">
         {data.tasks.map((task, index) => (
           <div
             key={task.id}
-            className="flex items-center space-x-2 p-1 rounded border cursor-pointer hover:bg-gray-50"
+            className="bg-white border rounded-lg p-3 cursor-pointer hover:shadow-sm transition-all duration-200"
             style={{ 
-              backgroundColor: task.bgColor,
-              borderColor: task.color + '40'
+              borderColor: task.color + '60'
             }}
             onClick={(e) => handleTaskClick(task.id, e)}
             onDoubleClick={(e) => handleTaskDoubleClick(task.id, e)}
           >
-            <div
-              className="w-4 h-4 rounded flex items-center justify-center text-xs"
-              style={{ backgroundColor: task.color + '20' }}
-            >
-              {task.icon}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <div
+                  className="w-5 h-5 rounded flex items-center justify-center text-sm"
+                  style={{ backgroundColor: task.bgColor }}
+                >
+                  {task.icon}
+                </div>
+                <span className="text-sm font-medium text-gray-800">{task.taskName}</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div
+                  className="w-2 h-2 rounded-full"
+                  style={{ backgroundColor: getStatusColor(task.configuration) }}
+                />
+                <button
+                  onClick={(e) => handleRemoveTask(task.id, e)}
+                  className="text-red-500 hover:bg-red-50 p-1 rounded opacity-70 hover:opacity-100 transition-opacity"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </div>
             </div>
-            <div className="flex-1 min-w-0">
-              <span className="text-xs font-medium truncate">{task.taskName}</span>
-            </div>
-            <div
-              className="w-1.5 h-1.5 rounded-full"
-              style={{ backgroundColor: getStatusColor(task.configuration) }}
-            />
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={(e) => handleRemoveTask(task.id, e)}
-              className="h-4 w-4 p-0 text-red-500 hover:bg-red-50 opacity-70 hover:opacity-100"
-            >
-              <X className="w-2 h-2" />
-            </Button>
           </div>
         ))}
         

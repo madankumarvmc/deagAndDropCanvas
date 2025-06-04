@@ -295,13 +295,38 @@ export const useWarehouseStore = create<WarehouseState>((set, get) => ({
   },
   
   deleteLocationTask: (locationId, taskId) => {
-    set((state) => ({
-      locationNodes: state.locationNodes.filter(node => node.id !== taskId),
-      movementEdges: state.movementEdges.filter(edge => 
-        !(edge.source === locationId && edge.target === taskId && edge.type === 'locationTask')
-      ),
-      selectedElementId: state.selectedElementId === taskId ? null : state.selectedElementId,
-    }));
+    set((state) => {
+      // Check if taskId is a task group node (separate node) or individual task within location
+      const isTaskGroupNode = state.locationNodes.some(node => node.id === taskId);
+      
+      if (isTaskGroupNode) {
+        // Remove entire task group node
+        return {
+          locationNodes: state.locationNodes.filter(node => node.id !== taskId),
+          movementEdges: state.movementEdges.filter(edge => 
+            !(edge.source === locationId && edge.target === taskId && edge.type === 'locationTask')
+          ),
+          selectedElementId: state.selectedElementId === taskId ? null : state.selectedElementId,
+        };
+      } else {
+        // Remove individual task from location's locationTasks array
+        return {
+          locationNodes: state.locationNodes.map(node => {
+            if (node.id === locationId && node.data.locationTasks) {
+              return {
+                ...node,
+                data: {
+                  ...node.data,
+                  locationTasks: node.data.locationTasks.filter(task => task.id !== taskId)
+                }
+              };
+            }
+            return node;
+          }),
+          selectedElementId: state.selectedElementId === taskId ? null : state.selectedElementId,
+        };
+      }
+    });
   },
   
   // Framework helpers
