@@ -166,10 +166,20 @@ export default function WarehouseCanvas() {
         onNodeClick={onNodeClick}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
-        fitView
+        defaultViewport={{ x: 0, y: 0, zoom: 0.8 }}
+        minZoom={0.3}
+        maxZoom={2}
         className="bg-gray-50 w-full h-full"
       >
-        <Controls />
+        <Controls 
+          showFitView={true}
+          fitViewOptions={{ 
+            padding: 0.2,
+            minZoom: 0.5,
+            maxZoom: 1.2,
+            duration: 500
+          }}
+        />
         <MiniMap 
           nodeColor={(node) => {
             if (node.type === 'warehouseLocation') {
