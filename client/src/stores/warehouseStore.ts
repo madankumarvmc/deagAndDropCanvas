@@ -16,7 +16,7 @@ interface WarehouseState {
   
   // UI state
   selectedElementId: string | null;
-  selectedElementType: 'location' | 'movement' | 'locationTask' | null;
+  selectedElementType: 'location' | 'movement' | 'locationTask' | 'taskSequence' | null;
   isConfigModalOpen: boolean;
   isPropertiesPanelOpen: boolean;
   isSidebarCollapsed: boolean;
@@ -169,6 +169,7 @@ export const useWarehouseStore = create<WarehouseState>((set, get) => ({
         color: taskType.color,
         category: taskType.category,
         configuration: null,
+        useSmoothing: taskType.id === 'putaway', // Enable curves for Putaway tasks
       },
       style: { stroke: taskType.color, strokeWidth: 2 },
       animated: true,

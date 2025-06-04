@@ -24,11 +24,17 @@ const TaskNode = memo(({ data, selected, id }: NodeProps<TaskNodeData>) => {
     setConfigModalOpen, 
     deleteLocationTask,
     addLocationTask,
-    frameworkConfig
+    frameworkConfig,
+    updateLocationTask
   } = useWarehouseStore();
 
   const handleNodeClick = () => {
-    setSelectedElement(id, 'locationTask');
+    setSelectedElement(id, 'taskSequence');
+  };
+
+  const handleNodeDoubleClick = () => {
+    setSelectedElement(id, 'taskSequence');
+    setConfigModalOpen(true);
   };
 
   const handleTaskClick = (taskId: string, e: React.MouseEvent) => {
@@ -61,8 +67,16 @@ const TaskNode = memo(({ data, selected, id }: NodeProps<TaskNodeData>) => {
 
   const handleRemoveTask = (taskId: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    // Remove individual task from the group
-    deleteLocationTask(data.parentLocationId, taskId);
+    // Remove individual task from the task sequence
+    const updatedTasks = data.tasks.filter(task => task.id !== taskId);
+    
+    // If no tasks left, remove the entire task group
+    if (updatedTasks.length === 0) {
+      deleteLocationTask(data.parentLocationId, id);
+    } else {
+      // Update the task group with remaining tasks
+      updateLocationTask(data.parentLocationId, id, { tasks: updatedTasks });
+    }
   };
 
   const getStatusColor = (config?: any) => {
@@ -77,6 +91,7 @@ const TaskNode = memo(({ data, selected, id }: NodeProps<TaskNodeData>) => {
         selected && 'ring-2 ring-blue-500 ring-offset-1'
       )}
       onClick={handleNodeClick}
+      onDoubleClick={handleNodeDoubleClick}
     >
       {/* Input Handle */}
       <Handle
