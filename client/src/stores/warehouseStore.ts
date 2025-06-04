@@ -53,6 +53,7 @@ interface WarehouseState {
   addLocationTask: (locationId: string, taskTypeId: string) => void;
   updateLocationTask: (locationId: string, taskId: string, data: any) => void;
   deleteLocationTask: (locationId: string, taskId: string) => void;
+  updateIndividualTask: (taskId: string, configuration: any) => void;
   
   // Framework helpers
   getLocationNodeType: (typeId: string) => LocationNodeType | undefined;
@@ -292,6 +293,22 @@ export const useWarehouseStore = create<WarehouseState>((set, get) => ({
           ? { ...node, data: { ...node.data, ...data } }
           : node
       ),
+    }));
+  },
+
+  updateIndividualTask: (taskId, configuration) => {
+    set((state) => ({
+      locationNodes: state.locationNodes.map((node) => {
+        if (node.data?.tasks) {
+          const updatedTasks = node.data.tasks.map((task: any) =>
+            task.id === taskId 
+              ? { ...task, configuration }
+              : task
+          );
+          return { ...node, data: { ...node.data, tasks: updatedTasks } };
+        }
+        return node;
+      }),
     }));
   },
   

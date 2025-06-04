@@ -14,6 +14,7 @@ export default function DynamicConfigModal() {
     updateLocationNode,
     updateMovementEdge,
     updateLocationTask,
+    updateIndividualTask,
     getLocationNodeType,
     getMovementTaskType,
     getLocationTaskType,
@@ -134,8 +135,10 @@ export default function DynamicConfigModal() {
       updateLocationNode(selectedElementId, { configuration });
     } else if (selectedElementType === 'movement') {
       updateMovementEdge(selectedElementId, { configuration });
-    } else if (selectedElementType === 'taskSequence' || selectedElementType === 'locationTask') {
+    } else if (selectedElementType === 'taskSequence') {
       updateLocationTask('', selectedElementId, { configuration });
+    } else if (selectedElementType === 'locationTask') {
+      updateIndividualTask(selectedElementId, configuration);
     }
     setConfigModalOpen(false);
   };
