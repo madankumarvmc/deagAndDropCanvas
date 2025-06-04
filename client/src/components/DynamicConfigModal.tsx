@@ -51,18 +51,18 @@ export default function DynamicConfigModal() {
       const taskType = getMovementTaskType(edge.data.taskTypeId);
       return taskType?.configurationFields || [];
     } else if (selectedElementType === 'taskSequence') {
-      // For task sequences, return configurable fields
+      // Task sequences are UI containers with simple configuration
       return [
         {
           id: 'sequenceName',
-          type: 'text',
+          type: 'text' as const,
           label: 'Sequence Name',
           required: true,
           placeholder: 'Enter sequence name'
         },
         {
           id: 'priority',
-          type: 'dropdown',
+          type: 'dropdown' as const,
           label: 'Priority',
           required: true,
           options: [
@@ -73,13 +73,13 @@ export default function DynamicConfigModal() {
         },
         {
           id: 'parallelExecution',
-          type: 'checkbox',
+          type: 'checkbox' as const,
           label: 'Allow Parallel Execution',
           defaultValue: false
         },
         {
           id: 'timeout',
-          type: 'number',
+          type: 'number' as const,
           label: 'Timeout (minutes)',
           required: false,
           placeholder: '30'
