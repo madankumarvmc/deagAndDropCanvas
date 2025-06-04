@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "Location-centric warehouse management system framework",
   "ui": {
-    "appTitle": "StackBox WMS Design Portal",
+    "appTitle": "WMS Design Portal",
     "warehouseLabel": "Warehouse:",
     "defaultWarehouseName": "Default Warehouse",
-    "libraryTitle": "Warehouse Element",
-    "searchPlaceholder": "Search elements...",
+    "libraryTitle": "Warehouse Elements",
+    "searchPlaceholder": "Search",
     "tabs": {
       "locations": {
         "id": "locations",
