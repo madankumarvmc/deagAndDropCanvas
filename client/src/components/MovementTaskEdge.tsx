@@ -11,6 +11,11 @@ interface MovementTaskEdgeData {
   configuration?: any;
   controlPointX?: number;
   controlPointY?: number;
+  useSmoothing?: boolean;
+  connectionPoints?: {
+    source?: 'top' | 'bottom' | 'left' | 'right';
+    target?: 'top' | 'bottom' | 'left' | 'right';
+  };
 }
 
 const MovementTaskEdge = memo(
@@ -36,10 +41,23 @@ const MovementTaskEdge = memo(
     const controlX = data?.controlPointX ?? defaultControlX;
     const controlY = data?.controlPointY ?? defaultControlY;
 
-    // Create orthogonal path with 90-degree angles using draggable control point
-    const midX = controlX; // Use control point for horizontal position
-    const midY = controlY; // Use control point for vertical position
-    const edgePath = `M ${sourceX},${sourceY} L ${midX},${sourceY} L ${midX},${midY} L ${targetX},${midY} L ${targetX},${targetY}`;
+    // Create Figma-style flexible path with multiple control points
+    const midX = controlX;
+    const midY = controlY;
+    
+    // Support for flexible routing with smooth curves
+    const useSmoothing = (data as any)?.useSmoothing ?? false;
+    
+    let edgePath: string;
+    if (useSmoothing) {
+      // Smooth curved path
+      const curve1X = sourceX + (midX - sourceX) / 2;
+      const curve2X = midX + (targetX - midX) / 2;
+      edgePath = `M ${sourceX},${sourceY} Q ${curve1X},${sourceY} ${midX},${midY} Q ${curve2X},${midY} ${targetX},${targetY}`;
+    } else {
+      // Sharp 90-degree angles (engineering style)
+      edgePath = `M ${sourceX},${sourceY} L ${midX},${sourceY} L ${midX},${midY} L ${targetX},${midY} L ${targetX},${targetY}`;
+    }
     
     // Position label at the control point
     const labelX = midX;
@@ -54,6 +72,13 @@ const MovementTaskEdge = memo(
     const handleEdgeDoubleClick = () => {
       setSelectedElement(id, "movement");
       setConfigModalOpen(true);
+    };
+
+    const handleConnectionStart = (e: React.MouseEvent, direction: 'top' | 'bottom' | 'left' | 'right') => {
+      e.stopPropagation();
+      // Start connection mode - this could trigger a new edge creation mode
+      console.log(`Starting connection from ${direction} of edge ${id}`);
+      // TODO: Implement connection mode in warehouse store
     };
 
     const handleMouseDown = useCallback((e: React.MouseEvent) => {
@@ -191,7 +216,50 @@ const MovementTaskEdge = memo(
               {!data?.configuration && (
                 <span className="text-yellow-500 text-xs font-bold">!</span>
               )}
+              
+              {/* Path style toggle button */}
+              {selected && (
+                <button
+                  className="ml-2 text-xs px-1 py-0.5 bg-gray-100 hover:bg-gray-200 rounded text-gray-600"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    updateMovementEdge(id, {
+                      ...data,
+                      useSmoothing: !data?.useSmoothing
+                    });
+                  }}
+                  title={(data as any)?.useSmoothing ? "Switch to Sharp Angles" : "Switch to Smooth Curves"}
+                >
+                  {(data as any)?.useSmoothing ? "⟡" : "⟀"}
+                </button>
+              )}
             </div>
+            
+            {/* Figma-style connection handles when selected */}
+            {selected && (
+              <>
+                {/* Top connection handle */}
+                <div
+                  className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-blue-500 rounded-full border border-white shadow-sm hover:scale-125 transition-transform cursor-crosshair"
+                  onMouseDown={(e) => handleConnectionStart(e, 'top')}
+                />
+                {/* Bottom connection handle */}
+                <div
+                  className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-blue-500 rounded-full border border-white shadow-sm hover:scale-125 transition-transform cursor-crosshair"
+                  onMouseDown={(e) => handleConnectionStart(e, 'bottom')}
+                />
+                {/* Left connection handle */}
+                <div
+                  className="absolute top-1/2 -left-2 transform -translate-y-1/2 w-2 h-2 bg-blue-500 rounded-full border border-white shadow-sm hover:scale-125 transition-transform cursor-crosshair"
+                  onMouseDown={(e) => handleConnectionStart(e, 'left')}
+                />
+                {/* Right connection handle */}
+                <div
+                  className="absolute top-1/2 -right-2 transform -translate-y-1/2 w-2 h-2 bg-blue-500 rounded-full border border-white shadow-sm hover:scale-125 transition-transform cursor-crosshair"
+                  onMouseDown={(e) => handleConnectionStart(e, 'right')}
+                />
+              </>
+            )}
           </div>
         </EdgeLabelRenderer>
       </>
