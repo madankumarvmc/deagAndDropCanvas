@@ -371,6 +371,11 @@ export const useWarehouseStore = create<WarehouseState>((set, get) => ({
     return frameworkConfig.locationTaskTypes.find(type => type.id === typeId);
   },
   
+  getTaskSequenceType: (typeId) => {
+    const { frameworkConfig } = get();
+    return frameworkConfig.taskSequenceTypes.find(type => type.id === typeId);
+  },
+  
   // Utility
   getWarehouseFlowData: () => {
     const { locationNodes, movementEdges, viewport } = get();

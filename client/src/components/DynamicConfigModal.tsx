@@ -18,6 +18,7 @@ export default function DynamicConfigModal() {
     getLocationNodeType,
     getMovementTaskType,
     getLocationTaskType,
+    getTaskSequenceType,
     frameworkConfig,
   } = useWarehouseStore();
 
@@ -51,40 +52,9 @@ export default function DynamicConfigModal() {
       const taskType = getMovementTaskType(edge.data.taskTypeId);
       return taskType?.configurationFields || [];
     } else if (selectedElementType === 'taskSequence') {
-      // Task sequences are UI containers with simple configuration
-      return [
-        {
-          id: 'sequenceName',
-          type: 'text' as const,
-          label: 'Sequence Name',
-          required: true,
-          placeholder: 'Enter sequence name'
-        },
-        {
-          id: 'priority',
-          type: 'dropdown' as const,
-          label: 'Priority',
-          required: true,
-          options: [
-            { value: 'high', label: 'High' },
-            { value: 'medium', label: 'Medium' },
-            { value: 'low', label: 'Low' }
-          ]
-        },
-        {
-          id: 'parallelExecution',
-          type: 'checkbox' as const,
-          label: 'Allow Parallel Execution',
-          defaultValue: false
-        },
-        {
-          id: 'timeout',
-          type: 'number' as const,
-          label: 'Timeout (minutes)',
-          required: false,
-          placeholder: '30'
-        }
-      ];
+      // Get Task Sequence configuration fields from framework config
+      const taskSequenceType = getTaskSequenceType('standard_sequence'); // Use default for now
+      return taskSequenceType?.configurationFields || [];
     } else if (selectedElementType === 'locationTask') {
       // For individual tasks, get configuration fields from the task type
       const task = getSelectedTask();
