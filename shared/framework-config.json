@@ -153,13 +153,15 @@
           "type": "number",
           "required": false,
           "defaultValue": 30,
-          "validation": { "min": 1, "max": 480 }
+          "validation": { "min": 1, "max": 480 },
+          "group": "advanced"
         },
         {
           "id": "retryOnFailure",
           "label": "Retry on Failure",
           "type": "checkbox",
-          "defaultValue": true
+          "defaultValue": true,
+          "group": "advanced"
         },
         {
           "id": "maxRetries",
@@ -167,7 +169,8 @@
           "type": "number",
           "required": false,
           "defaultValue": 3,
-          "validation": { "min": 0, "max": 10 }
+          "validation": { "min": 0, "max": 10 },
+          "group": "advanced"
         }
       ]
     }
@@ -182,35 +185,7 @@
       "bgColor": "#dcfce7",
       "borderColor": "#16a34a",
       "category": "Inbound",
-      "configurationFields": [
-        {
-          "id": "dock_number",
-          "label": "Dock Number",
-          "type": "text",
-          "required": true,
-          "placeholder": "e.g., DOCK-01"
-        },
-        {
-          "id": "capacity",
-          "label": "Capacity (pallets)",
-          "type": "number",
-          "required": true,
-          "defaultValue": 10,
-          "validation": { "min": 1, "max": 100 }
-        },
-        {
-          "id": "operating_hours",
-          "label": "Operating Hours",
-          "type": "dropdown",
-          "required": true,
-          "defaultValue": "24x7",
-          "options": [
-            { "value": "24x7", "label": "24/7" },
-            { "value": "business", "label": "Business Hours" },
-            { "value": "extended", "label": "Extended Hours" }
-          ]
-        }
-      ]
+      "configurationFields": []
     },
     {
       "id": "staging_area",
@@ -221,23 +196,7 @@
       "bgColor": "#dbeafe",
       "borderColor": "#2563eb",
       "category": "Inbound",
-      "configurationFields": [
-        {
-          "id": "area_code",
-          "label": "Area Code",
-          "type": "text",
-          "required": true,
-          "placeholder": "e.g., STAGE-A1"
-        },
-        {
-          "id": "max_dwell_time",
-          "label": "Max Dwell Time (hours)",
-          "type": "number",
-          "required": true,
-          "defaultValue": 24,
-          "validation": { "min": 1, "max": 168 }
-        }
-      ]
+      "configurationFields": []
     },
     {
       "id": "storage_location",
@@ -248,27 +207,18 @@
       "bgColor": "#ede9fe",
       "borderColor": "#7c3aed",
       "category": "Storage",
-      "configurationFields": [
-        {
-          "id": "zone",
-          "label": "Storage Zone",
-          "type": "text",
-          "required": true,
-          "placeholder": "e.g., A1-A5"
-        },
-        {
-          "id": "storage_type",
-          "label": "Storage Type",
-          "type": "dropdown",
-          "required": true,
-          "defaultValue": "rack",
-          "options": [
-            { "value": "rack", "label": "Rack Storage" },
-            { "value": "bulk", "label": "Bulk Storage" },
-            { "value": "floor", "label": "Floor Storage" }
-          ]
-        }
-      ]
+      "configurationFields": []
+    },
+    {
+      "id": "pick_and_drop_location",
+      "name": "Pick and Drop Location",
+      "description": "Temporary Storage area for inventory",
+      "icon": "🏪",
+      "color": "#8b5cf6",
+      "bgColor": "#ede9fe",
+      "borderColor": "#7c3aed",
+      "category": "Storage",
+      "configurationFields": []
     },
     {
       "id": "picking_face",
@@ -279,27 +229,7 @@
       "bgColor": "#fee2e2",
       "borderColor": "#dc2626",
       "category": "Outbound",
-      "configurationFields": [
-        {
-          "id": "pick_face_id",
-          "label": "Pick Face ID",
-          "type": "text",
-          "required": true,
-          "placeholder": "e.g., PF-A1-01"
-        },
-        {
-          "id": "pick_method",
-          "label": "Pick Method",
-          "type": "dropdown",
-          "required": true,
-          "defaultValue": "each",
-          "options": [
-            { "value": "each", "label": "Each" },
-            { "value": "case", "label": "Case" },
-            { "value": "pallet", "label": "Pallet" }
-          ]
-        }
-      ]
+      "configurationFields": []
     },
     {
       "id": "shipping_dock",
@@ -310,27 +240,7 @@
       "bgColor": "#fed7aa",
       "borderColor": "#ea580c",
       "category": "Outbound",
-      "configurationFields": [
-        {
-          "id": "dock_number",
-          "label": "Dock Number",
-          "type": "text",
-          "required": true,
-          "placeholder": "e.g., SHIP-01"
-        },
-        {
-          "id": "carrier_restrictions",
-          "label": "Carrier Restrictions",
-          "type": "multiselect",
-          "required": false,
-          "options": [
-            { "value": "fedex", "label": "FedEx" },
-            { "value": "ups", "label": "UPS" },
-            { "value": "dhl", "label": "DHL" },
-            { "value": "ltl", "label": "LTL Carriers" }
-          ]
-        }
-      ]
+      "configurationFields": []
     }
   ],
   "movementTaskTypes": [
@@ -466,7 +376,8 @@
           "type": "number",
           "required": true,
           "defaultValue": 20,
-          "validation": { "min": 1, "max": 100 }
+          "validation": { "min": 1, "max": 100 },
+          "group": "primary"
         }
       ]
     },
@@ -495,7 +406,8 @@
           "id": "load_verification",
           "label": "Load Verification",
           "type": "checkbox",
-          "defaultValue": true
+          "defaultValue": true,
+          "group": "primary"
         }
       ]
     }
@@ -530,21 +442,8 @@
           "type": "number",
           "required": true,
           "defaultValue": 10,
-          "validation": { "min": 1, "max": 100 }
-        },
-        {
-          "id": "priority-1",
-          "label": "Priority Level",
-          "type": "dropdown",
-          "required": true,
-          "defaultValue": "medium",
-          "options": [
-            { "value": "low", "label": "Low" },
-            { "value": "medium", "label": "Medium" },
-            { "value": "high", "label": "High" },
-            { "value": "urgent", "label": "Urgent" }
-          ],
-          "group": "advanced"
+          "validation": { "min": 1, "max": 100 },
+          "group": "primary"
         }
       ]
     },
@@ -614,7 +513,8 @@
           "type": "number",
           "required": true,
           "defaultValue": 10,
-          "validation": { "min": 1, "max": 50 }
+          "validation": { "min": 1, "max": 50 },
+          "group": "primary"
         }
       ]
     }

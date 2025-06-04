@@ -27,7 +27,7 @@ export const formFieldSchema = z.object({
     max: z.number().optional(),
     pattern: z.string().optional()
   }).optional(),
-  group: z.enum(["primary", "advanced"]).default("primary")
+  group: z.enum(["primary", "advanced"]).optional().default("primary")
 });
 
 // Task Sequence Type Definition
