@@ -37,6 +37,41 @@ export default function DynamicConfigModal() {
       
       const taskType = getMovementTaskType(edge.data.taskTypeId);
       return taskType?.configurationFields || [];
+    } else if (selectedElementType === 'taskSequence' || selectedElementType === 'locationTask') {
+      // For task sequences, return configurable fields based on framework config
+      return [
+        {
+          id: 'sequenceName',
+          type: 'text',
+          label: 'Sequence Name',
+          required: true,
+          placeholder: 'Enter sequence name'
+        },
+        {
+          id: 'priority',
+          type: 'select',
+          label: 'Priority',
+          required: true,
+          options: [
+            { value: 'high', label: 'High' },
+            { value: 'medium', label: 'Medium' },
+            { value: 'low', label: 'Low' }
+          ]
+        },
+        {
+          id: 'parallelExecution',
+          type: 'boolean',
+          label: 'Allow Parallel Execution',
+          defaultValue: false
+        },
+        {
+          id: 'timeout',
+          type: 'number',
+          label: 'Timeout (minutes)',
+          required: false,
+          placeholder: '30'
+        }
+      ];
     }
     return [];
   };
@@ -48,6 +83,9 @@ export default function DynamicConfigModal() {
     } else if (selectedElementType === 'movement') {
       const edge = movementEdges.find(e => e.id === selectedElementId);
       return edge?.data?.configuration || {};
+    } else if (selectedElementType === 'taskSequence' || selectedElementType === 'locationTask') {
+      const node = locationNodes.find(n => n.id === selectedElementId);
+      return node?.data?.configuration || {};
     }
     return {};
   };
@@ -59,6 +97,8 @@ export default function DynamicConfigModal() {
     } else if (selectedElementType === 'movement') {
       const edge = movementEdges.find(e => e.id === selectedElementId);
       return edge?.data?.taskName || 'Movement Task';
+    } else if (selectedElementType === 'taskSequence' || selectedElementType === 'locationTask') {
+      return 'Task Sequence';
     }
     return 'Element';
   };

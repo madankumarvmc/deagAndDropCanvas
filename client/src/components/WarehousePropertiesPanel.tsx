@@ -47,6 +47,8 @@ export default function WarehousePropertiesPanel() {
       return locationNodes.find(node => node.id === selectedElementId);
     } else if (selectedElementType === 'movement') {
       return movementEdges.find(edge => edge.id === selectedElementId);
+    } else if (selectedElementType === 'taskSequence' || selectedElementType === 'locationTask') {
+      return locationNodes.find(node => node.id === selectedElementId);
     }
     return null;
   };
@@ -60,8 +62,14 @@ export default function WarehousePropertiesPanel() {
         <CardHeader>
           <CardTitle className="text-lg flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <span>{selectedElementType === 'location' ? '📍' : '→'}</span>
-              <span className="capitalize">{selectedElementType} Properties</span>
+              <span>
+                {selectedElementType === 'location' ? '📍' : 
+                 selectedElementType === 'movement' ? '→' :
+                 selectedElementType === 'taskSequence' ? '📋' : '⚙️'}
+              </span>
+              <span className="capitalize">
+                {selectedElementType === 'taskSequence' ? 'Task Sequence' : selectedElementType} Properties
+              </span>
             </div>
             <Button
               variant="ghost"
@@ -101,6 +109,37 @@ export default function WarehousePropertiesPanel() {
                     {element.data.locationTasks.map((task: any) => (
                       <p key={task.id} className="text-sm text-gray-900">
                         {task.icon} {task.name}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+
+          {(selectedElementType === 'taskSequence' || selectedElementType === 'locationTask') && element.data && (
+            <>
+              <div>
+                <label className="text-sm font-medium text-gray-600">Task Sequence</label>
+                <p className="text-sm text-gray-900">Contains {element.data.tasks?.length || 0} tasks</p>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-gray-600">Parent Location</label>
+                <p className="text-sm text-gray-900">{element.data.parentLocationId}</p>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-gray-600">Configuration Status</label>
+                <p className={`text-sm ${element.data.configuration ? 'text-green-600' : 'text-yellow-600'}`}>
+                  {element.data.configuration ? 'Configured' : 'Not Configured'}
+                </p>
+              </div>
+              {element.data.tasks && element.data.tasks.length > 0 && (
+                <div>
+                  <label className="text-sm font-medium text-gray-600">Tasks in Sequence</label>
+                  <div className="space-y-1">
+                    {element.data.tasks.map((task: any) => (
+                      <p key={task.id} className="text-sm text-gray-900">
+                        {task.icon} {task.taskName}
                       </p>
                     ))}
                   </div>
