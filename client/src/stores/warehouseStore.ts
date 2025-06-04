@@ -200,34 +200,56 @@ export const useWarehouseStore = create<WarehouseState>((set, get) => ({
   
   // Location task operations
   addLocationTask: (locationId, taskTypeId) => {
-    const { frameworkConfig } = get();
+    const { frameworkConfig, locationNodes, movementEdges } = get();
     const taskType = frameworkConfig.locationTaskTypes.find(type => type.id === taskTypeId);
+    const parentLocation = locationNodes.find(node => node.id === locationId);
     
-    if (!taskType) return;
+    if (!taskType || !parentLocation) return;
     
-    const newTask = {
-      id: generateId(),
-      taskTypeId,
-      name: taskType.name,
-      icon: taskType.icon,
-      color: taskType.color,
-      bgColor: taskType.bgColor,
-      configuration: null,
+    const taskId = generateId();
+    const edgeId = generateId();
+    
+    // Create new task node positioned below the parent location
+    const taskNode: Node = {
+      id: taskId,
+      type: 'locationTask',
+      position: {
+        x: parentLocation.position.x,
+        y: parentLocation.position.y + 120 + (parentLocation.data.taskCount || 0) * 60,
+      },
+      data: {
+        taskTypeId,
+        taskName: taskType.name,
+        icon: taskType.icon,
+        color: taskType.color,
+        bgColor: taskType.bgColor,
+        borderColor: taskType.color,
+        category: taskType.category,
+        parentLocationId: locationId,
+        configuration: null,
+      },
+    };
+    
+    // Create edge connecting location to task
+    const taskEdge: Edge = {
+      id: edgeId,
+      source: locationId,
+      target: taskId,
+      type: 'locationTask',
+      data: {},
     };
     
     set((state) => ({
-      locationNodes: state.locationNodes.map((node) =>
-        node.id === locationId 
-          ? { 
-              ...node, 
-              data: { 
-                ...node.data, 
-                locationTasks: [...(node.data.locationTasks || []), newTask] 
-              } 
-            }
-          : node
-      ),
-      selectedElementId: newTask.id,
+      locationNodes: [
+        ...state.locationNodes.map(node => 
+          node.id === locationId 
+            ? { ...node, data: { ...node.data, taskCount: (node.data.taskCount || 0) + 1 } }
+            : node
+        ),
+        taskNode,
+      ],
+      movementEdges: [...state.movementEdges, taskEdge],
+      selectedElementId: taskId,
       selectedElementType: 'locationTask',
     }));
   },
@@ -235,16 +257,8 @@ export const useWarehouseStore = create<WarehouseState>((set, get) => ({
   updateLocationTask: (locationId, taskId, data) => {
     set((state) => ({
       locationNodes: state.locationNodes.map((node) =>
-        node.id === locationId 
-          ? { 
-              ...node, 
-              data: { 
-                ...node.data, 
-                locationTasks: (node.data.locationTasks || []).map((task: any) =>
-                  task.id === taskId ? { ...task, ...data } : task
-                )
-              } 
-            }
+        node.id === taskId 
+          ? { ...node, data: { ...node.data, ...data } }
           : node
       ),
     }));
@@ -252,16 +266,9 @@ export const useWarehouseStore = create<WarehouseState>((set, get) => ({
   
   deleteLocationTask: (locationId, taskId) => {
     set((state) => ({
-      locationNodes: state.locationNodes.map((node) =>
-        node.id === locationId 
-          ? { 
-              ...node, 
-              data: { 
-                ...node.data, 
-                locationTasks: (node.data.locationTasks || []).filter((task: any) => task.id !== taskId)
-              } 
-            }
-          : node
+      locationNodes: state.locationNodes.filter(node => node.id !== taskId),
+      movementEdges: state.movementEdges.filter(edge => 
+        !(edge.source === locationId && edge.target === taskId && edge.type === 'locationTask')
       ),
       selectedElementId: state.selectedElementId === taskId ? null : state.selectedElementId,
     }));
