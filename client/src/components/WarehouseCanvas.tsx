@@ -158,7 +158,7 @@ export default function WarehouseCanvas() {
   );
 
   return (
-    <div className="flex-1 relative h-full">
+    <div className="flex-1 relative h-full w-full" style={{ height: '100%', width: '100%' }}>
       <ReactFlow
         nodes={nodes}
         edges={edges}
