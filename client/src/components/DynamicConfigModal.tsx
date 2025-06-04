@@ -24,6 +24,18 @@ export default function DynamicConfigModal() {
     return null;
   }
 
+  const getSelectedTask = () => {
+    if (selectedElementType !== 'locationTask') return null;
+    
+    for (const node of locationNodes) {
+      if (node.data?.tasks) {
+        const task = node.data.tasks.find((t: any) => t.id === selectedElementId);
+        if (task) return task;
+      }
+    }
+    return null;
+  };
+
   const getConfigurationFields = () => {
     if (selectedElementType === 'location') {
       const node = locationNodes.find(n => n.id === selectedElementId);
@@ -37,8 +49,8 @@ export default function DynamicConfigModal() {
       
       const taskType = getMovementTaskType(edge.data.taskTypeId);
       return taskType?.configurationFields || [];
-    } else if (selectedElementType === 'taskSequence' || selectedElementType === 'locationTask') {
-      // For task sequences, return configurable fields based on framework config
+    } else if (selectedElementType === 'taskSequence') {
+      // For task sequences, return configurable fields
       return [
         {
           id: 'sequenceName',
@@ -49,7 +61,7 @@ export default function DynamicConfigModal() {
         },
         {
           id: 'priority',
-          type: 'select',
+          type: 'dropdown',
           label: 'Priority',
           required: true,
           options: [
@@ -60,7 +72,7 @@ export default function DynamicConfigModal() {
         },
         {
           id: 'parallelExecution',
-          type: 'boolean',
+          type: 'checkbox',
           label: 'Allow Parallel Execution',
           defaultValue: false
         },
@@ -72,6 +84,14 @@ export default function DynamicConfigModal() {
           placeholder: '30'
         }
       ];
+    } else if (selectedElementType === 'locationTask') {
+      // For individual tasks, get configuration fields from the task type
+      const task = getSelectedTask();
+      if (task) {
+        const taskType = getLocationTaskType(task.taskTypeId);
+        return taskType?.configurationFields || [];
+      }
+      return [];
     }
     return [];
   };
@@ -83,9 +103,12 @@ export default function DynamicConfigModal() {
     } else if (selectedElementType === 'movement') {
       const edge = movementEdges.find(e => e.id === selectedElementId);
       return edge?.data?.configuration || {};
-    } else if (selectedElementType === 'taskSequence' || selectedElementType === 'locationTask') {
+    } else if (selectedElementType === 'taskSequence') {
       const node = locationNodes.find(n => n.id === selectedElementId);
       return node?.data?.configuration || {};
+    } else if (selectedElementType === 'locationTask') {
+      const task = getSelectedTask();
+      return task?.configuration || {};
     }
     return {};
   };
@@ -97,8 +120,11 @@ export default function DynamicConfigModal() {
     } else if (selectedElementType === 'movement') {
       const edge = movementEdges.find(e => e.id === selectedElementId);
       return edge?.data?.taskName || 'Movement Task';
-    } else if (selectedElementType === 'taskSequence' || selectedElementType === 'locationTask') {
+    } else if (selectedElementType === 'taskSequence') {
       return 'Task Sequence';
+    } else if (selectedElementType === 'locationTask') {
+      const task = getSelectedTask();
+      return task?.taskName || 'Task';
     }
     return 'Element';
   };

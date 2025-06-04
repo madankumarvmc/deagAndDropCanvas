@@ -47,8 +47,18 @@ export default function WarehousePropertiesPanel() {
       return locationNodes.find(node => node.id === selectedElementId);
     } else if (selectedElementType === 'movement') {
       return movementEdges.find(edge => edge.id === selectedElementId);
-    } else if (selectedElementType === 'taskSequence' || selectedElementType === 'locationTask') {
+    } else if (selectedElementType === 'taskSequence') {
       return locationNodes.find(node => node.id === selectedElementId);
+    } else if (selectedElementType === 'locationTask') {
+      // For individual tasks, find the task group containing this task
+      for (const node of locationNodes) {
+        if (node.data?.tasks) {
+          const task = node.data.tasks.find((t: any) => t.id === selectedElementId);
+          if (task) {
+            return { ...node, data: { ...node.data, selectedTask: task } };
+          }
+        }
+      }
     }
     return null;
   };
@@ -117,7 +127,7 @@ export default function WarehousePropertiesPanel() {
             </>
           )}
 
-          {(selectedElementType === 'taskSequence' || selectedElementType === 'locationTask') && element.data && (
+          {selectedElementType === 'taskSequence' && element.data && (
             <>
               <div>
                 <label className="text-sm font-medium text-gray-600">Task Sequence</label>
@@ -145,6 +155,33 @@ export default function WarehousePropertiesPanel() {
                   </div>
                 </div>
               )}
+            </>
+          )}
+
+          {selectedElementType === 'locationTask' && element.data?.selectedTask && (
+            <>
+              <div>
+                <label className="text-sm font-medium text-gray-600">Task Name</label>
+                <p className="text-sm text-gray-900">{element.data.selectedTask.taskName}</p>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-gray-600">Task Type</label>
+                <p className="text-sm text-gray-900">{element.data.selectedTask.taskTypeId}</p>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-gray-600">Category</label>
+                <p className="text-sm text-gray-900">{getLocationTaskType(element.data.selectedTask.taskTypeId)?.category || 'Unknown'}</p>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-gray-600">Configuration Status</label>
+                <p className={`text-sm ${element.data.selectedTask.configuration ? 'text-green-600' : 'text-yellow-600'}`}>
+                  {element.data.selectedTask.configuration ? 'Configured' : 'Not Configured'}
+                </p>
+              </div>
+              <div>
+                <label className="text-sm font-medium text-gray-600">Parent Task Sequence</label>
+                <p className="text-sm text-gray-900">{element.data.parentLocationId}</p>
+              </div>
             </>
           )}
 
