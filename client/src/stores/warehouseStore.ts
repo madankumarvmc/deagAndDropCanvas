@@ -51,6 +51,7 @@ interface WarehouseState {
   
   // Location task operations
   addLocationTask: (locationId: string, taskTypeId: string) => void;
+  addTaskToSequence: (sequenceId: string, taskTypeId: string) => void;
   updateLocationTask: (locationId: string, taskId: string, data: any) => void;
   deleteLocationTask: (locationId: string, taskId: string) => void;
   updateIndividualTask: (taskId: string, configuration: any) => void;
@@ -208,82 +209,88 @@ export const useWarehouseStore = create<WarehouseState>((set, get) => ({
     
     if (!taskType || !parentLocation) return;
     
-    // Check if there's already a task group for this location
-    const existingTaskGroup = locationNodes.find(node => 
+    // Always create new task sequence container
+    const taskGroupId = generateId();
+    const edgeId = generateId();
+    
+    const newTask = {
+      id: generateId(),
+      taskTypeId,
+      taskName: taskType.name,
+      icon: taskType.icon,
+      color: taskType.color,
+      bgColor: taskType.bgColor,
+      configuration: null,
+    };
+    
+    // Calculate position for new task sequence (offset from existing ones)
+    const existingTaskGroups = locationNodes.filter(node => 
       node.type === 'locationTask' && node.data.parentLocationId === locationId
     );
     
-    if (existingTaskGroup) {
-      // Add task to existing group
-      const newTask = {
-        id: generateId(),
-        taskTypeId,
-        taskName: taskType.name,
-        icon: taskType.icon,
-        color: taskType.color,
-        bgColor: taskType.bgColor,
-        configuration: null,
-      };
-      
-      set((state) => ({
-        locationNodes: state.locationNodes.map(node =>
-          node.id === existingTaskGroup.id
-            ? { 
-                ...node, 
-                data: { 
-                  ...node.data, 
-                  tasks: [...node.data.tasks, newTask] 
-                } 
-              }
-            : node
-        ),
-        selectedElementId: newTask.id,
-        selectedElementType: 'locationTask',
-      }));
-    } else {
-      // Create new task group
-      const taskGroupId = generateId();
-      const edgeId = generateId();
-      
-      const newTask = {
-        id: generateId(),
-        taskTypeId,
-        taskName: taskType.name,
-        icon: taskType.icon,
-        color: taskType.color,
-        bgColor: taskType.bgColor,
-        configuration: null,
-      };
-      
-      const taskGroupNode: Node = {
-        id: taskGroupId,
-        type: 'locationTask',
-        position: {
-          x: parentLocation.position.x,
-          y: parentLocation.position.y + 120,
-        },
-        data: {
-          parentLocationId: locationId,
-          tasks: [newTask],
-        },
-      };
-      
-      const taskEdge: Edge = {
-        id: edgeId,
-        source: locationId,
-        sourceHandle: 'task-output',
-        target: taskGroupId,
-        type: 'locationTask',
-        data: {},
-      };
-      
-      set((state) => ({
-        locationNodes: [...state.locationNodes, taskGroupNode],
-        movementEdges: [...state.movementEdges, taskEdge],
-        selectedElementId: newTask.id,
-        selectedElementType: 'locationTask',
-      }));
-    }
+    const yOffset = 120 + (existingTaskGroups.length * 80); // Stack vertically
+    
+    const taskGroupNode: Node = {
+      id: taskGroupId,
+      type: 'locationTask',
+      position: {
+        x: parentLocation.position.x,
+        y: parentLocation.position.y + yOffset,
+      },
+      data: {
+        parentLocationId: locationId,
+        tasks: [newTask],
+      },
+    };
+    
+    const taskEdge: Edge = {
+      id: edgeId,
+      source: locationId,
+      sourceHandle: 'task-output',
+      target: taskGroupId,
+      type: 'locationTask',
+      data: {},
+    };
+    
+    set((state) => ({
+      locationNodes: [...state.locationNodes, taskGroupNode],
+      movementEdges: [...state.movementEdges, taskEdge],
+      selectedElementId: taskGroupId,
+      selectedElementType: 'taskSequence',
+    }));
+  },
+
+  addTaskToSequence: (sequenceId, taskTypeId) => {
+    const { frameworkConfig } = get();
+    const taskType = frameworkConfig.locationTaskTypes.find(type => type.id === taskTypeId);
+    
+    if (!taskType) return;
+    
+    const newTask = {
+      id: generateId(),
+      taskTypeId,
+      taskName: taskType.name,
+      icon: taskType.icon,
+      color: taskType.color,
+      bgColor: taskType.bgColor,
+      configuration: null,
+    };
+    
+    set((state) => ({
+      locationNodes: state.locationNodes.map(node =>
+        node.id === sequenceId && node.type === 'locationTask'
+          ? { 
+              ...node, 
+              data: { 
+                ...node.data, 
+                tasks: [...node.data.tasks, newTask] 
+              } 
+            }
+          : node
+      ),
+      selectedElementId: newTask.id,
+      selectedElementType: 'locationTask',
+    }));
   },
   
   updateLocationTask: (locationId, taskId, data) => {
