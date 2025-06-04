@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import ReactFlow, {
   MiniMap,
   Controls,
@@ -14,6 +14,7 @@ import ReactFlow, {
   OnConnect,
   OnNodesChange,
   OnEdgesChange,
+  useReactFlow,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { useWarehouseStore } from '@/stores/warehouseStore';
@@ -48,6 +49,22 @@ export default function WarehouseCanvas() {
 
   const [nodes, setNodes, onNodesChange] = useNodesState(locationNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(movementEdges);
+  const { fitView, setViewport: setReactFlowViewport } = useReactFlow();
+
+  // Auto-fit view when nodes are added or updated
+  useEffect(() => {
+    if (nodes.length > 0) {
+      // Delay to ensure nodes are rendered
+      setTimeout(() => {
+        fitView({ 
+          padding: 0.2,
+          minZoom: 0.5,
+          maxZoom: 1.2,
+          duration: 500
+        });
+      }, 100);
+    }
+  }, [nodes.length, fitView]);
 
   // Sync store with local state
   React.useEffect(() => {

@@ -79,8 +79,8 @@ const LocationNode = memo(({ data, selected, id }: NodeProps<LocationNodeData>) 
   return (
     <div
       className={cn(
-        'bg-white border-2 rounded-xl shadow-lg p-4 w-64 cursor-pointer hover:shadow-xl transition-all duration-200',
-        selected && 'ring-2 ring-blue-500 ring-offset-2'
+        'bg-white border-2 rounded-lg shadow-md p-3 w-48 cursor-pointer hover:shadow-lg transition-all duration-200',
+        selected && 'ring-2 ring-blue-500 ring-offset-1'
       )}
       style={{ borderColor: data.borderColor }}
       onClick={handleNodeClick}
@@ -95,36 +95,33 @@ const LocationNode = memo(({ data, selected, id }: NodeProps<LocationNodeData>) 
       />
 
       {/* Main Location Content */}
-      <div className="flex items-center space-x-3 mb-3">
+      <div className="flex items-center space-x-2 mb-2">
         <div
-          className="w-12 h-12 rounded-lg flex items-center justify-center text-xl"
+          className="w-8 h-8 rounded-md flex items-center justify-center text-sm"
           style={{ backgroundColor: data.bgColor }}
         >
           {data.icon}
         </div>
         <div className="flex-1">
-          <h3 className="font-semibold text-gray-900 text-sm">{data.locationName}</h3>
+          <h3 className="font-semibold text-gray-900 text-xs">{data.locationName}</h3>
           <p className="text-xs text-gray-500">{data.category}</p>
-          {data.configuration && (
-            <p className="text-xs text-green-600 font-medium">Configured</p>
-          )}
         </div>
         <div
-          className="w-3 h-3 rounded-full border-2 border-white shadow-sm"
+          className="w-2 h-2 rounded-full border border-white shadow-sm"
           style={{ backgroundColor: getStatusColor(data.configuration) }}
         />
       </div>
 
       {/* Location Tasks */}
       {data.locationTasks && data.locationTasks.length > 0 && (
-        <div className="space-y-2 mb-3">
-          <div className="text-xs font-medium text-gray-600 border-t pt-2">
-            Location Tasks:
+        <div className="space-y-1 mb-2">
+          <div className="text-xs font-medium text-gray-600 border-t pt-1">
+            Tasks:
           </div>
           {data.locationTasks.map((task) => (
             <div
               key={task.id}
-              className="flex items-center space-x-2 p-2 rounded-lg border cursor-pointer hover:bg-gray-50"
+              className="flex items-center space-x-1 p-1 rounded border cursor-pointer hover:bg-gray-50"
               style={{ 
                 backgroundColor: task.bgColor,
                 borderColor: task.color + '40'
@@ -132,15 +129,15 @@ const LocationNode = memo(({ data, selected, id }: NodeProps<LocationNodeData>) 
               onClick={(e) => handleTaskClick(task.id, e)}
               onDoubleClick={(e) => handleTaskDoubleClick(task.id, e)}
             >
-              <span className="text-sm">{task.icon}</span>
-              <span className="text-xs font-medium flex-1">{task.name}</span>
+              <span className="text-xs">{task.icon}</span>
+              <span className="text-xs font-medium flex-1 truncate">{task.name}</span>
               <div
-                className="w-2 h-2 rounded-full"
+                className="w-1.5 h-1.5 rounded-full"
                 style={{ backgroundColor: getStatusColor(task.configuration) }}
               />
               <button
                 onClick={(e) => handleDeleteTask(task.id, e)}
-                className="text-red-500 hover:text-red-700 text-xs"
+                className="text-red-500 hover:text-red-700 text-xs w-3 h-3 flex items-center justify-center"
               >
                 ×
               </button>
@@ -155,9 +152,9 @@ const LocationNode = memo(({ data, selected, id }: NodeProps<LocationNodeData>) 
           variant="ghost"
           size="sm"
           onClick={handleAddTask}
-          className="text-xs h-6 px-2"
+          className="text-xs h-5 px-1"
         >
-          <Plus className="w-3 h-3 mr-1" />
+          <Plus className="w-2 h-2 mr-1" />
           Add Task
         </Button>
         <Button
@@ -167,9 +164,9 @@ const LocationNode = memo(({ data, selected, id }: NodeProps<LocationNodeData>) 
             e.stopPropagation();
             handleNodeDoubleClick();
           }}
-          className="text-xs h-6 px-2"
+          className="text-xs h-5 px-1"
         >
-          <Settings className="w-3 h-3" />
+          <Settings className="w-2 h-2" />
         </Button>
       </div>
 
