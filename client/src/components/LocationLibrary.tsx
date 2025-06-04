@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, MapPin, ArrowRight, Settings } from 'lucide-react';
+import { Search, MapPin, ArrowRight, Settings, Menu, ChevronLeft } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -15,7 +15,9 @@ export default function LocationLibrary() {
     isCreatingMovementTask,
     pendingMovementTask,
     setCreatingMovementTask,
-    setPendingMovementTask
+    setPendingMovementTask,
+    isSidebarCollapsed,
+    toggleSidebar
   } = useWarehouseStore();
 
   const filteredLocationTypes = frameworkConfig.locationNodeTypes.filter(
@@ -106,22 +108,41 @@ export default function LocationLibrary() {
   const groupedLocationTasks = groupLocationTasksByCategory(filteredLocationTaskTypes);
 
   return (
-    <aside className="w-80 bg-white border-r border-gray-200 flex flex-col">
-      <div className="p-4 border-b border-gray-200">
-        <h2 className="text-lg font-semibold text-gray-900 mb-3">
-          {frameworkConfig.ui?.libraryTitle || 'Warehouse Elements'}
-        </h2>
-        <div className="relative mb-3">
-          <Input
-            type="text"
-            placeholder={frameworkConfig.ui?.searchPlaceholder || 'Search elements...'}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10"
-          />
-          <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-        </div>
+    <aside className={`${isSidebarCollapsed ? 'w-16' : 'w-80'} bg-white border-r border-gray-200 flex flex-col transition-all duration-300 ease-in-out`}>
+      <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleSidebar}
+          className="h-8 w-8 hover:bg-gray-100"
+          title={isSidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+        >
+          {isSidebarCollapsed ? <Menu className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+        </Button>
+        
+        {!isSidebarCollapsed && (
+          <>
+            <h2 className="text-lg font-semibold text-gray-900 flex-1 ml-3">
+              {frameworkConfig.ui?.libraryTitle || 'Warehouse Elements'}
+            </h2>
+          </>
+        )}
       </div>
+      
+      {!isSidebarCollapsed && (
+        <div className="px-4 pb-4">
+          <div className="relative">
+            <Input
+              type="text"
+              placeholder={frameworkConfig.ui?.searchPlaceholder || 'Search elements...'}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10"
+            />
+            <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+          </div>
+        </div>
+      )}
       
       <div className="flex-1 overflow-y-auto">
         <Tabs value={selectedTab} onValueChange={setSelectedTab} className="w-full">

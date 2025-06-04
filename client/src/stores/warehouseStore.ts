@@ -19,6 +19,7 @@ interface WarehouseState {
   selectedElementType: 'location' | 'movement' | 'locationTask' | null;
   isConfigModalOpen: boolean;
   isPropertiesPanelOpen: boolean;
+  isSidebarCollapsed: boolean;
   draggedLocationTypeId: string | null;
   isCreatingMovementTask: boolean;
   pendingMovementTask: MovementTaskSelection | null;
@@ -33,6 +34,7 @@ interface WarehouseState {
   setSelectedElement: (id: string | null, type: 'location' | 'movement' | 'locationTask' | null) => void;
   setConfigModalOpen: (open: boolean) => void;
   setPropertiesPanelOpen: (open: boolean) => void;
+  toggleSidebar: () => void;
   setDraggedLocationTypeId: (typeId: string | null) => void;
   setCreatingMovementTask: (creating: boolean) => void;
   setPendingMovementTask: (task: MovementTaskSelection | null) => void;
@@ -77,6 +79,7 @@ export const useWarehouseStore = create<WarehouseState>((set, get) => ({
   selectedElementType: null,
   isConfigModalOpen: false,
   isPropertiesPanelOpen: false,
+  isSidebarCollapsed: false,
   draggedLocationTypeId: null,
   isCreatingMovementTask: false,
   pendingMovementTask: null,
@@ -95,6 +98,7 @@ export const useWarehouseStore = create<WarehouseState>((set, get) => ({
   }),
   setConfigModalOpen: (open) => set({ isConfigModalOpen: open }),
   setPropertiesPanelOpen: (open) => set({ isPropertiesPanelOpen: open }),
+  toggleSidebar: () => set((state) => ({ isSidebarCollapsed: !state.isSidebarCollapsed })),
   setDraggedLocationTypeId: (typeId) => set({ draggedLocationTypeId: typeId }),
   setCreatingMovementTask: (creating) => set({ isCreatingMovementTask: creating }),
   setPendingMovementTask: (task) => set({ pendingMovementTask: task }),

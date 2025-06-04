@@ -151,88 +151,92 @@ export default function WarehouseFlowDesigner() {
     <ReactFlowProvider>
       <div className="flex flex-col h-screen bg-gray-50">
         {/* Header */}
-        <header className="bg-white border-b border-gray-200 px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
+        <header className="bg-white border-b border-gray-200">
+          <div className="w-full px-4 py-1">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-3">
+                  <img
+                    src="/logo.png"
+                    alt="Logo"
+                    className="h-20 w-60 object-contain"
+                  />
+                  <h1 className="text-xl font-semibold text-gray-900">
+                    {frameworkConfig?.ui?.appTitle || "Warehouse Flow Designer"}
+                  </h1>
+                </div>
+                <div className="flex items-center space-x-2 text-sm text-gray-500">
+                  <span>
+                    {frameworkConfig?.ui?.warehouseLabel || "Warehouse:"}
+                  </span>
+                  <Input
+                    value={warehouseName}
+                    onChange={(e) => setWarehouseName(e.target.value)}
+                    className="w-48 h-8 text-sm font-medium text-gray-700 border-none bg-transparent p-0"
+                  />
+                </div>
+              </div>
+
               <div className="flex items-center space-x-3">
-                <img
-                  src="/logo.png"
-                  alt="Logo"
-                  className="h-20 w-60 object-contain"
-                />
-                <h1 className="text-xl font-semibold text-gray-900">
-                  {frameworkConfig?.ui?.appTitle || "Warehouse Flow Designer"}
-                </h1>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleUndo}
+                  className="flex items-center space-x-2"
+                >
+                  <Undo className="w-4 h-4" />
+                  <span>{frameworkConfig?.ui?.actions?.undo || "Undo"}</span>
+                </Button>
+
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleRedo}
+                  className="flex items-center space-x-2"
+                >
+                  <Redo className="w-4 h-4" />
+                  <span>{frameworkConfig?.ui?.actions?.redo || "Redo"}</span>
+                </Button>
+
+                <div className="h-4 w-px bg-gray-300" />
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleNewFlow}
+                  className="flex items-center space-x-2"
+                >
+                  <span>
+                    {frameworkConfig?.ui?.actions?.newFlow || "New Flow"}
+                  </span>
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleSave}
+                  disabled={isSaving}
+                  className="flex items-center space-x-2"
+                >
+                  <Save className="w-4 h-4" />
+                  <span>
+                    {isSaving
+                      ? "Saving..."
+                      : frameworkConfig?.ui?.actions?.saveFlow || "Save Flow"}
+                  </span>
+                </Button>
+
+                <Button
+                  size="sm"
+                  onClick={handleExport}
+                  className="flex items-center space-x-2"
+                >
+                  <Download className="w-4 h-4" />
+                  <span>
+                    {frameworkConfig?.ui?.actions?.export || "Export"}
+                  </span>
+                </Button>
               </div>
-              <div className="flex items-center space-x-2 text-sm text-gray-500">
-                <span>
-                  {frameworkConfig?.ui?.warehouseLabel || "Warehouse:"}
-                </span>
-                <Input
-                  value={warehouseName}
-                  onChange={(e) => setWarehouseName(e.target.value)}
-                  className="w-48 h-8 text-sm font-medium text-gray-700 border-none bg-transparent p-0"
-                />
-              </div>
-            </div>
-
-            <div className="flex items-center space-x-3">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleUndo}
-                className="flex items-center space-x-2"
-              >
-                <Undo className="w-4 h-4" />
-                <span>{frameworkConfig?.ui?.actions?.undo || "Undo"}</span>
-              </Button>
-
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleRedo}
-                className="flex items-center space-x-2"
-              >
-                <Redo className="w-4 h-4" />
-                <span>{frameworkConfig?.ui?.actions?.redo || "Redo"}</span>
-              </Button>
-
-              <div className="h-4 w-px bg-gray-300" />
-
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleNewFlow}
-                className="flex items-center space-x-2"
-              >
-                <span>
-                  {frameworkConfig?.ui?.actions?.newFlow || "New Flow"}
-                </span>
-              </Button>
-
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleSave}
-                disabled={isSaving}
-                className="flex items-center space-x-2"
-              >
-                <Save className="w-4 h-4" />
-                <span>
-                  {isSaving
-                    ? "Saving..."
-                    : frameworkConfig?.ui?.actions?.saveFlow || "Save Flow"}
-                </span>
-              </Button>
-
-              <Button
-                size="sm"
-                onClick={handleExport}
-                className="flex items-center space-x-2"
-              >
-                <Download className="w-4 h-4" />
-                <span>{frameworkConfig?.ui?.actions?.export || "Export"}</span>
-              </Button>
             </div>
           </div>
         </header>
