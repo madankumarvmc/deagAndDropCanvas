@@ -139,12 +139,26 @@ const LocationNode = memo(({ data, selected, id }: NodeProps<LocationNodeData>) 
         </Button>
       </div>
 
-      {/* Output Handle */}
+      {/* Output Handle for Movement Tasks */}
       <Handle
         type="source"
         position={Position.Right}
         className="w-3 h-3 !border-2 !border-white shadow-sm"
         style={{ backgroundColor: data.color }}
+      />
+
+      {/* Task Handle at bottom center for task connections */}
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        id="task-output"
+        className="w-3 h-3 !border-2 !border-white shadow-sm"
+        style={{ 
+          backgroundColor: '#3b82f6',
+          left: '50%',
+          bottom: '-6px',
+          transform: 'translateX(-50%)'
+        }}
       />
 
       {/* Configuration Indicator */}

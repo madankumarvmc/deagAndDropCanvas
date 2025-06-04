@@ -13,8 +13,10 @@ const LocationTaskEdge = memo(({
   targetY, 
   selected 
 }: EdgeProps<LocationTaskEdgeData>) => {
-  // Create a simple straight line from location to task
-  const edgePath = `M ${sourceX} ${sourceY} L ${targetX} ${targetY}`;
+  // Create 90-degree angled path from location to task
+  // First go down from source, then horizontally to target X, then down to target
+  const midY = sourceY + 40; // Go down a bit from the source
+  const edgePath = `M ${sourceX} ${sourceY} L ${sourceX} ${midY} L ${targetX} ${midY} L ${targetX} ${targetY}`;
 
   return (
     <path

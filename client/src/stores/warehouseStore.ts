@@ -269,6 +269,7 @@ export const useWarehouseStore = create<WarehouseState>((set, get) => ({
       const taskEdge: Edge = {
         id: edgeId,
         source: locationId,
+        sourceHandle: 'task-output',
         target: taskGroupId,
         type: 'locationTask',
         data: {},

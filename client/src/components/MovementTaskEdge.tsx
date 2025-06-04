@@ -36,8 +36,8 @@ const MovementTaskEdge = memo(
     const controlX = data?.controlPointX ?? defaultControlX;
     const controlY = data?.controlPointY ?? defaultControlY;
 
-    // Create orthogonal path with 90-degree angles
-    const midX = sourceX + (targetX - sourceX) / 2;
+    // Create orthogonal path with 90-degree angles using draggable control point
+    const midX = controlX; // Use control point for horizontal position
     const edgePath = `M ${sourceX},${sourceY} L ${midX},${sourceY} L ${midX},${targetY} L ${targetX},${targetY}`;
     
     // Position label at the middle of the orthogonal path
