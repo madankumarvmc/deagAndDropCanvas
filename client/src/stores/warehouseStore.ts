@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { type Node, type Edge, type Viewport } from 'reactflow';
 import { type WarehouseFlowData, type MovementTaskSelection } from '@shared/schema';
-import { type FrameworkConfig, type LocationNodeType, type MovementTaskType, type LocationTaskType, defaultFrameworkConfig } from '@shared/framework-config';
+import { type FrameworkConfig, type LocationNodeType, type MovementTaskType, type LocationTaskType, type TaskSequenceType, defaultFrameworkConfig } from '@shared/framework-config';
 
 interface WarehouseState {
   // Current flow data
@@ -60,6 +60,7 @@ interface WarehouseState {
   getLocationNodeType: (typeId: string) => LocationNodeType | undefined;
   getMovementTaskType: (typeId: string) => MovementTaskType | undefined;
   getLocationTaskType: (typeId: string) => LocationTaskType | undefined;
+  getTaskSequenceType: (typeId: string) => TaskSequenceType | undefined;
   
   // Utility
   getWarehouseFlowData: () => WarehouseFlowData;

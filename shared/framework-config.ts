@@ -29,6 +29,17 @@ export const formFieldSchema = z.object({
   }).optional()
 });
 
+// Task Sequence Type Definition
+export const taskSequenceTypeSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  description: z.string(),
+  icon: z.string(),
+  color: z.string(),
+  bgColor: z.string(),
+  configurationFields: z.array(formFieldSchema)
+});
+
 // Location Node Type Definition
 export const locationNodeTypeSchema = z.object({
   id: z.string(),
@@ -126,6 +137,7 @@ export const frameworkConfigSchema = z.object({
   version: z.string(),
   description: z.string(),
   ui: uiConfigSchema,
+  taskSequenceTypes: z.array(taskSequenceTypeSchema),
   locationNodeTypes: z.array(locationNodeTypeSchema),
   movementTaskTypes: z.array(movementTaskTypeSchema),
   locationTaskTypes: z.array(locationTaskTypeSchema)
@@ -133,6 +145,7 @@ export const frameworkConfigSchema = z.object({
 
 // Type exports
 export type FormField = z.infer<typeof formFieldSchema>;
+export type TaskSequenceType = z.infer<typeof taskSequenceTypeSchema>;
 export type LocationNodeType = z.infer<typeof locationNodeTypeSchema>;
 export type MovementTaskType = z.infer<typeof movementTaskTypeSchema>;
 export type LocationTaskType = z.infer<typeof locationTaskTypeSchema>;

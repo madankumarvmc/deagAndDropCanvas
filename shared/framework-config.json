@@ -67,6 +67,71 @@
       }
     }
   },
+  "taskSequenceTypes": [
+    {
+      "id": "standard_sequence",
+      "name": "Standard Task Sequence",
+      "description": "Sequential execution of tasks",
+      "icon": "📋",
+      "color": "#3b82f6",
+      "bgColor": "#dbeafe",
+      "configurationFields": [
+        {
+          "id": "sequenceName",
+          "label": "Sequence Name",
+          "type": "text",
+          "required": true,
+          "placeholder": "Enter sequence name"
+        },
+        {
+          "id": "executionMode",
+          "label": "Execution Mode",
+          "type": "dropdown",
+          "required": true,
+          "defaultValue": "sequential",
+          "options": [
+            { "value": "sequential", "label": "Sequential" },
+            { "value": "parallel", "label": "Parallel" },
+            { "value": "conditional", "label": "Conditional" }
+          ]
+        },
+        {
+          "id": "priority",
+          "label": "Priority",
+          "type": "dropdown",
+          "required": true,
+          "defaultValue": "medium",
+          "options": [
+            { "value": "high", "label": "High" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "low", "label": "Low" }
+          ]
+        },
+        {
+          "id": "timeout",
+          "label": "Timeout (minutes)",
+          "type": "number",
+          "required": false,
+          "defaultValue": 30,
+          "validation": { "min": 1, "max": 480 }
+        },
+        {
+          "id": "retryOnFailure",
+          "label": "Retry on Failure",
+          "type": "checkbox",
+          "defaultValue": true
+        },
+        {
+          "id": "maxRetries",
+          "label": "Max Retries",
+          "type": "number",
+          "required": false,
+          "defaultValue": 3,
+          "validation": { "min": 0, "max": 10 }
+        }
+      ]
+    }
+  ],
   "locationNodeTypes": [
     {
       "id": "receiving_dock",
