@@ -19,14 +19,18 @@ import ReactFlow, {
 import 'reactflow/dist/style.css';
 import { useWarehouseStore } from '@/stores/warehouseStore';
 import LocationNode from './LocationNode';
+import TaskNode from './TaskNode';
 import MovementTaskEdge from './MovementTaskEdge';
+import LocationTaskEdge from './LocationTaskEdge';
 
 const nodeTypes: NodeTypes = {
   warehouseLocation: LocationNode,
+  locationTask: TaskNode,
 };
 
 const edgeTypes: EdgeTypes = {
   movementTask: MovementTaskEdge,
+  locationTask: LocationTaskEdge,
 };
 
 export default function WarehouseCanvas() {

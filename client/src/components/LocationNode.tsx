@@ -112,49 +112,15 @@ const LocationNode = memo(({ data, selected, id }: NodeProps<LocationNodeData>) 
         />
       </div>
 
-      {/* Location Tasks */}
-      {data.locationTasks && data.locationTasks.length > 0 && (
-        <div className="space-y-1 mb-2">
-          <div className="text-xs font-medium text-gray-600 border-t pt-1">
-            Tasks:
-          </div>
-          {data.locationTasks.map((task) => (
-            <div
-              key={task.id}
-              className="flex items-center space-x-1 p-1 rounded border cursor-pointer hover:bg-gray-50"
-              style={{ 
-                backgroundColor: task.bgColor,
-                borderColor: task.color + '40'
-              }}
-              onClick={(e) => handleTaskClick(task.id, e)}
-              onDoubleClick={(e) => handleTaskDoubleClick(task.id, e)}
-            >
-              <span className="text-xs">{task.icon}</span>
-              <span className="text-xs font-medium flex-1 truncate">{task.name}</span>
-              <div
-                className="w-1.5 h-1.5 rounded-full"
-                style={{ backgroundColor: getStatusColor(task.configuration) }}
-              />
-              <button
-                onClick={(e) => handleDeleteTask(task.id, e)}
-                className="text-red-500 hover:text-red-700 text-xs w-3 h-3 flex items-center justify-center"
-              >
-                ×
-              </button>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Add Task Button */}
-      <div className="flex items-center justify-between">
+      {/* Add Task Branch Button */}
+      <div className="flex items-center justify-between border-t pt-2">
         <Button
           variant="ghost"
           size="sm"
           onClick={handleAddTask}
-          className="text-xs h-5 px-1"
+          className="text-xs h-5 px-1 text-blue-600 hover:text-blue-800"
         >
-          <Plus className="w-2 h-2 mr-1" />
+          <Plus className="w-3 h-3 mr-1" />
           Add Task
         </Button>
         <Button

@@ -153,14 +153,14 @@ export default function WarehouseFlowDesigner() {
       <div className="flex flex-col h-screen bg-gray-50">
         {/* Header */}
         <header className="bg-white border-b border-gray-200">
-          <div className="w-full px-4 py-1">
+          <div className="w-full px-4 py-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-3">
                   <img
                     src="/logo.png"
                     alt="Logo"
-                    className="h-20 w-60 object-contain"
+                    className="h-15 w-60 object-contain"
                   />
                   <h1 className="text-xl font-semibold text-gray-900">
                     {frameworkConfig?.ui?.appTitle || "Warehouse Flow Designer"}
@@ -245,7 +245,9 @@ export default function WarehouseFlowDesigner() {
         {/* Main Content */}
         <div className="flex flex-1 overflow-hidden h-full">
           <LocationLibrary />
-          <div className={`flex-1 h-full transition-all duration-300 ease-in-out ${isSidebarCollapsed ? 'ml-0' : 'ml-0'}`}>
+          <div
+            className={`flex-1 h-full transition-all duration-300 ease-in-out ${isSidebarCollapsed ? "ml-0" : "ml-0"}`}
+          >
             <WarehouseCanvas />
           </div>
           <WarehousePropertiesPanel />

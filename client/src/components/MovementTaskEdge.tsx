@@ -36,19 +36,13 @@ const MovementTaskEdge = memo(
     const controlX = data?.controlPointX ?? defaultControlX;
     const controlY = data?.controlPointY ?? defaultControlY;
 
-    // Create smooth quadratic bezier curve - this path should follow the control point
-    const edgePath = `M ${sourceX},${sourceY} Q ${controlX},${controlY} ${targetX},${targetY}`;
-
-    // Calculate actual label position on the curve (t=0.5 for midpoint)
-    const t = 0.5;
-    const labelX =
-      (1 - t) * (1 - t) * sourceX +
-      2 * (1 - t) * t * controlX +
-      t * t * targetX;
-    const labelY =
-      (1 - t) * (1 - t) * sourceY +
-      2 * (1 - t) * t * controlY +
-      t * t * targetY;
+    // Create orthogonal path with 90-degree angles
+    const midX = sourceX + (targetX - sourceX) / 2;
+    const edgePath = `M ${sourceX},${sourceY} L ${midX},${sourceY} L ${midX},${targetY} L ${targetX},${targetY}`;
+    
+    // Position label at the middle of the orthogonal path
+    const labelX = midX;
+    const labelY = sourceY + (targetY - sourceY) / 2;
 
     const handleEdgeClick = () => {
       if (!isDragging) {
