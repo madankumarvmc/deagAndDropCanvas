@@ -63,8 +63,38 @@
       "propertiesPanel": {
         "noSelection": "Select an element to view its properties",
         "configured": "Configured",
-        "notConfigured": "Not Configured"
-      }
+        "notConfigured": "Not Configured",
+        "title": "Properties",
+        "elementTypes": {
+          "location": "Location",
+          "movement": "Movement",
+          "taskSequence": "Task Sequence",
+          "locationTask": "Task"
+        },
+        "icons": {
+          "location": "📍",
+          "movement": "→",
+          "taskSequence": "📋", 
+          "locationTask": "⚙️"
+        }
+      },
+      "loading": "Loading configuration...",
+      "saving": "Saving...",
+      "flowName": "Warehouse Flow - {timestamp}",
+      "flowDescription": "Warehouse Management System Flow"
+    },
+    "buttons": {
+      "cancel": "Cancel",
+      "save": "Save",
+      "delete": "Delete",
+      "configure": "Configure",
+      "close": "Close",
+      "addTask": "Add Task",
+      "newFlow": "New Flow",
+      "saveFlow": "Save Flow",
+      "export": "Export",
+      "undo": "Undo",
+      "redo": "Redo"
     }
   },
   "taskSequenceTypes": [

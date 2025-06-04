@@ -66,6 +66,10 @@ export default function WarehousePropertiesPanel() {
   const element = getSelectedElement();
   if (!element) return null;
 
+  const { frameworkConfig } = useWarehouseStore();
+  const propertiesConfig = frameworkConfig.ui?.messages?.propertiesPanel;
+  const buttonsConfig = frameworkConfig.ui?.buttons;
+
   return (
     <aside className="w-80 bg-white border-l border-gray-200 p-4 overflow-y-auto">
       <Card>
@@ -73,12 +77,10 @@ export default function WarehousePropertiesPanel() {
           <CardTitle className="text-lg flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <span>
-                {selectedElementType === 'location' ? '📍' : 
-                 selectedElementType === 'movement' ? '→' :
-                 selectedElementType === 'taskSequence' ? '📋' : '⚙️'}
+                {propertiesConfig?.icons?.[selectedElementType as keyof typeof propertiesConfig.icons] || '📄'}
               </span>
               <span className="capitalize">
-                {selectedElementType === 'taskSequence' ? 'Task Sequence' : selectedElementType} Properties
+                {propertiesConfig?.elementTypes?.[selectedElementType as keyof typeof propertiesConfig.elementTypes] || selectedElementType} {propertiesConfig?.title || 'Properties'}
               </span>
             </div>
             <Button

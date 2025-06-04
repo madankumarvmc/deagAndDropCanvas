@@ -53,7 +53,7 @@ export default function WarehouseFlowDesigner() {
   if (isConfigLoading || !frameworkConfig) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="text-lg">Loading configuration...</div>
+        <div className="text-lg">{frameworkConfig?.ui?.messages?.loading || "Loading configuration..."}</div>
       </div>
     );
   }
@@ -64,8 +64,8 @@ export default function WarehouseFlowDesigner() {
       const flowData = getWarehouseFlowData();
 
       const payload = {
-        name: `Warehouse Flow - ${new Date().toLocaleString()}`,
-        description: "Warehouse Management System Flow",
+        name: frameworkConfig.ui?.messages?.flowName?.replace('{timestamp}', new Date().toLocaleString()) || `Warehouse Flow - ${new Date().toLocaleString()}`,
+        description: frameworkConfig.ui?.messages?.flowDescription || "Warehouse Management System Flow",
         warehouseName,
         flowData,
         frameworkConfig: defaultFrameworkConfig,

@@ -127,8 +127,38 @@ export const uiConfigSchema = z.object({
     propertiesPanel: z.object({
       noSelection: z.string(),
       configured: z.string(),
-      notConfigured: z.string()
-    })
+      notConfigured: z.string(),
+      title: z.string(),
+      elementTypes: z.object({
+        location: z.string(),
+        movement: z.string(),
+        taskSequence: z.string(),
+        locationTask: z.string()
+      }),
+      icons: z.object({
+        location: z.string(),
+        movement: z.string(),
+        taskSequence: z.string(),
+        locationTask: z.string()
+      })
+    }),
+    loading: z.string(),
+    saving: z.string(),
+    flowName: z.string(),
+    flowDescription: z.string()
+  }),
+  buttons: z.object({
+    cancel: z.string(),
+    save: z.string(),
+    delete: z.string(),
+    configure: z.string(),
+    close: z.string(),
+    addTask: z.string(),
+    newFlow: z.string(),
+    saveFlow: z.string(),
+    export: z.string(),
+    undo: z.string(),
+    redo: z.string()
   })
 });
 

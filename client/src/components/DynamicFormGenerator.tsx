@@ -26,6 +26,7 @@ interface DynamicFormGeneratorProps {
   onCancel: () => void;
   isLoading?: boolean;
   submitLabel?: string;
+  frameworkConfig?: any;
 }
 
 export default function DynamicFormGenerator({
