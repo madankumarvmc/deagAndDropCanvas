@@ -74,7 +74,7 @@
         "icons": {
           "location": "📍",
           "movement": "→",
-          "taskSequence": "📋", 
+          "taskSequence": "📋",
           "locationTask": "⚙️"
         }
       },
@@ -531,6 +531,20 @@
           "required": true,
           "defaultValue": 10,
           "validation": { "min": 1, "max": 100 }
+        },
+        {
+          "id": "priority-1",
+          "label": "Priority Level",
+          "type": "dropdown",
+          "required": true,
+          "defaultValue": "medium",
+          "options": [
+            { "value": "low", "label": "Low" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "high", "label": "High" },
+            { "value": "urgent", "label": "Urgent" }
+          ],
+          "group": "advanced"
         }
       ]
     },

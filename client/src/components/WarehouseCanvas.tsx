@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import ReactFlow, {
   MiniMap,
   Controls,
@@ -23,6 +23,7 @@ import TaskNode from './TaskNode';
 import MovementTaskEdge from './MovementTaskEdge';
 import LocationTaskEdge from './LocationTaskEdge';
 
+// Define nodeTypes and edgeTypes outside component to prevent recreation
 const nodeTypes: NodeTypes = {
   warehouseLocation: LocationNode,
   locationTask: TaskNode,

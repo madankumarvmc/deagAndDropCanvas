@@ -243,10 +243,11 @@ export default function WarehouseFlowDesigner() {
         </header>
 
         {/* Main Content */}
-        <div className="flex flex-1 overflow-hidden h-full">
+        <div className="flex flex-1 overflow-hidden" style={{ height: 'calc(100vh - 80px)' }}>
           <LocationLibrary />
           <div
-            className={`flex-1 h-full transition-all duration-300 ease-in-out ${isSidebarCollapsed ? "ml-0" : "ml-0"}`}
+            className={`flex-1 transition-all duration-300 ease-in-out ${isSidebarCollapsed ? "ml-0" : "ml-0"}`}
+            style={{ height: '100%' }}
           >
             <WarehouseCanvas />
           </div>
