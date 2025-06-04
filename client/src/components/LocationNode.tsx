@@ -128,12 +128,12 @@ const LocationNode = memo(({ data, selected, id }: NodeProps<LocationNodeData>) 
       </div>
 
       {/* Add Task Branch Button - positioned at bottom center */}
-      <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2">
+      <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 z-10">
         <Button
           variant="outline"
           size="sm"
           onClick={handleAddTask}
-          className="h-6 w-6 p-0 rounded-full bg-white border-2 border-blue-500 text-blue-600 hover:bg-blue-50 shadow-md"
+          className="h-6 w-6 p-0 rounded-full bg-white border-2 border-blue-500 text-blue-600 hover:bg-blue-50 shadow-lg"
         >
           <Plus className="w-3 h-3" />
         </Button>

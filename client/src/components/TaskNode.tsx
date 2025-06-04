@@ -59,6 +59,12 @@ const TaskNode = memo(({ data, selected, id }: NodeProps<TaskNodeData>) => {
     }
   };
 
+  const handleRemoveTask = (taskId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    // Remove individual task from the group
+    deleteLocationTask(data.parentLocationId, taskId);
+  };
+
   const getStatusColor = (config?: any) => {
     if (!config) return '#f59e0b'; // Warning yellow for unconfigured
     return '#10b981'; // Success green for configured
@@ -67,7 +73,7 @@ const TaskNode = memo(({ data, selected, id }: NodeProps<TaskNodeData>) => {
   return (
     <div
       className={cn(
-        'bg-white border rounded-md shadow-sm p-2 w-40 cursor-pointer hover:shadow-md transition-all duration-200',
+        'bg-white border rounded-md shadow-sm p-2 w-64 cursor-pointer hover:shadow-md transition-all duration-200',
         selected && 'ring-2 ring-blue-500 ring-offset-1'
       )}
       onClick={handleNodeClick}
@@ -106,6 +112,14 @@ const TaskNode = memo(({ data, selected, id }: NodeProps<TaskNodeData>) => {
               className="w-1.5 h-1.5 rounded-full"
               style={{ backgroundColor: getStatusColor(task.configuration) }}
             />
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={(e) => handleRemoveTask(task.id, e)}
+              className="h-4 w-4 p-0 text-red-500 hover:bg-red-50 opacity-70 hover:opacity-100"
+            >
+              <X className="w-2 h-2" />
+            </Button>
           </div>
         ))}
         
