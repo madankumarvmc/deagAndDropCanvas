@@ -206,52 +206,81 @@ export const useWarehouseStore = create<WarehouseState>((set, get) => ({
     
     if (!taskType || !parentLocation) return;
     
-    const taskId = generateId();
-    const edgeId = generateId();
+    // Check if there's already a task group for this location
+    const existingTaskGroup = locationNodes.find(node => 
+      node.type === 'locationTask' && node.data.parentLocationId === locationId
+    );
     
-    // Create new task node positioned below the parent location
-    const taskNode: Node = {
-      id: taskId,
-      type: 'locationTask',
-      position: {
-        x: parentLocation.position.x,
-        y: parentLocation.position.y + 120 + (parentLocation.data.taskCount || 0) * 60,
-      },
-      data: {
+    if (existingTaskGroup) {
+      // Add task to existing group
+      const newTask = {
+        id: generateId(),
         taskTypeId,
         taskName: taskType.name,
         icon: taskType.icon,
         color: taskType.color,
         bgColor: taskType.bgColor,
-        borderColor: taskType.color,
-        category: taskType.category,
-        parentLocationId: locationId,
         configuration: null,
-      },
-    };
-    
-    // Create edge connecting location to task
-    const taskEdge: Edge = {
-      id: edgeId,
-      source: locationId,
-      target: taskId,
-      type: 'locationTask',
-      data: {},
-    };
-    
-    set((state) => ({
-      locationNodes: [
-        ...state.locationNodes.map(node => 
-          node.id === locationId 
-            ? { ...node, data: { ...node.data, taskCount: (node.data.taskCount || 0) + 1 } }
+      };
+      
+      set((state) => ({
+        locationNodes: state.locationNodes.map(node =>
+          node.id === existingTaskGroup.id
+            ? { 
+                ...node, 
+                data: { 
+                  ...node.data, 
+                  tasks: [...node.data.tasks, newTask] 
+                } 
+              }
             : node
         ),
-        taskNode,
-      ],
-      movementEdges: [...state.movementEdges, taskEdge],
-      selectedElementId: taskId,
-      selectedElementType: 'locationTask',
-    }));
+        selectedElementId: newTask.id,
+        selectedElementType: 'locationTask',
+      }));
+    } else {
+      // Create new task group
+      const taskGroupId = generateId();
+      const edgeId = generateId();
+      
+      const newTask = {
+        id: generateId(),
+        taskTypeId,
+        taskName: taskType.name,
+        icon: taskType.icon,
+        color: taskType.color,
+        bgColor: taskType.bgColor,
+        configuration: null,
+      };
+      
+      const taskGroupNode: Node = {
+        id: taskGroupId,
+        type: 'locationTask',
+        position: {
+          x: parentLocation.position.x,
+          y: parentLocation.position.y + 120,
+        },
+        data: {
+          parentLocationId: locationId,
+          tasks: [newTask],
+        },
+      };
+      
+      const taskEdge: Edge = {
+        id: edgeId,
+        source: locationId,
+        target: taskGroupId,
+        type: 'locationTask',
+        data: {},
+      };
+      
+      set((state) => ({
+        locationNodes: [...state.locationNodes, taskGroupNode],
+        movementEdges: [...state.movementEdges, taskEdge],
+        selectedElementId: newTask.id,
+        selectedElementType: 'locationTask',
+      }));
+    }
   },
   
   updateLocationTask: (locationId, taskId, data) => {

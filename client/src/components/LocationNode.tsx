@@ -79,7 +79,7 @@ const LocationNode = memo(({ data, selected, id }: NodeProps<LocationNodeData>) 
   return (
     <div
       className={cn(
-        'bg-white border-2 rounded-lg shadow-md p-3 w-48 cursor-pointer hover:shadow-lg transition-all duration-200',
+        'relative bg-white border-2 rounded-lg shadow-md p-3 w-48 cursor-pointer hover:shadow-lg transition-all duration-200',
         selected && 'ring-2 ring-blue-500 ring-offset-1'
       )}
       style={{ borderColor: data.borderColor }}
@@ -112,17 +112,8 @@ const LocationNode = memo(({ data, selected, id }: NodeProps<LocationNodeData>) 
         />
       </div>
 
-      {/* Add Task Branch Button */}
-      <div className="flex items-center justify-between border-t pt-2">
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleAddTask}
-          className="text-xs h-5 px-1 text-blue-600 hover:text-blue-800"
-        >
-          <Plus className="w-3 h-3 mr-1" />
-          Add Task
-        </Button>
+      {/* Settings Button */}
+      <div className="flex justify-end mb-2">
         <Button
           variant="ghost"
           size="sm"
@@ -133,6 +124,18 @@ const LocationNode = memo(({ data, selected, id }: NodeProps<LocationNodeData>) 
           className="text-xs h-5 px-1"
         >
           <Settings className="w-2 h-2" />
+        </Button>
+      </div>
+
+      {/* Add Task Branch Button - positioned at bottom center */}
+      <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleAddTask}
+          className="h-6 w-6 p-0 rounded-full bg-white border-2 border-blue-500 text-blue-600 hover:bg-blue-50 shadow-md"
+        >
+          <Plus className="w-3 h-3" />
         </Button>
       </div>
 
