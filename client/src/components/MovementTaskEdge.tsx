@@ -102,6 +102,22 @@ const MovementTaskEdge = memo(({
 
   return (
     <>
+      <defs>
+        {/* Arrow marker for direction */}
+        <marker
+          id={`arrow-${id}`}
+          viewBox="0 0 10 10"
+          refX="8"
+          refY="3"
+          markerWidth="6"
+          markerHeight="6"
+          orient="auto"
+          markerUnits="strokeWidth"
+        >
+          <path d="M0,0 L0,6 L9,3 z" fill={data?.color || '#64748b'} />
+        </marker>
+      </defs>
+      
       <path
         id={id}
         className="react-flow__edge-path"
@@ -109,8 +125,11 @@ const MovementTaskEdge = memo(({
         stroke={data?.color || '#64748b'}
         strokeWidth={selected ? 4 : 2}
         fill="none"
+        markerEnd={`url(#arrow-${id})`}
         style={{
-          strokeDasharray: data?.configuration ? 'none' : '5,5',
+          strokeDasharray: '8,4',
+          strokeDashoffset: '0',
+          animation: 'dash-flow 2s linear infinite',
         }}
       />
       

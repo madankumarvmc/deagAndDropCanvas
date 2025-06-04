@@ -30,6 +30,16 @@
   --danger: 0 84% 60%; /* #ef4444 */
 }
 
+/* Movement edge animations */
+@keyframes dash-flow {
+  0% {
+    stroke-dashoffset: 12;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
 .dark {
   --background: 240 10% 3.9%;
   --foreground: 0 0% 98%;
