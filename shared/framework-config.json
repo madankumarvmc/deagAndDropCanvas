@@ -148,7 +148,7 @@
       "required": true,
       "group": "pickStrategy",
       "options": [
-        { "value": "", "label": "None" },
+        { "value": "NONE", "label": "None" },
         { "value": "OUTBOUND_PICK", "label": "Outbound Pick" },
         { "value": "OUTBOUND_REPLEN", "label": "Outbound Replen" },
         { "value": "AUTO_REPLEN", "label": "Auto Replen" },
@@ -164,7 +164,7 @@
       "required": false,
       "group": "pickStrategy",
       "options": [
-        { "value": "", "label": "None" },
+        { "value": "NONE", "label": "None" },
         { "value": "PICK_BY_TRIP", "label": "Pick by Trip" },
         { "value": "PICK_BY_CUSTOMER", "label": "Pick by Customer" },
         { "value": "PICK_BY_INVOICE", "label": "Pick by Invoice" },
@@ -179,7 +179,7 @@
       "required": false,
       "group": "pickStrategy",
       "options": [
-        { "value": "", "label": "None" },
+        { "value": "NONE", "label": "None" },
         { "value": "LOAD_BY_CUSTOMER", "label": "Load by Customer" },
         { "value": "LOAD_BY_TRIP", "label": "Load by Trip" }
       ],
