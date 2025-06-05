@@ -178,6 +178,8 @@ export const frameworkConfigSchema = z.object({
   version: z.string(),
   description: z.string(),
   ui: uiConfigSchema,
+  movementTaskConfigTemplate: z.array(formFieldSchema).optional(),
+  locationTaskConfigTemplate: z.array(formFieldSchema).optional(),
   taskSequenceTypes: z.array(taskSequenceTypeSchema),
   locationNodeTypes: z.array(locationNodeTypeSchema),
   movementTaskTypes: z.array(movementTaskTypeSchema),

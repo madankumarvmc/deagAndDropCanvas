@@ -81,7 +81,7 @@
       "forms": {
         "primarySection": {
           "title": "Define Inventory Group",
-          "description": "Configure basic inventory handling settings"
+          "description": ""
         },
         "advancedSection": {
           "title": "Advanced Configuration",
@@ -107,6 +107,57 @@
       "redo": "Redo"
     }
   },
+  "movementTaskConfigTemplate": [
+    {
+      "id": "priority",
+      "label": "Priority",
+      "type": "dropdown",
+      "required": true,
+      "defaultValue": "medium",
+      "group": "primary",
+      "options": [
+        { "value": "high", "label": "High" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "low", "label": "Low" }
+      ]
+    },
+    {
+      "id": "timeout",
+      "label": "Timeout (minutes)",
+      "type": "number",
+      "required": false,
+      "defaultValue": 30,
+      "validation": { "min": 1, "max": 480 },
+      "group": "advanced"
+    },
+    {
+      "id": "retryOnFailure",
+      "label": "Retry on Failure",
+      "type": "checkbox",
+      "defaultValue": true,
+      "group": "advanced"
+    },
+    {
+      "id": "maxRetries",
+      "label": "Max Retries",
+      "type": "number",
+      "required": false,
+      "defaultValue": 3,
+      "validation": { "min": 0, "max": 10 },
+      "group": "advanced"
+    }
+  ],
+  "locationTaskConfigTemplate": [
+    {
+      "id": "sampling_rate",
+      "label": "Sampling Rate (%)",
+      "type": "number",
+      "required": true,
+      "defaultValue": 10,
+      "validation": { "min": 1, "max": 100 },
+      "group": "primary"
+    }
+  ],
   "taskSequenceTypes": [
     {
       "id": "standard_sequence",
@@ -287,20 +338,6 @@
             { "value": "closest", "label": "Closest Available" }
           ],
           "group": "advanced"
-        },
-        {
-          "id": "priority",
-          "label": "Priority Level",
-          "type": "dropdown",
-          "required": true,
-          "defaultValue": "medium",
-          "options": [
-            { "value": "low", "label": "Low" },
-            { "value": "medium", "label": "Medium" },
-            { "value": "high", "label": "High" },
-            { "value": "urgent", "label": "Urgent" }
-          ],
-          "group": "advanced"
         }
       ]
     },
@@ -319,7 +356,8 @@
           "type": "text",
           "required": false,
           "placeholder": "Enter custom label name (optional)",
-          "description": "Custom name to identify this connection"
+          "description": "Custom name to identify this connection",
+          "group": "primary"
         },
         {
           "id": "picking_method",
@@ -327,6 +365,7 @@
           "type": "dropdown",
           "required": true,
           "defaultValue": "batch",
+          "group": "primary",
           "options": [
             { "value": "discrete", "label": "Discrete" },
             { "value": "batch", "label": "Batch" },
@@ -340,6 +379,7 @@
           "type": "dropdown",
           "required": true,
           "defaultValue": "rf",
+          "group": "advanced",
           "options": [
             { "value": "paper", "label": "Paper" },
             { "value": "rf", "label": "RF Scanner" },
@@ -402,6 +442,15 @@
           "defaultValue": 10,
           "validation": { "min": 1, "max": 100 },
           "group": "primary"
+        },
+        {
+          "id": "sampling_rate_1",
+          "label": "Sampling Rate (%)",
+          "type": "number",
+          "required": true,
+          "defaultValue": 10,
+          "validation": { "min": 1, "max": 100 },
+          "group": "advanced"
         }
       ]
     },
