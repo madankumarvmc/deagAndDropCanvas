@@ -208,8 +208,7 @@
       "group": "pickStrategy",
       "explainer": "Custom label or name assigned to this task for identification"
     },
-    [
-      {
+    {
         "id": "mode",
         "label": "Mode",
         "type": "select",
@@ -314,7 +313,6 @@
         ],
         "explainer": "Defines the optimization strategy for task execution (e.g., minimize touchpoints or travel distance)."
       }
-    ]
   ],
   "locationTaskConfigTemplate": [
     {
