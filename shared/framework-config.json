@@ -142,97 +142,71 @@
       "explainer": "Customer or client identifier for the line item"
     },
     {
-      "id": "taskSequence",
-      "label": "Task Sequence",
-      "type": "array",
+      "id": "taskKind",
+      "label": "Task Kind",
+      "type": "select",
       "required": true,
-      "group": "defineTaskSequence",
-      "explainer": "Defines the sequence of tasks to be executed.",
-      "items": {
-        "type": "object",
-        "fields": [
-          {
-            "id": "taskKind",
-            "label": "Task Kind",
-            "type": "dropdown",
-            "required": true,
-            "options": [
-              { "value": "", "label": "None" },
-              { "value": "AUTO_REPLEN", "label": "Auto Replenishment" },
-              { "value": "INBOUND_PUTAWAY", "label": "Inbound Put Away" },
-              { "value": "INBOUND_RECEIVE", "label": "Inbound Receive" },
-              { "value": "INTERNAL_MOVEMENT", "label": "Internal Movement" },
-              { "value": "OUTBOUND_REPLEN", "label": "Outbound Replenishment" },
-              { "value": "OUTBOUND_PICK", "label": "Outbound Pick" },
-              { "value": "OUTBOUND_LOAD", "label": "Outbound Load" }
-            ],
-            "explainer": "Type of the task within the task sequence."
-          },
-          {
-            "id": "taskSubKind",
-            "label": "Task Sub-Kind",
-            "type": "text",
-            "required": false,
-            "explainer": "Optional subcategory for more specific task classification."
-          }
-        ]
-      }
+      "group": "pickStrategy",
+      "options": [
+        { "value": "", "label": "None" },
+        { "value": "OUTBOUND_PICK", "label": "Outbound Pick" },
+        { "value": "OUTBOUND_REPLEN", "label": "Outbound Replen" },
+        { "value": "AUTO_REPLEN", "label": "Auto Replen" },
+        { "value": "OUTBOUND_LOAD", "label": "Outbound Load" },
+        { "value": "OUTBOUND_UNPICK", "label": "Outbound Unpick" }
+      ],
+      "explainer": "The kind of movement task, e.g., AUTO_REPLEN"
     },
     {
-      "id": "ginAckByApi",
-      "label": "GIN Acknowledgement by API",
-      "type": "checkbox",
-      "required": false,
-      "defaultValue": true,
-      "group": "defineTaskSequence",
-      "explainer": "If true, GIN will be acknowledged via API instead of manual confirmation."
-    },
-    {
-      "id": "ginAckLevel",
-      "label": "GIN Acknowledgement Level",
+      "id": "strat",
+      "label": "Pick Strategy",
       "type": "dropdown",
       "required": false,
-      "defaultValue": "SHIPMENT",
-      "group": "defineTaskSequence",
-      "explainer": "Defines the level at which GIN is acknowledged.",
+      "group": "pickStrategy",
       "options": [
-        { "value": "NONE", "label": "None" },
-        { "value": "ORDER", "label": "Order" },
-        { "value": "SHIPMENT", "label": "Shipment" },
-        { "value": "ITEM", "label": "Item" }
-      ]
+        { "value": "", "label": "None" },
+        { "value": "PICK_BY_TRIP", "label": "Pick by Trip" },
+        { "value": "PICK_BY_CUSTOMER", "label": "Pick by Customer" },
+        { "value": "PICK_BY_INVOICE", "label": "Pick by Invoice" },
+        { "value": "PICK_ALL_TRIPS", "label": "Pick All Trips" }
+      ],
+      "explainer": "Picking Task is created according to this defined strategy. E.g., in PICK_BY_CUSTOMER, the picking task is grouped by Customer."
     },
     {
-      "id": "retryOnFailure",
-      "label": "Retry on Failure",
-      "type": "checkbox",
-      "defaultValue": true,
-      "group": "advanced-reliability"
-    },
-    {
-      "id": "maxRetries",
-      "label": "Max Retries",
-      "type": "number",
+      "id": "loadingStrategy",
+      "label": "Loading Strategy",
+      "type": "dropdown",
       "required": false,
-      "defaultValue": 3,
-      "validation": { "min": 0, "max": 10 },
-      "group": "advanced-reliability"
+      "group": "pickStrategy",
+      "options": [
+        { "value": "", "label": "None" },
+        { "value": "LOAD_BY_CUSTOMER", "label": "Load by Customer" },
+        { "value": "LOAD_BY_TRIP", "label": "Load by Trip" }
+      ],
+      "explainer": "Strategy for loading operations, either by customer grouping or by trip grouping."
     },
     {
-      "id": "notificationEnabled",
-      "label": "Enable Notifications",
-      "type": "checkbox",
-      "defaultValue": false,
-      "group": "advanced-alerts"
-    },
-    {
-      "id": "alertThreshold",
-      "label": "Alert Threshold (seconds)",
-      "type": "number",
+      "id": "groupBy",
+      "label": "Group By",
+      "type": "multiselect",
       "required": false,
-      "defaultValue": 300,
-      "validation": { "min": 10, "max": 3600 },
-      "group": "advanced-alerts"
+      "group": "pickStrategy",
+      "options": [
+        { "value": "category", "label": "Category" },
+        { "value": "customer", "label": "Customer" },
+        { "value": "location", "label": "Location" },
+        { "value": "skuClass", "label": "SKU Class" },
+        { "value": "trip", "label": "Trip" }
+      ],
+      "explainer": "Fields used to group the task items. You can group by one or more dimensions like category, location, or customer."
+    },
+    {
+      "id": "taskLabel",
+      "label": "Task Label",
+      "type": "text",
+      "required": false,
+      "group": "pickStrategy",
+      "explainer": "Custom label or name assigned to this task for identification"
     }
   ],
   "locationTaskConfigTemplate": [

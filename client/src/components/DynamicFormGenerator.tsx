@@ -95,8 +95,11 @@ export default function DynamicFormGenerator({
           }
           break;
         case 'dropdown':
-        case 'multiselect':
+        case 'select':
           fieldSchema = z.string();
+          break;
+        case 'multiselect':
+          fieldSchema = z.array(z.string());
           break;
         case 'checkbox':
           fieldSchema = z.boolean();
@@ -131,6 +134,9 @@ export default function DynamicFormGenerator({
             break;
           case 'number':
             defaults[field.id] = 0;
+            break;
+          case 'multiselect':
+            defaults[field.id] = [];
             break;
           default:
             defaults[field.id] = '';
@@ -211,6 +217,7 @@ export default function DynamicFormGenerator({
                     );
                     
                   case 'dropdown':
+                  case 'select':
                     return (
                       <Select onValueChange={formField.onChange} value={formField.value}>
                         <SelectTrigger className="h-7 text-xs px-2 py-1">
@@ -227,12 +234,32 @@ export default function DynamicFormGenerator({
                     );
                     
                   case 'multiselect':
+                    const selectedValues = Array.isArray(formField.value) ? formField.value : [];
                     return (
-                      <Input
-                        {...formField}
-                        placeholder={field.placeholder}
-                        value={formField.value || ''}
-                      />
+                      <div className="space-y-1">
+                        {field.options?.map((option) => (
+                          <div key={option.value} className="flex items-center space-x-1.5">
+                            <Checkbox
+                              checked={selectedValues.includes(option.value)}
+                              onCheckedChange={(checked) => {
+                                let newValues = [...selectedValues];
+                                if (checked) {
+                                  if (!newValues.includes(option.value)) {
+                                    newValues.push(option.value);
+                                  }
+                                } else {
+                                  newValues = newValues.filter(v => v !== option.value);
+                                }
+                                formField.onChange(newValues);
+                              }}
+                              className="h-3 w-3"
+                            />
+                            <span className="text-xs text-gray-600 leading-tight">
+                              {option.label}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
                     );
                 }
               })()}

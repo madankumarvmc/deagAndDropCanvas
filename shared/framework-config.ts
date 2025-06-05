@@ -5,6 +5,7 @@ export const fieldTypeSchema = z.enum([
   'text',
   'number', 
   'dropdown',
+  'select',
   'checkbox',
   'textarea',
   'multiselect'
@@ -13,7 +14,7 @@ export const fieldTypeSchema = z.enum([
 export const formFieldSchema = z.object({
   id: z.string(),
   label: z.string(),
-  type: z.enum(['text', 'number', 'dropdown', 'checkbox', 'textarea', 'multiselect']),
+  type: z.enum(['text', 'number', 'dropdown', 'select', 'checkbox', 'textarea', 'multiselect']),
   required: z.boolean().default(false),
   defaultValue: z.union([z.string(), z.number(), z.boolean(), z.array(z.string())]).optional(),
   placeholder: z.string().optional(),
