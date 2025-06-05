@@ -50,7 +50,11 @@ export default function DynamicConfigModal() {
       if (!edge) return [];
       
       const taskType = getMovementTaskType(edge.data.taskTypeId);
-      return taskType?.configurationFields || [];
+      const taskSpecificFields = taskType?.configurationFields || [];
+      const templateFields = frameworkConfig?.movementTaskConfigTemplate || [];
+      
+      // Merge template fields with task-specific fields
+      return [...taskSpecificFields, ...templateFields];
     } else if (selectedElementType === 'taskSequence') {
       // Get Task Sequence configuration fields from framework config
       const taskSequenceType = getTaskSequenceType('standard_sequence'); // Use default for now
@@ -60,7 +64,11 @@ export default function DynamicConfigModal() {
       const task = getSelectedTask();
       if (task) {
         const taskType = getLocationTaskType(task.taskTypeId);
-        return taskType?.configurationFields || [];
+        const taskSpecificFields = taskType?.configurationFields || [];
+        const templateFields = frameworkConfig?.locationTaskConfigTemplate || [];
+        
+        // Merge template fields with task-specific fields
+        return [...taskSpecificFields, ...templateFields];
       }
       return [];
     }
