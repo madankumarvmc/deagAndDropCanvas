@@ -207,7 +207,114 @@
       "required": false,
       "group": "pickStrategy",
       "explainer": "Custom label or name assigned to this task for identification"
-    }
+    },
+    [
+      {
+        "id": "mode",
+        "label": "Mode",
+        "type": "select",
+        "required": true,
+        "group": "stockAndBinAllocation",
+        "options": [
+          { "value": "PICK", "label": "Pick" },
+          { "value": "PUT", "label": "Put" }
+        ],
+        "explainer": "The task mode determines the operation type, such as PICK, PUT."
+      },
+      {
+        "id": "priority",
+        "label": "Priority",
+        "type": "number",
+        "required": false,
+        "group": "stockAndBinAllocation",
+        "explainer": "Numeric value indicating the priority of the task. Lower values imply higher priority."
+      },
+      {
+        "id": "skipZoneFace",
+        "label": "Skip Zone Face",
+        "type": "select",
+        "required": false,
+        "group": "stockAndBinAllocation",
+        "options": [
+          { "value": "PICK", "label": "Pick" },
+          { "value": "PUTAWAY", "label": "Putaway" },
+          { "value": "NONE", "label": "None" }
+        ],
+        "explainer": "Specifies if zone face should be skipped during certain operations, e.g., during picking."
+      },
+      {
+        "id": "searchScope",
+        "label": "Search Scope",
+        "type": "select",
+        "required": false,
+        "group": "stockAndBinAllocation",
+        "options": [
+          { "value": "WH", "label": "Warehouse" },
+          { "value": "ZONE", "label": "Zone" },
+          { "value": "AREA", "label": "Area" }
+        ],
+        "explainer": "Defines the scope within which locations or inventory will be searched."
+      },
+      {
+        "id": "statePreferenceOrder",
+        "label": "State Preference Order",
+        "type": "multiselect",
+        "required": false,
+        "group": "stockAndBinAllocation",
+        "options": [
+          { "value": "PURE", "label": "Pure" },
+          { "value": "SKU PURE", "label": "Sku Puru" },
+          { "value": "IMPURE", "label": "Impure" },
+          { "value": "SKU IMPURE", "label": "Sku Impure" }
+        ],
+        "explainer": "Preference order for inventory state (e.g., PURE before MIXED)."
+      },
+      {
+        "id": "batchPreferenceMode",
+        "label": "Batch Preference Mode",
+        "type": "select",
+        "required": false,
+        "group": "stockAndBinAllocation",
+        "options": [
+          { "value": "CLOSEST_PREVIOUS", "label": "Closest Previous" }
+        ],
+        "explainer": "Determines which inventory batch to prefer during picking or allocation."
+      },
+      {
+        "id": "areaTypes",
+        "label": "Area Types",
+        "type": "multiselect",
+        "required": false,
+        "group": "stockAndBinAllocation",
+        "options": [
+          { "value": "INVENTORY", "label": "Inventory" },
+          { "value": "STAGING", "label": "Staging" },
+          { "value": "SHIPPING", "label": "Shipping" }
+        ],
+        "explainer": "Specifies which types of areas are considered in the task."
+      },
+      {
+        "id": "areas",
+        "label": "Areas",
+        "type": "text",
+        "required": false,
+        "group": "stockAndBinAllocation",
+        "explainer": "List of specific area identifiers to include in this task configuration."
+      },
+      {
+        "id": "optimizationMode",
+        "label": "Optimization Mode",
+        "type": "select",
+        "required": false,
+        "group": "stockAndBinAllocation",
+        "options": [
+          { "value": "TOUCH", "label": "Touch" },
+          { "value": "DISTANCE", "label": "Distance" },
+          { "value": "TIME", "label": "Time" }
+        ],
+        "explainer": "Defines the optimization strategy for task execution (e.g., minimize touchpoints or travel distance)."
+      }
+    ]
   ],
   "locationTaskConfigTemplate": [
     {

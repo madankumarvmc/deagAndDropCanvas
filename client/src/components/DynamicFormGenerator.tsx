@@ -46,6 +46,7 @@ export default function DynamicFormGenerator({
     fields
       .filter(field => field.group && field.group !== "primary")
       .map(field => field.group!)
+      .filter(group => group != null && group !== undefined)
   ));
   
   // State for tracking which expandable sections are open
@@ -53,6 +54,9 @@ export default function DynamicFormGenerator({
   
   // Function to generate human-readable titles from group names
   const generateGroupTitle = (groupName: string): string => {
+    if (!groupName || typeof groupName !== 'string') {
+      return 'Untitled Group';
+    }
     return groupName
       .split('-')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
