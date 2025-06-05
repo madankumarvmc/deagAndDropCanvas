@@ -18,6 +18,7 @@ export const formFieldSchema = z.object({
   defaultValue: z.union([z.string(), z.number(), z.boolean(), z.array(z.string())]).optional(),
   placeholder: z.string().optional(),
   description: z.string().optional(),
+  explainer: z.string().optional(),
   options: z.array(z.object({
     value: z.string(),
     label: z.string()

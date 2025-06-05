@@ -79,16 +79,17 @@ export default function DynamicFormGenerator({
         case 'textarea':
           fieldSchema = z.string();
           if (field.validation?.pattern) {
-            fieldSchema = fieldSchema.regex(new RegExp(field.validation.pattern));
+            const stringSchema = fieldSchema as z.ZodString;
+            fieldSchema = stringSchema.regex(new RegExp(field.validation.pattern));
           }
           break;
         case 'number':
           fieldSchema = z.number();
           if (field.validation?.min !== undefined) {
-            fieldSchema = fieldSchema.min(field.validation.min);
+            fieldSchema = (fieldSchema as z.ZodNumber).min(field.validation.min);
           }
           if (field.validation?.max !== undefined) {
-            fieldSchema = fieldSchema.max(field.validation.max);
+            fieldSchema = (fieldSchema as z.ZodNumber).max(field.validation.max);
           }
           break;
         case 'dropdown':
@@ -150,8 +151,11 @@ export default function DynamicFormGenerator({
         control={form.control}
         name={field.id}
         render={({ field: formField }) => (
-          <FormItem>
-            <FormLabel>{field.label}</FormLabel>
+          <FormItem className="space-y-1">
+            <FormLabel className="text-xs font-medium text-gray-600 leading-tight">
+              {field.label}
+              {field.required && <span className="text-red-500 ml-1">*</span>}
+            </FormLabel>
             <FormControl>
               {(() => {
                 switch (field.type) {
@@ -161,6 +165,7 @@ export default function DynamicFormGenerator({
                         {...formField}
                         placeholder={field.placeholder}
                         value={formField.value || ''}
+                        className="h-7 text-xs px-2 py-1"
                       />
                     );
                     
@@ -172,6 +177,9 @@ export default function DynamicFormGenerator({
                         placeholder={field.placeholder}
                         value={formField.value || ''}
                         onChange={(e) => formField.onChange(Number(e.target.value))}
+                        className="h-7 text-xs px-2 py-1"
+                        min={field.validation?.min}
+                        max={field.validation?.max}
                       />
                     );
                     
@@ -181,34 +189,34 @@ export default function DynamicFormGenerator({
                         {...formField}
                         placeholder={field.placeholder}
                         value={formField.value || ''}
-                        rows={3}
+                        rows={2}
+                        className="text-xs px-2 py-1 resize-none min-h-[3rem]"
                       />
                     );
                     
                   case 'checkbox':
                     return (
-                      <div className="flex items-center space-x-2">
+                      <div className="flex items-center space-x-1.5 h-7">
                         <Checkbox
                           checked={formField.value || false}
                           onCheckedChange={formField.onChange}
+                          className="h-3 w-3"
                         />
-                        <div className="grid gap-1.5 leading-none">
-                          <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                            {field.label}
-                          </label>
-                        </div>
+                        <span className="text-xs text-gray-600 leading-tight">
+                          {field.explainer || 'Enable this option'}
+                        </span>
                       </div>
                     );
                     
                   case 'dropdown':
                     return (
                       <Select onValueChange={formField.onChange} value={formField.value}>
-                        <SelectTrigger>
-                          <SelectValue placeholder={field.placeholder || `Select ${field.label}`} />
+                        <SelectTrigger className="h-7 text-xs px-2 py-1">
+                          <SelectValue placeholder={field.placeholder || "Select..."} />
                         </SelectTrigger>
                         <SelectContent>
                           {field.options?.map((option) => (
-                            <SelectItem key={option.value} value={option.value}>
+                            <SelectItem key={option.value} value={option.value} className="text-xs">
                               {option.label}
                             </SelectItem>
                           ))}
@@ -251,7 +259,7 @@ export default function DynamicFormGenerator({
                 {frameworkConfig?.ui?.messages?.forms?.primarySection?.description || "Configure basic inventory handling settings"}
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-3 gap-y-2">
               {primaryFields.map(renderField)}
             </div>
           </div>
@@ -281,8 +289,8 @@ export default function DynamicFormGenerator({
               </button>
               
               {isExpanded && (
-                <div className="pl-6 border-l-2 border-gray-200 space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="pl-4 border-l-2 border-gray-200 space-y-2">
+                  <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-3 gap-y-2">
                     {groupFields.map(renderField)}
                   </div>
                 </div>
