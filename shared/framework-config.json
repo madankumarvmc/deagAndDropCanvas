@@ -39,7 +39,7 @@
         "icon": "⚙️",
         "instruction": "These tasks can be attached to compatible location types",
         "categories": [
-          "Quality Control",
+          "Location Task",
           "Inventory Management",
           "Order Processing"
         ]
@@ -74,26 +74,133 @@
   },
   "movementTaskConfigTemplate": [
     {
-      "id": "priority",
-      "label": "Priority",
-      "type": "dropdown",
-      "required": true,
-      "defaultValue": "medium",
+      "id": "category",
+      "label": "Category",
+      "type": "text",
+      "required": false,
       "group": "primary",
+      "explainer": "SKU category identifier"
+    },
+    {
+      "id": "skuClassType",
+      "label": "SKU Class Type",
+      "type": "text",
+      "required": false,
+      "group": "primary",
+      "explainer": "Type of SKU classification"
+    },
+    {
+      "id": "skuClass",
+      "label": "SKU Class",
+      "type": "text",
+      "required": false,
+      "group": "primary",
+      "explainer": "SKU class identifier"
+    },
+    {
+      "id": "uom",
+      "label": "Unit of Measure",
+      "type": "dropdown",
+      "required": false,
+      "defaultValue": "L0",
+      "group": "primary",
+      "explainer": "Unit of measure for SKU level (e.g., L0, L1)",
       "options": [
-        { "value": "high", "label": "High" },
-        { "value": "medium", "label": "Medium" },
-        { "value": "low", "label": "Low" }
+        { "value": "L0", "label": "L0" },
+        { "value": "L1", "label": "L1" },
+        { "value": "L2", "label": "L2" },
+        { "value": "L3", "label": "L3" }
       ]
     },
     {
-      "id": "timeout",
-      "label": "Timeout (minutes)",
-      "type": "number",
+      "id": "bucket",
+      "label": "Bucket",
+      "type": "dropdown",
       "required": false,
-      "defaultValue": 30,
-      "validation": { "min": 1, "max": 480 },
-      "group": "advanced-performance"
+      "defaultValue": "Good",
+      "group": "primary",
+      "explainer": "Quality bucket for SKU (e.g., Good, Damaged)",
+      "options": [
+        { "value": "Good", "label": "Good" },
+        { "value": "Damaged", "label": "Damaged" }
+      ]
+    },
+    {
+      "id": "channel",
+      "label": "Channel",
+      "type": "text",
+      "required": false,
+      "group": "primary",
+      "explainer": "Sales or distribution channel (e.g., online, retail)"
+    },
+    {
+      "id": "customer",
+      "label": "Customer",
+      "type": "text",
+      "required": false,
+      "group": "primary",
+      "explainer": "Customer or client identifier for the line item"
+    },
+    {
+      "id": "taskSequence",
+      "label": "Task Sequence",
+      "type": "array",
+      "required": true,
+      "group": "defineTaskSequence",
+      "explainer": "Defines the sequence of tasks to be executed.",
+      "items": {
+        "type": "object",
+        "fields": [
+          {
+            "id": "taskKind",
+            "label": "Task Kind",
+            "type": "dropdown",
+            "required": true,
+            "options": [
+              { "value": "", "label": "None" },
+              { "value": "AUTO_REPLEN", "label": "Auto Replenishment" },
+              { "value": "INBOUND_PUTAWAY", "label": "Inbound Put Away" },
+              { "value": "INBOUND_RECEIVE", "label": "Inbound Receive" },
+              { "value": "INTERNAL_MOVEMENT", "label": "Internal Movement" },
+              { "value": "OUTBOUND_REPLEN", "label": "Outbound Replenishment" },
+              { "value": "OUTBOUND_PICK", "label": "Outbound Pick" },
+              { "value": "OUTBOUND_LOAD", "label": "Outbound Load" }
+            ],
+            "explainer": "Type of the task within the task sequence."
+          },
+          {
+            "id": "taskSubKind",
+            "label": "Task Sub-Kind",
+            "type": "text",
+            "required": false,
+            "explainer": "Optional subcategory for more specific task classification."
+          }
+        ]
+      }
+    },
+    {
+      "id": "ginAckByApi",
+      "label": "GIN Acknowledgement by API",
+      "type": "checkbox",
+      "required": false,
+      "defaultValue": true,
+      "group": "defineTaskSequence",
+      "explainer": "If true, GIN will be acknowledged via API instead of manual confirmation."
+    },
+    {
+      "id": "ginAckLevel",
+      "label": "GIN Acknowledgement Level",
+      "type": "dropdown",
+      "required": false,
+      "defaultValue": "SHIPMENT",
+      "group": "defineTaskSequence",
+      "explainer": "Defines the level at which GIN is acknowledged.",
+      "options": [
+        { "value": "NONE", "label": "None" },
+        { "value": "ORDER", "label": "Order" },
+        { "value": "SHIPMENT", "label": "Shipment" },
+        { "value": "ITEM", "label": "Item" }
+      ]
     },
     {
       "id": "retryOnFailure",
@@ -242,7 +349,7 @@
       "description": "Restock picking locations",
       "icon": "🔄",
       "color": "#f59e0b",
-      "category": "Internal Movement",
+      "category": "Outbound Movement",
       "allowMultiple": true,
       "configurationFields": []
     },
@@ -255,18 +362,82 @@
       "category": "Outbound Movement",
       "allowMultiple": false,
       "configurationFields": []
+    },
+    {
+      "id": "outbound_unpick",
+      "name": "Outbound Unpick",
+      "description": "Pick Loading Dock and drop in storage",
+      "icon": "📤",
+      "color": "#f97316",
+      "category": "Internal Movement",
+      "allowMultiple": false,
+      "configurationFields": []
+    },
+    {
+      "id": "internal_movement",
+      "name": "Internal Movement",
+      "description": "Internal Movement of the Inventory",
+      "icon": "📤",
+      "color": "#f97316",
+      "category": "Internal Movement",
+      "allowMultiple": false,
+      "configurationFields": []
     }
   ],
   "locationTaskTypes": [
     {
-      "id": "receiving_inspection",
-      "name": "Receiving Inspection",
+      "id": "receiving",
+      "name": "Receiving",
+      "description": "Receiving of incoming goods",
+      "icon": "🔍",
+      "color": "#16a34a",
+      "bgColor": "#dcfce7",
+      "category": "Location Task",
+      "compatibleLocationTypes": ["receiving_dock", "staging_area"],
+      "configurationFields": []
+    },
+    {
+      "id": "qualityControl",
+      "name": "Quality Control",
       "description": "Quality check of incoming goods",
       "icon": "🔍",
       "color": "#16a34a",
       "bgColor": "#dcfce7",
-      "category": "Quality Control",
+      "category": "Location Task",
       "compatibleLocationTypes": ["receiving_dock", "staging_area"],
+      "configurationFields": []
+    },
+    {
+      "id": "serialization",
+      "name": "Serialization",
+      "description": "Serialization of incoming goods",
+      "icon": "🔍",
+      "color": "#16a34a",
+      "bgColor": "#dcfce7",
+      "category": "Location Task",
+      "compatibleLocationTypes": ["receiving_dock", "staging_area"],
+      "configurationFields": []
+    },
+    {
+      "id": "palletization",
+      "name": "Palletization",
+      "description": "Palletization of incoming goods",
+      "icon": "🔍",
+      "color": "#16a34a",
+      "bgColor": "#dcfce7",
+      "category": "Location Task",
+      "compatibleLocationTypes": ["receiving_dock", "staging_area"],
+      "configurationFields": []
+    },
+    {
+      "id": "cycle_count",
+      "name": "Cycle Count",
+      "description": "Regular inventory verification",
+      "icon": "📊",
+      "color": "#8b5cf6",
+      "bgColor": "#ede9fe",
+      "category": "Inventory Management",
+      "compatibleLocationTypes": ["storage_location", "picking_face"],
       "configurationFields": []
     },
     {
@@ -278,6 +449,17 @@
       "bgColor": "#ede9fe",
       "category": "Inventory Management",
       "compatibleLocationTypes": ["storage_location", "picking_face"],
+      "configurationFields": []
+    },
+    {
+      "id": "outbound_load",
+      "name": "Outbound Load",
+      "description": "Loading",
+      "icon": "📊",
+      "color": "#8b5cf6",
+      "bgColor": "#ede9fe",
+      "category": "Location Task",
+      "compatibleLocationTypes": ["pick_and_drop_location", "shipping_dock"],
       "configurationFields": []
     }
   ]
