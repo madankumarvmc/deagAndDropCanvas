@@ -208,43 +208,7 @@
       "color": "#10b981",
       "category": "Inbound Movement",
       "allowMultiple": true,
-      "configurationFields": [
-        {
-          "id": "labelName",
-          "label": "Label Name",
-          "type": "text",
-          "required": false,
-          "placeholder": "Enter custom label name (optional)",
-          "description": "Custom name to identify this connection",
-          "group": "primary"
-        },
-        {
-          "id": "unit_type",
-          "label": "Unit Type",
-          "type": "dropdown",
-          "required": true,
-          "defaultValue": "pallet",
-          "options": [
-            { "value": "full_case", "label": "Full Case" },
-            { "value": "loose_item", "label": "Loose Item" },
-            { "value": "pallet", "label": "Pallet" }
-          ],
-          "group": "primary"
-        },
-        {
-          "id": "putaway_strategy",
-          "label": "Putaway Strategy",
-          "type": "dropdown",
-          "required": true,
-          "defaultValue": "directed",
-          "options": [
-            { "value": "directed", "label": "Directed" },
-            { "value": "random", "label": "Random" },
-            { "value": "closest", "label": "Closest Available" }
-          ],
-          "group": "advanced"
-        }
-      ]
+      "configurationFields": []
     },
     {
       "id": "picking",
@@ -254,45 +218,7 @@
       "color": "#ef4444",
       "category": "Outbound Movement",
       "allowMultiple": true,
-      "configurationFields": [
-        {
-          "id": "labelName",
-          "label": "Label Name",
-          "type": "text",
-          "required": false,
-          "placeholder": "Enter custom label name (optional)",
-          "description": "Custom name to identify this connection",
-          "group": "primary"
-        },
-        {
-          "id": "picking_method",
-          "label": "Picking Method",
-          "type": "dropdown",
-          "required": true,
-          "defaultValue": "batch",
-          "group": "primary",
-          "options": [
-            { "value": "discrete", "label": "Discrete" },
-            { "value": "batch", "label": "Batch" },
-            { "value": "zone", "label": "Zone" },
-            { "value": "wave", "label": "Wave" }
-          ]
-        },
-        {
-          "id": "picking_technology",
-          "label": "Technology",
-          "type": "dropdown",
-          "required": true,
-          "defaultValue": "rf",
-          "group": "advanced",
-          "options": [
-            { "value": "paper", "label": "Paper" },
-            { "value": "rf", "label": "RF Scanner" },
-            { "value": "voice", "label": "Voice" },
-            { "value": "light", "label": "Pick to Light" }
-          ]
-        }
-      ]
+      "configurationFields": []
     },
     {
       "id": "replenishment",
@@ -325,22 +251,7 @@
       "bgColor": "#dcfce7",
       "category": "Quality Control",
       "compatibleLocationTypes": ["receiving_dock", "staging_area"],
-      "configurationFields": [
-        {
-          "id": "inspection_type",
-          "label": "Inspection Type",
-          "type": "dropdown",
-          "required": true,
-          "defaultValue": "visual",
-          "group": "primary",
-          "options": [
-            { "value": "visual", "label": "Visual Inspection" },
-            { "value": "dimensional", "label": "Dimensional Check" },
-            { "value": "weight", "label": "Weight Verification" },
-            { "value": "full", "label": "Full Quality Check" }
-          ]
-        }
-      ]
+      "configurationFields": []
     },
     {
       "id": "cycle_counting",
