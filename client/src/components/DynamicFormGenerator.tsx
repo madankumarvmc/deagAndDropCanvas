@@ -86,10 +86,12 @@ export default function DynamicFormGenerator({
         case 'number':
           fieldSchema = z.number();
           if (field.validation?.min !== undefined) {
-            fieldSchema = (fieldSchema as z.ZodNumber).min(field.validation.min);
+            const numberSchema = fieldSchema as z.ZodNumber;
+            fieldSchema = numberSchema.min(field.validation.min);
           }
           if (field.validation?.max !== undefined) {
-            fieldSchema = (fieldSchema as z.ZodNumber).max(field.validation.max);
+            const numberSchema = fieldSchema as z.ZodNumber;
+            fieldSchema = numberSchema.max(field.validation.max);
           }
           break;
         case 'dropdown':
@@ -247,15 +249,15 @@ export default function DynamicFormGenerator({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
         {/* Primary Section - Always Visible */}
         {primaryFields.length > 0 && (
-          <div className="space-y-4">
-            <div className="border-b border-gray-200 pb-2">
-              <h3 className="text-lg font-semibold text-gray-900">
+          <div className="space-y-2">
+            <div className="border-b border-gray-200 pb-1">
+              <h3 className="text-base font-semibold text-gray-900">
                 {frameworkConfig?.ui?.messages?.forms?.primarySection?.title || "Define Inventory Group"}
               </h3>
-              <p className="text-sm text-gray-600 mt-1">
+              <p className="text-xs text-gray-600 mt-0.5">
                 {frameworkConfig?.ui?.messages?.forms?.primarySection?.description || "Configure basic inventory handling settings"}
               </p>
             </div>
@@ -271,25 +273,25 @@ export default function DynamicFormGenerator({
           const isExpanded = expandedSections[groupName] || false;
           
           return (
-            <div key={groupName} className="space-y-4">
+            <div key={groupName} className="space-y-2">
               <button
                 type="button"
                 onClick={() => toggleSection(groupName)}
                 className="flex items-center space-x-2 text-gray-700 hover:text-gray-900 transition-colors"
               >
                 {isExpanded ? (
-                  <ChevronDown className="h-4 w-4" />
+                  <ChevronDown className="h-3 w-3" />
                 ) : (
-                  <ChevronRight className="h-4 w-4" />
+                  <ChevronRight className="h-3 w-3" />
                 )}
-                <span className="font-medium">{generateGroupTitle(groupName)}</span>
-                <span className="text-sm text-gray-500 ml-2">
+                <span className="text-sm font-medium">{generateGroupTitle(groupName)}</span>
+                <span className="text-xs text-gray-500 ml-2">
                   ({groupFields.length} fields)
                 </span>
               </button>
               
               {isExpanded && (
-                <div className="pl-4 border-l-2 border-gray-200 space-y-2">
+                <div className="pl-3 border-l-2 border-gray-200 space-y-1">
                   <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-3 gap-y-2">
                     {groupFields.map(renderField)}
                   </div>
@@ -299,11 +301,11 @@ export default function DynamicFormGenerator({
           );
         })}
         
-        <div className="flex items-center justify-end space-x-3 pt-6 border-t border-gray-200">
-          <Button type="button" variant="outline" onClick={onCancel}>
+        <div className="flex items-center justify-end space-x-2 pt-3 border-t border-gray-200">
+          <Button type="button" variant="outline" onClick={onCancel} className="h-7 text-xs px-3">
             {frameworkConfig?.ui?.buttons?.cancel || "Cancel"}
           </Button>
-          <Button type="submit" disabled={isLoading}>
+          <Button type="submit" disabled={isLoading} className="h-7 text-xs px-3">
             {isLoading ? (frameworkConfig?.ui?.messages?.saving || 'Saving...') : (submitLabel || frameworkConfig?.ui?.buttons?.save || "Save")}
           </Button>
         </div>
