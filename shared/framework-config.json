@@ -93,14 +93,14 @@
       "required": false,
       "defaultValue": 30,
       "validation": { "min": 1, "max": 480 },
-      "group": "advanced"
+      "group": "advanced-performance"
     },
     {
       "id": "retryOnFailure",
       "label": "Retry on Failure",
       "type": "checkbox",
       "defaultValue": true,
-      "group": "advanced"
+      "group": "advanced-reliability"
     },
     {
       "id": "maxRetries",
@@ -109,7 +109,23 @@
       "required": false,
       "defaultValue": 3,
       "validation": { "min": 0, "max": 10 },
-      "group": "advanced"
+      "group": "advanced-reliability"
+    },
+    {
+      "id": "notificationEnabled",
+      "label": "Enable Notifications",
+      "type": "checkbox",
+      "defaultValue": false,
+      "group": "advanced-alerts"
+    },
+    {
+      "id": "alertThreshold",
+      "label": "Alert Threshold (seconds)",
+      "type": "number",
+      "required": false,
+      "defaultValue": 300,
+      "validation": { "min": 10, "max": 3600 },
+      "group": "advanced-alerts"
     }
   ],
   "locationTaskConfigTemplate": [

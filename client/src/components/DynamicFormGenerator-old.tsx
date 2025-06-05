@@ -76,12 +76,17 @@ export default function DynamicFormGenerator({
       
       switch (field.type) {
         case 'text':
-        case 'textarea':
+        case 'dropdown':
           fieldSchema = z.string();
           if (field.validation?.pattern) {
             fieldSchema = fieldSchema.regex(new RegExp(field.validation.pattern));
           }
           break;
+          
+        case 'textarea':
+          fieldSchema = z.string();
+          break;
+          
         case 'number':
           fieldSchema = z.number();
           if (field.validation?.min !== undefined) {
@@ -91,19 +96,29 @@ export default function DynamicFormGenerator({
             fieldSchema = fieldSchema.max(field.validation.max);
           }
           break;
-        case 'dropdown':
-        case 'multiselect':
-          fieldSchema = z.string();
-          break;
+          
         case 'checkbox':
           fieldSchema = z.boolean();
           break;
+          
+        case 'multiselect':
+          fieldSchema = z.array(z.string());
+          break;
+          
         default:
           fieldSchema = z.string();
       }
       
-      if (!field.required) {
+      if (field.required) {
+        if (field.type === 'text' || field.type === 'textarea' || field.type === 'dropdown') {
+          fieldSchema = fieldSchema.min(1, `${field.label} is required`);
+        }
+      } else {
         fieldSchema = fieldSchema.optional();
+      }
+      
+      if (field.defaultValue !== undefined) {
+        fieldSchema = fieldSchema.default(field.defaultValue);
       }
       
       schemaFields[field.id] = fieldSchema;
@@ -114,17 +129,23 @@ export default function DynamicFormGenerator({
 
   const dynamicSchema = createDynamicSchema(fields);
   
-  // Generate default values based on field definitions
+  // Create default values combining field defaults with initial values
   const getDefaultValues = () => {
-    const defaults: Record<string, any> = { ...initialValues };
+    const defaults: Record<string, any> = {};
     
     fields.forEach(field => {
-      if (defaults[field.id] === undefined && field.defaultValue !== undefined) {
+      if (initialValues[field.id] !== undefined) {
+        defaults[field.id] = initialValues[field.id];
+      } else if (field.defaultValue !== undefined) {
         defaults[field.id] = field.defaultValue;
-      } else if (defaults[field.id] === undefined) {
+      } else {
+        // Set appropriate default based on type
         switch (field.type) {
           case 'checkbox':
             defaults[field.id] = false;
+            break;
+          case 'multiselect':
+            defaults[field.id] = [];
             break;
           case 'number':
             defaults[field.id] = 0;
@@ -202,7 +223,7 @@ export default function DynamicFormGenerator({
                     
                   case 'dropdown':
                     return (
-                      <Select onValueChange={formField.onChange} value={formField.value}>
+                      <Select onValueChange={formField.onChange} value={formField.value || ''}>
                         <SelectTrigger>
                           <SelectValue placeholder={field.placeholder || `Select ${field.label}`} />
                         </SelectTrigger>
@@ -217,6 +238,32 @@ export default function DynamicFormGenerator({
                     );
                     
                   case 'multiselect':
+                    return (
+                      <div className="space-y-2">
+                        {field.options?.map((option) => (
+                          <div key={option.value} className="flex items-center space-x-2">
+                            <Checkbox
+                              checked={(formField.value || []).includes(option.value)}
+                              onCheckedChange={(checked) => {
+                                const currentValue = formField.value || [];
+                                if (checked) {
+                                  formField.onChange([...currentValue, option.value]);
+                                } else {
+                                  formField.onChange(
+                                    currentValue.filter((v: string) => v !== option.value)
+                                  );
+                                }
+                              }}
+                            />
+                            <label className="text-sm font-medium">
+                              {option.label}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    );
+                    
+                  default:
                     return (
                       <Input
                         {...formField}
