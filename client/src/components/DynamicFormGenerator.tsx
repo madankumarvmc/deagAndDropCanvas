@@ -210,13 +210,13 @@ export default function DynamicFormGenerator({
                     
                   case 'checkbox':
                     return (
-                      <div className="flex items-center space-x-1.5 h-7">
+                      <div className="flex items-center space-x-2 h-7">
                         <Checkbox
                           checked={formField.value || false}
                           onCheckedChange={formField.onChange}
-                          className="h-3 w-3"
+                          className="h-4 w-4 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
                         />
-                        <span className="text-xs text-gray-600 leading-tight">
+                        <span className="text-xs text-gray-700 leading-tight font-medium">
                           {field.label}
                           {field.required && <span className="text-red-500 ml-1">*</span>}
                         </span>
@@ -295,7 +295,7 @@ export default function DynamicFormGenerator({
                 {frameworkConfig?.ui?.messages?.forms?.primarySection?.description || "Configure basic inventory handling settings"}
               </p>
             </div>
-            <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-3 gap-y-2">
+            <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-3">
               {primaryFields.map((field) => renderField(field))}
             </div>
           </div>
@@ -326,7 +326,7 @@ export default function DynamicFormGenerator({
               
               {isExpanded && (
                 <div className="pl-3 border-l-2 border-gray-200 space-y-1">
-                  <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-3 gap-y-2">
+                  <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-3">
                     {groupFields.map((field) => renderField(field))}
                   </div>
                 </div>

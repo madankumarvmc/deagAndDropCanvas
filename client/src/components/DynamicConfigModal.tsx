@@ -131,7 +131,7 @@ export default function DynamicConfigModal() {
 
   return (
     <Dialog open={isConfigModalOpen} onOpenChange={setConfigModalOpen}>
-      <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+      <DialogContent className="max-w-4xl max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
             Configure {elementName}
