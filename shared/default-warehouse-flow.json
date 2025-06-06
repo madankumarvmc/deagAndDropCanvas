@@ -9,7 +9,7 @@
       "position": { "x": 100, "y": 200 },
       "data": {
         "locationTypeId": "receiving_dock",
-        "locationName": "Main Receiving Dock",
+        "locationName": "Receiving Dock",
         "icon": "🚛",
         "color": "#16a34a", 
         "bgColor": "#dcfce7",
@@ -20,7 +20,7 @@
           {
             "id": "receiving-task-1",
             "taskTypeId": "receiving", 
-            "name": "Goods Receiving",
+            "name": "Receiving",
             "icon": "🔍",
             "color": "#16a34a",
             "bgColor": "#dcfce7",
@@ -37,7 +37,7 @@
       "position": { "x": 400, "y": 200 },
       "data": {
         "locationTypeId": "staging_area",
-        "locationName": "Inbound Staging",
+        "locationName": "Staging Area",
         "icon": "📦",
         "color": "#3b82f6",
         "bgColor": "#dbeafe",
@@ -65,7 +65,7 @@
       "position": { "x": 700, "y": 200 },
       "data": {
         "locationTypeId": "storage_location",
-        "locationName": "Main Storage Area",
+        "locationName": "Storage Location",
         "icon": "🏪",
         "color": "#8b5cf6",
         "bgColor": "#ede9fe",
@@ -93,7 +93,7 @@
       "position": { "x": 700, "y": 400 },
       "data": {
         "locationTypeId": "picking_face",
-        "locationName": "Forward Pick Zone",
+        "locationName": "Picking Face",
         "icon": "👆",
         "color": "#ef4444",
         "bgColor": "#fee2e2",
@@ -109,7 +109,7 @@
       "position": { "x": 400, "y": 400 },
       "data": {
         "locationTypeId": "shipping_dock",
-        "locationName": "Main Shipping Dock",
+        "locationName": "Shipping Dock",
         "icon": "🚚",
         "color": "#f97316",
         "bgColor": "#fed7aa",
