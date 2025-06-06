@@ -140,7 +140,7 @@
       "type": "movementTask",
       "data": {
         "taskTypeId": "putaway",
-        "taskName": "Receive to Staging",
+        "taskName": "Putaway",
         "icon": "📥",
         "color": "#10b981",
         "category": "Inbound Movement",
@@ -159,7 +159,7 @@
       "type": "movementTask",
       "data": {
         "taskTypeId": "putaway",
-        "taskName": "Staging to Storage",
+        "taskName": "Putaway",
         "icon": "📥",
         "color": "#10b981",
         "category": "Inbound Movement",
@@ -178,7 +178,7 @@
       "type": "movementTask",
       "data": {
         "taskTypeId": "replenishment",
-        "taskName": "Storage to Pick Face",
+        "taskName": "Replenishment",
         "icon": "🔄",
         "color": "#f59e0b",
         "category": "Outbound Movement",
@@ -197,7 +197,7 @@
       "type": "movementTask",
       "data": {
         "taskTypeId": "picking",
-        "taskName": "Pick and Ship",
+        "taskName": "Picking",
         "icon": "👆",
         "color": "#ef4444",
         "category": "Outbound Movement",
