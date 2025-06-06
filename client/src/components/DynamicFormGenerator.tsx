@@ -324,7 +324,7 @@ export default function DynamicFormGenerator({
               {isExpanded && (
                 <div className="pl-3 border-l-2 border-gray-200 space-y-1">
                   <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-3 gap-y-2">
-                    {groupFields.map(renderField)}
+                    {groupFields.map((field) => renderField(field))}
                   </div>
                 </div>
               )}
