@@ -1,0 +1,238 @@
+{
+  "name": "Standard Warehouse Flow Template",
+  "description": "Complete warehouse operation flow with receiving, storage, picking, and shipping",
+  "version": "1.0",
+  "locationNodes": [
+    {
+      "id": "receiving-dock-1",
+      "type": "warehouseLocation",
+      "position": { "x": 100, "y": 200 },
+      "data": {
+        "locationTypeId": "receiving_dock",
+        "locationName": "Main Receiving Dock",
+        "icon": "🚛",
+        "color": "#16a34a",
+        "bgColor": "#dcfce7",
+        "borderColor": "#16a34a",
+        "category": "Inbound",
+        "configuration": {
+          "capacity": 50,
+          "operatingHours": "24/7"
+        },
+        "locationTasks": [
+          {
+            "id": "receiving-task-1",
+            "taskTypeId": "receiving",
+            "name": "Goods Receiving",
+            "icon": "📦",
+            "color": "#16a34a",
+            "bgColor": "#dcfce7",
+            "configuration": {
+              "sampling_rate": 15,
+              "quality_check": true
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "staging-area-1",
+      "type": "warehouseLocation",
+      "position": { "x": 400, "y": 200 },
+      "data": {
+        "locationTypeId": "staging_area",
+        "locationName": "Inbound Staging",
+        "icon": "📦",
+        "color": "#3b82f6",
+        "bgColor": "#dbeafe",
+        "borderColor": "#2563eb",
+        "category": "Inbound",
+        "configuration": {
+          "capacity": 100,
+          "maxStayTime": "24 hours"
+        },
+        "locationTasks": [
+          {
+            "id": "palletization-task-1",
+            "taskTypeId": "palletization",
+            "name": "Palletization",
+            "icon": "📦",
+            "color": "#3b82f6",
+            "bgColor": "#dbeafe",
+            "configuration": {
+              "sampling_rate": 10,
+              "pallet_type": "standard"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "storage-location-1",
+      "type": "warehouseLocation",
+      "position": { "x": 700, "y": 200 },
+      "data": {
+        "locationTypeId": "storage_location",
+        "locationName": "Main Storage Area",
+        "icon": "🏪",
+        "color": "#8b5cf6",
+        "bgColor": "#ede9fe",
+        "borderColor": "#7c3aed",
+        "category": "Storage",
+        "configuration": {
+          "capacity": 1000,
+          "zone": "A1-A5"
+        },
+        "locationTasks": [
+          {
+            "id": "cycle-count-task-1",
+            "taskTypeId": "cycle_count",
+            "name": "Inventory Count",
+            "icon": "📊",
+            "color": "#8b5cf6",
+            "bgColor": "#ede9fe",
+            "configuration": {
+              "sampling_rate": 5,
+              "frequency": "weekly"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "picking-face-1",
+      "type": "warehouseLocation",
+      "position": { "x": 700, "y": 400 },
+      "data": {
+        "locationTypeId": "picking_face",
+        "locationName": "Forward Pick Zone",
+        "icon": "👆",
+        "color": "#ef4444",
+        "bgColor": "#fee2e2",
+        "borderColor": "#dc2626",
+        "category": "Outbound",
+        "configuration": {
+          "capacity": 200,
+          "pickType": "forward"
+        },
+        "locationTasks": []
+      }
+    },
+    {
+      "id": "shipping-dock-1",
+      "type": "warehouseLocation",
+      "position": { "x": 400, "y": 400 },
+      "data": {
+        "locationTypeId": "shipping_dock",
+        "locationName": "Main Shipping Dock",
+        "icon": "🚚",
+        "color": "#f97316",
+        "bgColor": "#fed7aa",
+        "borderColor": "#ea580c",
+        "category": "Outbound",
+        "configuration": {
+          "capacity": 30,
+          "loadingBays": 6
+        },
+        "locationTasks": [
+          {
+            "id": "outbound-load-task-1",
+            "taskTypeId": "outbound_load",
+            "name": "Loading Operations",
+            "icon": "🚚",
+            "color": "#f97316",
+            "bgColor": "#fed7aa",
+            "configuration": {
+              "sampling_rate": 20,
+              "dock_assignment": true
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "movementEdges": [
+    {
+      "id": "putaway-edge-1",
+      "source": "receiving-dock-1",
+      "target": "staging-area-1",
+      "type": "movementTask",
+      "data": {
+        "taskTypeId": "putaway",
+        "taskName": "Receive to Staging",
+        "icon": "📥",
+        "color": "#10b981",
+        "category": "Inbound Movement",
+        "configuration": {
+          "priority": 1,
+          "mode": "PUT",
+          "optimizationMode": "DISTANCE",
+          "allowComplete": true
+        }
+      }
+    },
+    {
+      "id": "putaway-edge-2",
+      "source": "staging-area-1",
+      "target": "storage-location-1",
+      "type": "movementTask",
+      "data": {
+        "taskTypeId": "putaway",
+        "taskName": "Staging to Storage",
+        "icon": "📥",
+        "color": "#10b981",
+        "category": "Inbound Movement",
+        "configuration": {
+          "priority": 2,
+          "mode": "PUT",
+          "optimizationMode": "TOUCH",
+          "dropSlottingMode": "AREA"
+        }
+      }
+    },
+    {
+      "id": "replenishment-edge-1",
+      "source": "storage-location-1",
+      "target": "picking-face-1",
+      "type": "movementTask",
+      "data": {
+        "taskTypeId": "replenishment",
+        "taskName": "Storage to Pick Face",
+        "icon": "🔄",
+        "color": "#f59e0b",
+        "category": "Outbound Movement",
+        "configuration": {
+          "priority": 3,
+          "mode": "PICK",
+          "optimizationMode": "DISTANCE",
+          "batchPreferenceMode": "CLOSEST_PREVIOUS"
+        }
+      }
+    },
+    {
+      "id": "picking-edge-1",
+      "source": "picking-face-1",
+      "target": "shipping-dock-1",
+      "type": "movementTask",
+      "data": {
+        "taskTypeId": "picking",
+        "taskName": "Pick and Ship",
+        "icon": "👆",
+        "color": "#ef4444",
+        "category": "Outbound Movement",
+        "configuration": {
+          "priority": 4,
+          "mode": "PICK",
+          "optimizationMode": "TIME",
+          "pickBundles": true,
+          "enableEditQtyInPickOp": true
+        }
+      }
+    }
+  ],
+  "viewport": {
+    "x": 0,
+    "y": 0,
+    "zoom": 1
+  }
+}

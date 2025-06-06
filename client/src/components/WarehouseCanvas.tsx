@@ -18,6 +18,8 @@ import ReactFlow, {
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { useWarehouseStore } from '@/stores/warehouseStore';
+import { Button } from '@/components/ui/button';
+import { FileText, Download } from 'lucide-react';
 import LocationNode from './LocationNode';
 import TaskNode from './TaskNode';
 import MovementTaskEdge from './MovementTaskEdge';
@@ -79,6 +81,46 @@ export default function WarehouseCanvas() {
   React.useEffect(() => {
     setEdges(movementEdges);
   }, [movementEdges, setEdges]);
+
+  // Load default warehouse flow
+  const loadDefaultFlow = async () => {
+    try {
+      const response = await fetch('/api/default-warehouse-flow');
+      if (!response.ok) {
+        throw new Error('Failed to load default flow');
+      }
+      const defaultFlow = await response.json();
+      
+      // Clear existing nodes and edges
+      setLocationNodes([]);
+      setMovementEdges([]);
+      
+      // Load the default flow data
+      setLocationNodes(defaultFlow.locationNodes);
+      setMovementEdges(defaultFlow.movementEdges);
+      
+      // Set viewport if provided
+      if (defaultFlow.viewport) {
+        setViewport(defaultFlow.viewport);
+        setTimeout(() => {
+          setReactFlowViewport(defaultFlow.viewport);
+        }, 100);
+      }
+      
+      // Auto-fit view after loading
+      setTimeout(() => {
+        fitView({ 
+          padding: 0.2,
+          minZoom: 0.5,
+          maxZoom: 1.2,
+          duration: 800
+        });
+      }, 200);
+      
+    } catch (error) {
+      console.error('Error loading default flow:', error);
+    }
+  };
 
   const onConnect: OnConnect = useCallback(
     (params: Connection) => {
@@ -196,6 +238,19 @@ export default function WarehouseCanvas() {
         />
         <Background gap={20} size={1} color="#d1d5db" />
       </ReactFlow>
+      
+      {/* Load Default Flow Button */}
+      <div className="absolute top-4 left-4 z-10">
+        <Button
+          onClick={loadDefaultFlow}
+          variant="outline"
+          size="sm"
+          className="bg-white/90 hover:bg-white border-gray-300 shadow-sm"
+        >
+          <FileText className="h-4 w-4 mr-2" />
+          Load Default Flow
+        </Button>
+      </div>
       
       {isCreatingMovementTask && (
         <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-blue-100 border border-blue-300 rounded-lg px-4 py-2 z-10">

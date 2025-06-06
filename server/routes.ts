@@ -202,6 +202,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Default Warehouse Flow route
+  app.get("/api/default-warehouse-flow", async (req, res) => {
+    try {
+      const defaultFlow = require("../shared/default-warehouse-flow.json");
+      res.json(defaultFlow);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch default warehouse flow" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
