@@ -312,161 +312,161 @@
       "explainer": "Defines the optimization strategy for task execution (e.g., minimize touchpoints or travel distance)."
     },
     {
-        "id": "scanSourceHUKind",
-        "label": "Scan Source HU Kind",
-        "type": "select",
-        "required": false,
-        "group": "huFormation",
-        "options": [
-          { "value": "PALLET", "label": "Pallet" },
-          { "value": "NONE", "label": "None" }
-        ],
-        "explainer": "Type of HU (Handling Unit) to scan at source. Use NONE if scanning is not required."
-      },
-      {
-        "id": "pickSourceHUKind",
-        "label": "Pick Source HU Kind",
-        "type": "select",
-        "required": false,
-        "group": "huFormation",
-        "options": [
-          { "value": "PALLET", "label": "Pallet" },
-          { "value": "NONE", "label": "None" }
-        ],
-        "explainer": "Type of source HU used during picking."
-      },
-      {
-        "id": "carrierHUKind",
-        "label": "Carrier HU Kind",
-        "type": "select",
-        "required": false,
-        "group": "huFormation",
-        "options": [
-          { "value": "PALLET", "label": "Pallet" },
-          { "value": "NONE", "label": "None" }
-        ],
-        "explainer": "Type of HU used for carrying the picked items."
-      },
-      {
-        "id": "huMappingMode",
-        "label": "HU Mapping Mode",
-        "type": "select",
-        "required": false,
-        "group": "huFormation",
-        "options": [
-          { "value": "AREA", "label": "Area" },
-          { "value": "BIN", "label": "Bin" }
-        ],
-        "explainer": "Determines how handling units are mapped, either by area or by bin."
-      },
-      {
-        "id": "dropHUQuantThreshold",
-        "label": "Drop HU Quantity Threshold",
-        "type": "number",
-        "required": false,
-        "group": "huFormation",
-        "explainer": "Minimum quantity threshold to trigger HU drop."
-      },
-      {
-        "id": "dropUOM",
-        "label": "Drop UOM",
-        "type": "text",
-        "required": false,
-        "group": "huFormation",
-        "explainer": "Unit of Measure used at the drop point (e.g., L0, L1)."
-      },
-      {
-        "id": "allowComplete",
-        "label": "Allow Complete",
-        "type": "checkbox",
-        "required": false,
-        "group": "huFormation",
-        "explainer": "Whether completing a task without partial drops is allowed."
-      },
-      {
-        "id": "swapHUThreshold",
-        "label": "Swap HU Threshold",
-        "type": "number",
-        "required": false,
-        "group": "huFormation",
-        "explainer": "Threshold for replacing HU when a certain quantity is reached."
-      },
-      {
-        "id": "dropInnerHU",
-        "label": "Drop Inner HU",
-        "type": "checkbox",
-        "required": false,
-        "group": "huFormation",
-        "explainer": "Enable dropping inner HUs instead of full containers."
-      },
-      {
-        "id": "allowInnerHUBreak",
-        "label": "Allow Inner HU Break",
-        "type": "checkbox",
-        "required": false,
-        "group": "huFormation",
-        "explainer": "Allow breaking inner handling units during the task."
-      },
-      {
-        "id": "displayDropUOM",
-        "label": "Display Drop UOM",
-        "type": "checkbox",
-        "required": false,
-        "group": "huFormation",
-        "explainer": "Whether to show drop unit of measure during operation."
-      },
-      {
-        "id": "autoUOMConversion",
-        "label": "Auto UOM Conversion",
-        "type": "checkbox",
-        "required": false,
-        "group": "huFormation",
-        "explainer": "Automatically convert UOM based on inventory configuration."
-      },
-      {
-        "id": "huWeightThreshold",
-        "label": "HU Weight Threshold",
-        "type": "number",
-        "required": false,
-        "group": "huFormation",
-        "explainer": "Maximum weight allowed in a single HU before a new HU is required."
-      },
-      {
-        "id": "pickBundles",
-        "label": "Pick Bundles",
-        "type": "checkbox",
-        "required": false,
-        "group": "huFormation",
-        "explainer": "Enable picking items in bundles instead of individual units."
-      },
-      {
-        "id": "enableEditQtyInPickOp",
-        "label": "Enable Edit Quantity in Pick Operation",
-        "type": "checkbox",
-        "required": false,
-        "group": "huFormation",
-        "explainer": "Allows editing picked quantity during pick operations."
-      },
-      {
-        "id": "dropSlottingMode",
-        "label": "Drop Slotting Mode",
-        "type": "select",
-        "required": false,
-        "group": "huFormation",
-        "options": [
-          { "value": "AREA", "label": "Area" },
-          { "value": "BIN", "label": "Bin" }
-        ],
-        "explainer": "Defines how items are slotted during drop — by AREA or BIN."
-      },
-      {
-        "id": "enableManualDestBinSelection",
-        "label": "Enable Manual Destination Bin Selection",
-        "type": "checkbox",
-        "required": false,
-        "group": "huFormation",
-        "explainer": "Allows the operator to manually select the destination bin."
-      }
+      "id": "scanSourceHUKind",
+      "label": "Scan Source HU Kind",
+      "type": "select",
+      "required": false,
+      "group": "huFormation",
+      "options": [
+        { "value": "PALLET", "label": "Pallet" },
+        { "value": "NONE", "label": "None" }
+      ],
+      "explainer": "Use NONE if scanning is not required."
+    },
+    {
+      "id": "pickSourceHUKind",
+      "label": "Pick Source HU Kind",
+      "type": "select",
+      "required": false,
+      "group": "huFormation",
+      "options": [
+        { "value": "PALLET", "label": "Pallet" },
+        { "value": "NONE", "label": "None" }
+      ],
+      "explainer": ""
+    },
+    {
+      "id": "carrierHUKind",
+      "label": "Carrier HU Kind",
+      "type": "select",
+      "required": false,
+      "group": "huFormation",
+      "options": [
+        { "value": "PALLET", "label": "Pallet" },
+        { "value": "NONE", "label": "None" }
+      ],
+      "explainer": ""
+    },
+    {
+      "id": "huMappingMode",
+      "label": "HU Mapping Mode",
+      "type": "select",
+      "required": false,
+      "group": "huFormation",
+      "options": [
+        { "value": "AREA", "label": "Area" },
+        { "value": "BIN", "label": "Bin" }
+      ],
+      "explainer": ""
+    },
+    {
+      "id": "dropHUQuantThreshold",
+      "label": "Drop HU Quantity Threshold",
+      "type": "number",
+      "required": false,
+      "group": "huFormation",
+      "explainer": "Min qty threshold to trigger HU drop."
+    },
+    {
+      "id": "dropUOM",
+      "label": "Drop UOM",
+      "type": "text",
+      "required": false,
+      "group": "huFormation",
+      "explainer": "e.g., L0, L1"
+    },
+    {
+      "id": "allowComplete",
+      "label": "Allow Complete",
+      "type": "checkbox",
+      "required": false,
+      "group": "huFormation",
+      "explainer": ""
+    },
+    {
+      "id": "swapHUThreshold",
+      "label": "Swap HU Threshold",
+      "type": "number",
+      "required": false,
+      "group": "huFormation",
+      "explainer": ""
+    },
+    {
+      "id": "dropInnerHU",
+      "label": "Drop Inner HU",
+      "type": "checkbox",
+      "required": false,
+      "group": "huFormation",
+      "explainer": ""
+    },
+    {
+      "id": "allowInnerHUBreak",
+      "label": "Allow Inner HU Break",
+      "type": "checkbox",
+      "required": false,
+      "group": "huFormation",
+      "explainer": ""
+    },
+    {
+      "id": "displayDropUOM",
+      "label": "Display Drop UOM",
+      "type": "checkbox",
+      "required": false,
+      "group": "huFormation",
+      "explainer": ""
+    },
+    {
+      "id": "autoUOMConversion",
+      "label": "Auto UOM Conversion",
+      "type": "checkbox",
+      "required": false,
+      "group": "huFormation",
+      "explainer": ""
+    },
+    {
+      "id": "huWeightThreshold",
+      "label": "HU Weight Threshold",
+      "type": "number",
+      "required": false,
+      "group": "huFormation",
+      "explainer": ""
+    },
+    {
+      "id": "pickBundles",
+      "label": "Pick Bundles",
+      "type": "checkbox",
+      "required": false,
+      "group": "huFormation",
+      "explainer": ""
+    },
+    {
+      "id": "enableEditQtyInPickOp",
+      "label": "Enable Edit Quantity in Pick Operation",
+      "type": "checkbox",
+      "required": false,
+      "group": "huFormation",
+      "explainer": ""
+    },
+    {
+      "id": "dropSlottingMode",
+      "label": "Drop Slotting Mode",
+      "type": "select",
+      "required": false,
+      "group": "huFormation",
+      "options": [
+        { "value": "AREA", "label": "Area" },
+        { "value": "BIN", "label": "Bin" }
+      ],
+      "explainer": "Defines how items are slotted during drop — by AREA or BIN."
+    },
+    {
+      "id": "enableManualDestBinSelection",
+      "label": "Enable Manual Destination Bin Selection",
+      "type": "checkbox",
+      "required": false,
+      "group": "huFormation",
+      "explainer": ""
+    }
   ],
   "locationTaskConfigTemplate": [
     {

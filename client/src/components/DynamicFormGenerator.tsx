@@ -164,10 +164,12 @@ export default function DynamicFormGenerator({
         name={field.id}
         render={({ field: formField }) => (
           <FormItem className="space-y-1">
-            <FormLabel className="text-xs font-medium text-gray-600 leading-tight">
-              {field.label}
-              {field.required && <span className="text-red-500 ml-1">*</span>}
-            </FormLabel>
+            {field.type !== 'checkbox' && (
+              <FormLabel className="text-xs font-medium text-gray-600 leading-tight">
+                {field.label}
+                {field.required && <span className="text-red-500 ml-1">*</span>}
+              </FormLabel>
+            )}
             <FormControl>
               {(() => {
                 switch (field.type) {
@@ -215,7 +217,8 @@ export default function DynamicFormGenerator({
                           className="h-3 w-3"
                         />
                         <span className="text-xs text-gray-600 leading-tight">
-                          {field.explainer || 'Enable this option'}
+                          {field.label}
+                          {field.required && <span className="text-red-500 ml-1">*</span>}
                         </span>
                       </div>
                     );
