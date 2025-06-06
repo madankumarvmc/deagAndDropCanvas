@@ -466,7 +466,55 @@
       "required": false,
       "group": "huFormation",
       "explainer": ""
-    }
+    },
+    {
+        "id": "allowWorkOrderSplit",
+        "label": "Allow Work Order Split",
+        "type": "checkbox",
+        "required": false,
+        "group": "workOrderManagement",
+        "explainer": "Enables splitting of work orders into multiple tasks if needed."
+      },
+      {
+        "id": "undoOp",
+        "label": "Allow Undo Operation",
+        "type": "checkbox",
+        "required": false,
+        "group": "workOrderManagement",
+        "explainer": "Allows users to undo the last performed operation"
+      },
+      {
+        "id": "allowUnpick",
+        "label": "Allow Unpick",
+        "type": "checkbox",
+        "required": false,
+        "group": "workOrderManagement",
+        "explainer": "Reversal of picking operations if needed."
+      },
+      {
+        "id": "supportPalletScan",
+        "label": "Support Pallet Scan",
+        "type": "checkbox",
+        "required": false,
+        "group": "workOrderManagement",
+        "explainer": ""
+      },
+      {
+        "id": "pickMandatoryScan",
+        "label": "Pick Mandatory Scan",
+        "type": "checkbox",
+        "required": false,
+        "group": "workOrderManagement",
+        "explainer": ""
+      },
+      {
+        "id": "dropMandatoryScan",
+        "label": "Drop Mandatory Scan",
+        "type": "checkbox",
+        "required": false,
+        "group": "workOrderManagement",
+        "explainer": ""
+      }
   ],
   "locationTaskConfigTemplate": [
     {
