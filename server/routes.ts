@@ -9,6 +9,7 @@ import {
   insertLocationTaskConfigurationSchema,
 } from "@shared/schema";
 import { defaultFrameworkConfig } from "@shared/framework-config";
+import * as defaultWarehouseFlow from "@shared/default-warehouse-flow.json";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
@@ -205,9 +206,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Default Warehouse Flow route
   app.get("/api/default-warehouse-flow", async (req, res) => {
     try {
-      const defaultFlow = require("../shared/default-warehouse-flow.json");
-      res.json(defaultFlow);
+      res.json(defaultWarehouseFlow);
     } catch (error) {
+      console.error("Error loading default warehouse flow:", error);
       res.status(500).json({ message: "Failed to fetch default warehouse flow" });
     }
   });
