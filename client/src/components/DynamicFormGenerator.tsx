@@ -293,7 +293,7 @@ export default function DynamicFormGenerator({
               </p>
             </div>
             <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-3 gap-y-2">
-              {primaryFields.map(renderField)}
+              {primaryFields.map((field) => renderField(field))}
             </div>
           </div>
         )}

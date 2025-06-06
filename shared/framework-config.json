@@ -311,8 +311,7 @@
       ],
       "explainer": "Defines the optimization strategy for task execution (e.g., minimize touchpoints or travel distance)."
     },
-    [
-      {
+    {
         "id": "scanSourceHUKind",
         "label": "Scan Source HU Kind",
         "type": "select",
@@ -468,7 +467,6 @@
         "group": "huFormation",
         "explainer": "Allows the operator to manually select the destination bin."
       }
-    ]
   ],
   "locationTaskConfigTemplate": [
     {
