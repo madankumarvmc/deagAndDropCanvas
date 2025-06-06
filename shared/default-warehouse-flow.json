@@ -1,35 +1,31 @@
 {
-  "name": "Standard Warehouse Flow Template",
+  "name": "Standard Warehouse Flow Template", 
   "description": "Complete warehouse operation flow with receiving, storage, picking, and shipping",
   "version": "1.0",
   "locationNodes": [
     {
       "id": "receiving-dock-1",
-      "type": "warehouseLocation",
+      "type": "warehouseLocation", 
       "position": { "x": 100, "y": 200 },
       "data": {
         "locationTypeId": "receiving_dock",
         "locationName": "Main Receiving Dock",
         "icon": "🚛",
-        "color": "#16a34a",
+        "color": "#16a34a", 
         "bgColor": "#dcfce7",
         "borderColor": "#16a34a",
         "category": "Inbound",
-        "configuration": {
-          "capacity": 50,
-          "operatingHours": "24/7"
-        },
+        "configuration": {},
         "locationTasks": [
           {
             "id": "receiving-task-1",
-            "taskTypeId": "receiving",
+            "taskTypeId": "receiving", 
             "name": "Goods Receiving",
-            "icon": "📦",
+            "icon": "🔍",
             "color": "#16a34a",
             "bgColor": "#dcfce7",
             "configuration": {
-              "sampling_rate": 15,
-              "quality_check": true
+              "sampling_rate": 15
             }
           }
         ]
@@ -47,21 +43,17 @@
         "bgColor": "#dbeafe",
         "borderColor": "#2563eb",
         "category": "Inbound",
-        "configuration": {
-          "capacity": 100,
-          "maxStayTime": "24 hours"
-        },
+        "configuration": {},
         "locationTasks": [
           {
             "id": "palletization-task-1",
             "taskTypeId": "palletization",
             "name": "Palletization",
-            "icon": "📦",
-            "color": "#3b82f6",
-            "bgColor": "#dbeafe",
+            "icon": "🔍",
+            "color": "#16a34a",
+            "bgColor": "#dcfce7",
             "configuration": {
-              "sampling_rate": 10,
-              "pallet_type": "standard"
+              "sampling_rate": 10
             }
           }
         ]
@@ -79,10 +71,7 @@
         "bgColor": "#ede9fe",
         "borderColor": "#7c3aed",
         "category": "Storage",
-        "configuration": {
-          "capacity": 1000,
-          "zone": "A1-A5"
-        },
+        "configuration": {},
         "locationTasks": [
           {
             "id": "cycle-count-task-1",
@@ -92,8 +81,7 @@
             "color": "#8b5cf6",
             "bgColor": "#ede9fe",
             "configuration": {
-              "sampling_rate": 5,
-              "frequency": "weekly"
+              "sampling_rate": 5
             }
           }
         ]
@@ -111,10 +99,7 @@
         "bgColor": "#fee2e2",
         "borderColor": "#dc2626",
         "category": "Outbound",
-        "configuration": {
-          "capacity": 200,
-          "pickType": "forward"
-        },
+        "configuration": {},
         "locationTasks": []
       }
     },
@@ -130,21 +115,17 @@
         "bgColor": "#fed7aa",
         "borderColor": "#ea580c",
         "category": "Outbound",
-        "configuration": {
-          "capacity": 30,
-          "loadingBays": 6
-        },
+        "configuration": {},
         "locationTasks": [
           {
             "id": "outbound-load-task-1",
             "taskTypeId": "outbound_load",
             "name": "Loading Operations",
-            "icon": "🚚",
-            "color": "#f97316",
-            "bgColor": "#fed7aa",
+            "icon": "📊",
+            "color": "#8b5cf6",
+            "bgColor": "#ede9fe",
             "configuration": {
-              "sampling_rate": 20,
-              "dock_assignment": true
+              "sampling_rate": 20
             }
           }
         ]
