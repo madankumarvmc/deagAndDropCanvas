@@ -206,7 +206,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Default Warehouse Flow route
   app.get("/api/default-warehouse-flow", async (req, res) => {
     try {
-      res.json(defaultWarehouseFlow);
+      // Handle the default property wrapper from JSON import
+      const flowData = (defaultWarehouseFlow as any).default || defaultWarehouseFlow;
+      res.json(flowData);
     } catch (error) {
       console.error("Error loading default warehouse flow:", error);
       res.status(500).json({ message: "Failed to fetch default warehouse flow" });

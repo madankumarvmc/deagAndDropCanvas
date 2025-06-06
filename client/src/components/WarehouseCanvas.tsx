@@ -89,7 +89,10 @@ export default function WarehouseCanvas() {
       if (!response.ok) {
         throw new Error('Failed to load default flow');
       }
-      const defaultFlow = await response.json();
+      const responseData = await response.json();
+      
+      // Handle the default property wrapper from API response
+      const defaultFlow = responseData.default || responseData;
       
       // Clear existing nodes and edges
       setLocationNodes([]);
